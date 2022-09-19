@@ -13,6 +13,7 @@ import com.lucashcampos.projetodelivery.domain.Cidade;
 import com.lucashcampos.projetodelivery.domain.Cliente;
 import com.lucashcampos.projetodelivery.domain.Endereco;
 import com.lucashcampos.projetodelivery.domain.Estado;
+import com.lucashcampos.projetodelivery.domain.ItemPedido;
 import com.lucashcampos.projetodelivery.domain.Pagamento;
 import com.lucashcampos.projetodelivery.domain.PagamentoComBoleto;
 import com.lucashcampos.projetodelivery.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.lucashcampos.projetodelivery.repositories.CidadeRepository;
 import com.lucashcampos.projetodelivery.repositories.ClienteRepository;
 import com.lucashcampos.projetodelivery.repositories.EnderecoRepository;
 import com.lucashcampos.projetodelivery.repositories.EstadoRepository;
+import com.lucashcampos.projetodelivery.repositories.ItemPedidoRepository;
 import com.lucashcampos.projetodelivery.repositories.PagamentoRepository;
 import com.lucashcampos.projetodelivery.repositories.PedidoRepository;
 import com.lucashcampos.projetodelivery.repositories.ProdutoRepository;
@@ -56,24 +58,28 @@ public class ProjetodeliveryApplication implements CommandLineRunner {
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
 
+	@Autowired
+	private ItemPedidoRepository itemPedidooRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(ProjetodeliveryApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		Categoria cat1 = new Categoria(null, "Informatica");
-		Categoria cat2 = new Categoria(null, "Escritório");
+		Categoria cat1 = new Categoria(null, "Lanches");
+		Categoria cat2 = new Categoria(null, "Bebidas");
 
-		Produto p1 = new Produto(null, "computador", 2000.00);
-		Produto p2 = new Produto(null, "impressora", 800.00);
-		Produto p3 = new Produto(null, "mouse", 80.00);
+		Produto p1 = new Produto(null, "Coca-cola 2l", 15.00);
+		Produto p2 = new Produto(null, "Suco de laranja", 8.00);
+		Produto p3 = new Produto(null, "X-Bacon", 20.00,
+				"Carne, Bacon, Presunto, Queijo, Milho, Batata palha, Tomate e Alface");
 
-		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
-		cat2.getProdutos().addAll(Arrays.asList(p2));
+		cat1.getProdutos().addAll(Arrays.asList(p3));
+		cat2.getProdutos().addAll(Arrays.asList(p1, p2));
 
-		p1.getCategorias().addAll(Arrays.asList(cat1));
-		p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
+		p1.getCategorias().addAll(Arrays.asList(cat2));
+		p2.getCategorias().addAll(Arrays.asList(cat2));
 		p3.getCategorias().addAll(Arrays.asList(cat1));
 
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
@@ -119,6 +125,19 @@ public class ProjetodeliveryApplication implements CommandLineRunner {
 
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pgto1, pgto2));
+
+		ItemPedido ip1 = new ItemPedido(p1, ped1, 0.00, 1.00, 15.00);
+		ItemPedido ip2 = new ItemPedido(p3, ped1, 0.00, 2.00, 20.00);
+		ItemPedido ip3 = new ItemPedido(p2, ped2, 0.00, 1.00, 8.00);
+
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+
+		itemPedidooRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 
 	}
 
