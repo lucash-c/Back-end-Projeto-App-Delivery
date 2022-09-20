@@ -18,15 +18,17 @@ public class PizzaMassa implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+	private Double preco;
 
 	public PizzaMassa() {
 
 	}
 
-	public PizzaMassa(Integer id, String nome) {
+	public PizzaMassa(Integer id, String nome, Double preco) {
 
 		this.id = id;
 		this.nome = nome;
+		this.preco = preco;
 	}
 
 	public Integer getId() {
@@ -43,6 +45,14 @@ public class PizzaMassa implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public Double getPreco() {
+		return preco;
+	}
+
+	public void setPreco(Double preco) {
+		this.preco = preco;
 	}
 
 	@Override

@@ -21,6 +21,11 @@ import com.lucashcampos.projetodelivery.domain.Pedido;
 import com.lucashcampos.projetodelivery.domain.Produto;
 import com.lucashcampos.projetodelivery.domain.enums.EstadoPagamento;
 import com.lucashcampos.projetodelivery.domain.enums.TipoCliente;
+import com.lucashcampos.projetodelivery.domain.pizza.Pizza;
+import com.lucashcampos.projetodelivery.domain.pizza.PizzaAdicional;
+import com.lucashcampos.projetodelivery.domain.pizza.PizzaMassa;
+import com.lucashcampos.projetodelivery.domain.pizza.PizzaSabor;
+import com.lucashcampos.projetodelivery.domain.pizza.PizzaTamanho;
 import com.lucashcampos.projetodelivery.repositories.CategoriaRepository;
 import com.lucashcampos.projetodelivery.repositories.CidadeRepository;
 import com.lucashcampos.projetodelivery.repositories.ClienteRepository;
@@ -30,6 +35,11 @@ import com.lucashcampos.projetodelivery.repositories.ItemPedidoRepository;
 import com.lucashcampos.projetodelivery.repositories.PagamentoRepository;
 import com.lucashcampos.projetodelivery.repositories.PedidoRepository;
 import com.lucashcampos.projetodelivery.repositories.ProdutoRepository;
+import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaAdicionalRepository;
+import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaMassaRepository;
+import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaRepository;
+import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaSaborRepository;
+import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaTamanhoRepository;
 
 @SpringBootApplication
 public class ProjetodeliveryApplication implements CommandLineRunner {
@@ -59,7 +69,22 @@ public class ProjetodeliveryApplication implements CommandLineRunner {
 	private PagamentoRepository pagamentoRepository;
 
 	@Autowired
-	private ItemPedidoRepository itemPedidooRepository;
+	private ItemPedidoRepository itemPedidoRepository;
+
+	@Autowired
+	private PizzaRepository pizzaRepository;
+
+	@Autowired
+	private PizzaSaborRepository pizzaSaborRepository;
+
+	@Autowired
+	private PizzaTamanhoRepository pizzaTamanhoRepository;
+
+	@Autowired
+	private PizzaMassaRepository pizzaMassaRepository;
+
+	@Autowired
+	private PizzaAdicionalRepository pizzaAdicionalRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProjetodeliveryApplication.class, args);
@@ -69,21 +94,66 @@ public class ProjetodeliveryApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		Categoria cat1 = new Categoria(null, "Lanches");
 		Categoria cat2 = new Categoria(null, "Bebidas");
+		Categoria cat3 = new Categoria(null, "Pizzas");
 
 		Produto p1 = new Produto(null, "Coca-cola 2l", 15.00);
 		Produto p2 = new Produto(null, "Suco de laranja", 8.00);
-		Produto p3 = new Produto(null, "X-Bacon", 20.00,
-				"Carne, Bacon, Presunto, Queijo, Milho, Batata palha, Tomate e Alface");
+		Produto p3 = new Produto(null, "X-Bacon", 20.00);
+
+		// pizza
+		PizzaTamanho grande = new PizzaTamanho(null, "Grande", 8, 4);
+		PizzaTamanho media = new PizzaTamanho(null, "Media", 6, 2);
+		PizzaTamanho broto = new PizzaTamanho(null, "Broto", 4, 1);
+
+		PizzaMassa massa1 = new PizzaMassa(null, "Borda simples", 2.00);
+
+		PizzaSabor sb1 = new PizzaSabor(null, "Mussarrela", 28.00, "molho, mussarela, tomate e orégano", grande);
+		PizzaSabor sb2 = new PizzaSabor(null, "Portuguesa", 32.00, "molho, presunto, mussarela, ovo, cebola e orégano",
+				grande);
+		PizzaAdicional ad1 = new PizzaAdicional(null, "Calabresa", 6.00);
+
+		Pizza p4 = new Pizza(grande, massa1);
+		p4.getSabores().addAll(Arrays.asList(sb1, sb2));
+		p4.getAdicionais().addAll(Arrays.asList(ad1));
 
 		cat1.getProdutos().addAll(Arrays.asList(p3));
 		cat2.getProdutos().addAll(Arrays.asList(p1, p2));
+		cat3.getProdutos().addAll(Arrays.asList(p4));
 
 		p1.getCategorias().addAll(Arrays.asList(cat2));
 		p2.getCategorias().addAll(Arrays.asList(cat2));
 		p3.getCategorias().addAll(Arrays.asList(cat1));
+		p4.getCategorias().addAll(Arrays.asList(cat3));
 
-		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
-		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
+		p4.setNome("Pizza " + p4.getTamanho().getNome());
+		Double valor = 0.00;
+
+		if (p4.getSabores().size() > 1) {
+			for (PizzaSabor x : p4.getSabores()) {
+				valor += x.getPreco();
+			}
+
+			valor = valor / p4.getSabores().size();
+
+		} else {
+			valor = p4.getSabores().get(1).getPreco();
+		}
+
+		valor += p4.getMassa().getPreco();
+
+		for (PizzaAdicional x : p4.getAdicionais()) {
+			valor += x.getPreco();
+		}
+
+		p4.setPreco(valor);
+
+		pizzaTamanhoRepository.saveAll(Arrays.asList(grande, media, broto));
+		pizzaMassaRepository.saveAll(Arrays.asList(massa1));
+		pizzaSaborRepository.saveAll(Arrays.asList(sb1, sb2));
+		pizzaAdicionalRepository.saveAll(Arrays.asList(ad1));
+
+		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
+		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4));
 
 		Estado est1 = new Estado(null, "Minas Gerais");
 		Estado est2 = new Estado(null, "São Paulo");
@@ -129,15 +199,17 @@ public class ProjetodeliveryApplication implements CommandLineRunner {
 		ItemPedido ip1 = new ItemPedido(p1, ped1, 0.00, 1.00, 15.00);
 		ItemPedido ip2 = new ItemPedido(p3, ped1, 0.00, 2.00, 20.00);
 		ItemPedido ip3 = new ItemPedido(p2, ped2, 0.00, 1.00, 8.00);
+		ItemPedido ip4 = new ItemPedido(p4, ped1, 0.00, 1.00, 32.00);
 
-		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2, ip4));
 		ped2.getItens().addAll(Arrays.asList(ip3));
 
-		p1.getItens().addAll(Arrays.asList(ip1));
+		p1.getItens().addAll(Arrays.asList(ip1, ip4));
 		p2.getItens().addAll(Arrays.asList(ip3));
 		p3.getItens().addAll(Arrays.asList(ip2));
+		p4.getItens().addAll(Arrays.asList(ip1));
 
-		itemPedidooRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3, ip4));
 
 	}
 

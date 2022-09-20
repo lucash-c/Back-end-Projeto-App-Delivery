@@ -21,6 +21,7 @@ public class PizzaSabor implements Serializable {
 	private Integer id;
 	private String nome;
 	private Double preco;
+	private String descricao;
 
 	@ManyToOne
 	@JoinColumn(name = "tamanho_id")
@@ -30,10 +31,13 @@ public class PizzaSabor implements Serializable {
 
 	}
 
-	public PizzaSabor(Integer id, String nome) {
+	public PizzaSabor(Integer id, String nome, Double preco, String descricao, PizzaTamanho tamanho) {
 
 		this.id = id;
 		this.nome = nome;
+		this.preco = preco;
+		this.descricao = descricao;
+		this.tamanho = tamanho;
 	}
 
 	public Integer getId() {
@@ -66,6 +70,14 @@ public class PizzaSabor implements Serializable {
 
 	public void setTamanho(PizzaTamanho tamanho) {
 		this.tamanho = tamanho;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	@Override

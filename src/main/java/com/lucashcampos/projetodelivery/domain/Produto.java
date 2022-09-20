@@ -30,7 +30,6 @@ public class Produto implements Serializable {
 	private Integer id;
 	private String nome;
 	private Double preco;
-	private String descricao;
 
 	@JsonBackReference
 	@ManyToMany
@@ -49,14 +48,6 @@ public class Produto implements Serializable {
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
-	}
-
-	public Produto(Integer id, String nome, Double preco, String descricao) {
-
-		this.id = id;
-		this.nome = nome;
-		this.preco = preco;
-		this.descricao = descricao;
 	}
 
 	public List<Pedido> getPedidos() {
@@ -98,14 +89,6 @@ public class Produto implements Serializable {
 
 	public void setCategorias(List<Categoria> categorias) {
 		this.categorias = categorias;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
 	}
 
 	public Set<ItemPedido> getItens() {
