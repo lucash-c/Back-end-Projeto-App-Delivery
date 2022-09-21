@@ -37,7 +37,6 @@ import com.lucashcampos.projetodelivery.repositories.PedidoRepository;
 import com.lucashcampos.projetodelivery.repositories.ProdutoRepository;
 import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaAdicionalRepository;
 import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaMassaRepository;
-import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaRepository;
 import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaSaborRepository;
 import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaTamanhoRepository;
 
@@ -70,9 +69,6 @@ public class ProjetodeliveryApplication implements CommandLineRunner {
 
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
-
-	@Autowired
-	private PizzaRepository pizzaRepository;
 
 	@Autowired
 	private PizzaSaborRepository pizzaSaborRepository;
