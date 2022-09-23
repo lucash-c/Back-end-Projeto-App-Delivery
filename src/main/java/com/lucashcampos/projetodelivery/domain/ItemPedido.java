@@ -28,12 +28,12 @@ public class ItemPedido implements Serializable {
 	private Double preco;
 
 	@ManyToMany
-	@JoinTable(name = "PIZZA_ADICIONAIS", joinColumns = { @JoinColumn(name = "pedido_id"),
+	@JoinTable(name = "PIZZA_ADICIONAIS", joinColumns = { @JoinColumn(name = "item_pedido_id"), @JoinColumn(name = "pedido_id"),
 			@JoinColumn(name = "item_id") }, inverseJoinColumns = @JoinColumn(name = "adicional_id"))
 	private List<PizzaAdicional> adicionais = new ArrayList<>();
 
 	@ManyToOne
-	@JoinTable(name = "PIZZA_MASSA", joinColumns = { @JoinColumn(name = "pedido_id"),
+	@JoinTable(name = "PIZZA_MASSA", joinColumns = { @JoinColumn(name = "item_pedido_id"), @JoinColumn(name = "pedido_id"),
 			@JoinColumn(name = "item_id") }, inverseJoinColumns = @JoinColumn(name = "massa_id"))
 	private PizzaMassa massa;
 
@@ -98,7 +98,7 @@ public class ItemPedido implements Serializable {
 	public void setAdicionais(List<PizzaAdicional> adicionais) {
 		this.adicionais = adicionais;
 	}
-	
+
 	public PizzaMassa getMassa() {
 		return massa;
 	}

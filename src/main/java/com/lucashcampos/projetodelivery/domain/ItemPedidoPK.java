@@ -2,6 +2,7 @@ package com.lucashcampos.projetodelivery.domain;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
@@ -10,6 +11,8 @@ import javax.persistence.ManyToOne;
 @Embeddable // declara que essa classe sera um subtipo
 public class ItemPedidoPK implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	private String id = UUID.randomUUID().toString();
 
 	@ManyToOne
 	@JoinColumn(name = "pedido_id")
@@ -37,7 +40,7 @@ public class ItemPedidoPK implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(pedido, produto);
+		return Objects.hash(id, pedido, produto);
 	}
 
 	@Override
@@ -49,7 +52,8 @@ public class ItemPedidoPK implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		ItemPedidoPK other = (ItemPedidoPK) obj;
-		return Objects.equals(pedido, other.pedido) && Objects.equals(produto, other.produto);
+		return Objects.equals(id, other.id) && Objects.equals(pedido, other.pedido)
+				&& Objects.equals(produto, other.produto);
 	}
 
 }
