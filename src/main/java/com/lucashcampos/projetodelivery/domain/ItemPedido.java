@@ -1,12 +1,20 @@
 package com.lucashcampos.projetodelivery.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lucashcampos.projetodelivery.domain.pizza.PizzaAdicional;
+import com.lucashcampos.projetodelivery.domain.pizza.PizzaMassa;
 
 @Entity
 public class ItemPedido implements Serializable {
@@ -15,10 +23,19 @@ public class ItemPedido implements Serializable {
 	@JsonIgnore
 	@EmbeddedId
 	private ItemPedidoPK id = new ItemPedidoPK();
-
 	private Double desconto;
 	private Double quantidade;
 	private Double preco;
+
+	@ManyToMany
+	@JoinTable(name = "PIZZA_ADICIONAIS", joinColumns = { @JoinColumn(name = "pedido_id"),
+			@JoinColumn(name = "item_id") }, inverseJoinColumns = @JoinColumn(name = "adicional_id"))
+	private List<PizzaAdicional> adicionais = new ArrayList<>();
+
+	@ManyToOne
+	@JoinTable(name = "PIZZA_MASSA", joinColumns = { @JoinColumn(name = "pedido_id"),
+			@JoinColumn(name = "item_id") }, inverseJoinColumns = @JoinColumn(name = "massa_id"))
+	private PizzaMassa massa;
 
 	public ItemPedido() {
 
@@ -72,6 +89,22 @@ public class ItemPedido implements Serializable {
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
+	}
+
+	public List<PizzaAdicional> getAdicionais() {
+		return adicionais;
+	}
+
+	public void setAdicionais(List<PizzaAdicional> adicionais) {
+		this.adicionais = adicionais;
+	}
+	
+	public PizzaMassa getMassa() {
+		return massa;
+	}
+
+	public void setMassa(PizzaMassa massa) {
+		this.massa = massa;
 	}
 
 	@Override
