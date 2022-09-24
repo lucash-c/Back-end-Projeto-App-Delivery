@@ -88,6 +88,11 @@ public class ProjetodeliveryApplication implements CommandLineRunner {
 		Categoria cat1 = new Categoria(null, "Lanches");
 		Categoria cat2 = new Categoria(null, "Bebidas");
 		Categoria cat3 = new Categoria(null, "Pizzas");
+		Categoria cat4 = new Categoria(null, "Doces");
+		Categoria cat5 = new Categoria(null, "Bolos");
+		Categoria cat6 = new Categoria(null, "Mercado");
+		Categoria cat7 = new Categoria(null, "Farmacia");
+		
 
 		Produto p1 = new Produto(null, "Coca-cola 2l", 15.00);
 		Produto p2 = new Produto(null, "Suco de laranja", 8.00);
@@ -116,7 +121,7 @@ public class ProjetodeliveryApplication implements CommandLineRunner {
 		p3.getCategorias().addAll(Arrays.asList(cat1));
 		p4.getCategorias().addAll(Arrays.asList(cat3));
 
-		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
+		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4));
 
 		Estado est1 = new Estado(null, "Minas Gerais");
