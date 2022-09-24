@@ -2,12 +2,19 @@ package com.lucashcampos.projetodelivery.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.lucashcampos.projetodelivery.domain.Categoria;
 
 public class CategoriaDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
+
+	@NotEmpty(message = "Preenchimento obrigatório!")
+	@Length(min = 3, max = 80, message = "O tamanho deve ser de no mínimo 3 e no maximo 80 caracteres! ")
 	private String nome;
 
 	public CategoriaDTO() {
