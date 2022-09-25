@@ -13,13 +13,13 @@ public class ClienteDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
-	
-	@NotEmpty(message="Preenchimento obrigatório")
-	@Length(min=3, max=120, message="O nome deve conter no minimo 3 caracteres!")
+
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Length(min = 3, max = 120, message = "O nome deve conter no minimo 3 caracteres!")
 	private String nome;
-	
-	@NotEmpty(message="Preenchimento obrigatório")
-	@Email(message="E-mail inválido!")
+
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Email(message = "E-mail inválido!")
 	private String email;
 
 	public ClienteDTO() {
