@@ -53,6 +53,14 @@ public class ItemPedido implements Serializable {
 	}
 
 	public double getSubTotal() {
+
+		if (massa != null) {
+			preco += massa.getPreco();
+		}
+
+		for (PizzaAdicional x : adicionais) {
+			preco += x.getPreco();
+		}
 		return (preco - desconto) * quantidade;
 	}
 
