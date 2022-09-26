@@ -28,12 +28,14 @@ public class ItemPedido implements Serializable {
 	private Double preco;
 
 	@ManyToMany
-	@JoinTable(name = "PIZZA_ADICIONAIS", joinColumns = { @JoinColumn(name = "item_pedido_id"), @JoinColumn(name = "pedido_id"),
+	@JoinTable(name = "PIZZA_ADICIONAIS", joinColumns = { @JoinColumn(name = "item_pedido_id"),
+			@JoinColumn(name = "pedido_id"),
 			@JoinColumn(name = "item_id") }, inverseJoinColumns = @JoinColumn(name = "adicional_id"))
 	private List<PizzaAdicional> adicionais = new ArrayList<>();
 
 	@ManyToOne
-	@JoinTable(name = "PIZZA_MASSA", joinColumns = { @JoinColumn(name = "item_pedido_id"), @JoinColumn(name = "pedido_id"),
+	@JoinTable(name = "PIZZA_MASSA", joinColumns = { @JoinColumn(name = "item_pedido_id"),
+			@JoinColumn(name = "pedido_id"),
 			@JoinColumn(name = "item_id") }, inverseJoinColumns = @JoinColumn(name = "massa_id"))
 	private PizzaMassa massa;
 
@@ -49,9 +51,9 @@ public class ItemPedido implements Serializable {
 		this.quantidade = quantidade;
 		this.preco = preco;
 	}
-	
+
 	public double getSubTotal() {
-		return (preco - desconto)* quantidade;
+		return (preco - desconto) * quantidade;
 	}
 
 	@JsonIgnore
@@ -59,8 +61,16 @@ public class ItemPedido implements Serializable {
 		return id.getPedido();
 	}
 
+	public void setPedido(Pedido pedido) {
+		id.setPedido(pedido);
+	}
+
 	public Produto getProduto() {
 		return id.getProduto();
+	}
+
+	public void setProduto(Produto produto) {
+		id.setProduto(produto);
 	}
 
 	public ItemPedidoPK getId() {
