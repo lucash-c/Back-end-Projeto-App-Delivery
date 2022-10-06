@@ -22,6 +22,7 @@ import com.lucashcampos.projetodelivery.domain.PagamentoComCartao;
 import com.lucashcampos.projetodelivery.domain.Pedido;
 import com.lucashcampos.projetodelivery.domain.Produto;
 import com.lucashcampos.projetodelivery.domain.enums.EstadoPagamento;
+import com.lucashcampos.projetodelivery.domain.enums.Perfil;
 import com.lucashcampos.projetodelivery.domain.enums.TipoCliente;
 import com.lucashcampos.projetodelivery.domain.pizza.Pizza;
 import com.lucashcampos.projetodelivery.domain.pizza.PizzaAdicional;
@@ -153,14 +154,21 @@ public class DBService {
 
 		Cliente cli1 = new Cliente(null, "56198765545", "Maria Silva", "maria@gmail.com", TipoCliente.PESSOAFISICA, pe.encode("1234"));
 		cli1.getTelefones().addAll(Arrays.asList("5465465645", "56116161"));
+		
+		Cliente cli2 = new Cliente(null, "39140661059", "Ana Costa", "ana@gmail.com", TipoCliente.PESSOAFISICA, pe.encode("1234"));
+		cli2.getTelefones().addAll(Arrays.asList("55555454", "1111555555"));
+		cli2.addPerfil(Perfil.ADMIN);
+
 
 		Endereco e1 = new Endereco(null, "Rua das Flores", "300", "Apto 303", "Jardim", "38220834", c1, cli1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "5465465", c2, cli1);
+		Endereco e3 = new Endereco(null, "Avenida Floriano", "2106", null, "Centro", "8858585", c2, cli2);
 
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
 
-		clienteRepository.saveAll(Arrays.asList(cli1));
-		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
