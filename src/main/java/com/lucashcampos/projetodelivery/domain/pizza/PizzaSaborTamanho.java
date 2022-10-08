@@ -10,27 +10,32 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "TAMANHOS_PARA_PIZZA")
-public class PizzaTamanho implements Serializable {
+@Table(name = "CARDAPIO_PIZZAS")
+public class PizzaSaborTamanho implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String nome;
+	private String sabor;
+	private String tamanho;
+	private String descricao;
 	private Integer pedacos;
 	private Integer pessoas; // quantidade de pessoas que serve
+	private Double preco;
 
-	public PizzaTamanho() {
+	public PizzaSaborTamanho() {
 
 	}
 
-	public PizzaTamanho(Integer id, String nome, Integer pedacos, Integer pessoas) {
-
+	public PizzaSaborTamanho(Integer id, String sabor, String descricao, String tamanho, Integer pedacos, Integer pessoas, Double preco) {
 		this.id = id;
-		this.nome = nome;
+		this.sabor = sabor;
+		this.descricao= descricao;
+		this.tamanho = tamanho;
 		this.pedacos = pedacos;
 		this.pessoas = pessoas;
+		this.preco = preco;
 	}
 
 	public Integer getId() {
@@ -41,12 +46,20 @@ public class PizzaTamanho implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getSabor() {
+		return sabor;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setSabor(String sabor) {
+		this.sabor = sabor;
+	}
+
+	public String getTamanho() {
+		return tamanho;
+	}
+
+	public void setTamanho(String tamanho) {
+		this.tamanho = tamanho;
 	}
 
 	public Integer getPedacos() {
@@ -65,6 +78,22 @@ public class PizzaTamanho implements Serializable {
 		this.pessoas = pessoas;
 	}
 
+	public Double getPreco() {
+		return preco;
+	}
+
+	public void setPreco(Double preco) {
+		this.preco = preco;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -78,8 +107,12 @@ public class PizzaTamanho implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PizzaTamanho other = (PizzaTamanho) obj;
+		PizzaSaborTamanho other = (PizzaSaborTamanho) obj;
 		return Objects.equals(id, other.id);
 	}
+	
+	
+
+	
 
 }

@@ -10,34 +10,34 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.lucashcampos.projetodelivery.domain.pizza.PizzaTamanho;
+import com.lucashcampos.projetodelivery.domain.pizza.PizzaSaborTamanho;
 import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaTamanhoRepository;
 import com.lucashcampos.projetodelivery.services.exceptions.DataIntegrityException;
 import com.lucashcampos.projetodelivery.services.exceptions.ObjectNotFoundException;
 
 @Service
-public class PizzaTamanhoService {
+public class PizzaSaborTamanhoService {
 
 	@Autowired
 	private PizzaTamanhoRepository repo;
 
-	public PizzaTamanho find(Integer id) {
-		Optional<PizzaTamanho> obj = repo.findById(id);
+	public PizzaSaborTamanho find(Integer id) {
+		Optional<PizzaSaborTamanho> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id " + id + ", Tipo: " + PizzaTamanho.class.getName()));
+				"Objeto não encontrado! Id " + id + ", Tipo: " + PizzaSaborTamanho.class.getName()));
 	}
 
-	public List<PizzaTamanho> findAll() {
+	public List<PizzaSaborTamanho> findAll() {
 		return repo.findAll();
 	}
 
-	public PizzaTamanho insert(PizzaTamanho obj) {
+	public PizzaSaborTamanho insert(PizzaSaborTamanho obj) {
 		obj.setId(null);
 		return repo.save(obj);
 	}
 
-	public PizzaTamanho update(PizzaTamanho obj) {
-		PizzaTamanho newObj = find(obj.getId());
+	public PizzaSaborTamanho update(PizzaSaborTamanho obj) {
+		PizzaSaborTamanho newObj = find(obj.getId());
 		updateData(newObj, obj);
 		return repo.save(newObj);
 	}
@@ -53,15 +53,18 @@ public class PizzaTamanhoService {
 
 	}
 
-	public Page<PizzaTamanho> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+	public Page<PizzaSaborTamanho> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
 	}
 
-	private void updateData(PizzaTamanho newObj, PizzaTamanho obj) {
-		newObj.setNome(obj.getNome());
+	private void updateData(PizzaSaborTamanho newObj, PizzaSaborTamanho obj) {
+		newObj.setDescricao(obj.getDescricao());
 		newObj.setPedacos(obj.getPedacos());
 		newObj.setPessoas(obj.getPessoas());
+		newObj.setSabor(obj.getSabor());
+		newObj.setPreco(obj.getPreco());
+		newObj.setTamanho(obj.getTamanho());
 	}
 
 }

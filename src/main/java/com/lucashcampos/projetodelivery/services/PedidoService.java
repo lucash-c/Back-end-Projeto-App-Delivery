@@ -1,8 +1,6 @@
 package com.lucashcampos.projetodelivery.services;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +14,6 @@ import com.lucashcampos.projetodelivery.domain.Cliente;
 import com.lucashcampos.projetodelivery.domain.ItemPedido;
 import com.lucashcampos.projetodelivery.domain.Pedido;
 import com.lucashcampos.projetodelivery.domain.enums.EstadoPagamento;
-import com.lucashcampos.projetodelivery.domain.pizza.Pizza;
-import com.lucashcampos.projetodelivery.domain.pizza.PizzaAdicional;
 import com.lucashcampos.projetodelivery.repositories.ItemPedidoRepository;
 import com.lucashcampos.projetodelivery.repositories.PagamentoRepository;
 import com.lucashcampos.projetodelivery.repositories.PedidoRepository;
@@ -73,14 +69,7 @@ public class PedidoService {
 			ip.setProduto(produtoService.find(ip.getProduto().getId()));
 			ip.setPreco(ip.getProduto().getPreco());
 			ip.setPedido(obj);
-			if (ip.getProduto() instanceof Pizza) {
-				ip.setMassa(pms.find(ip.getMassa().getId()));
-				List<PizzaAdicional> list = new ArrayList<>();
-				for (PizzaAdicional adicional : ip.getAdicionais()) {
-					list.add(pas.find(adicional.getId()));
-				}
-				ip.setAdicionais(list);
-			}
+			
 		}
 
 		itemPedidoRepository.saveAll(obj.getItens());

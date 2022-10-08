@@ -2,9 +2,7 @@ package com.lucashcampos.projetodelivery.services;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,7 +25,7 @@ import com.lucashcampos.projetodelivery.domain.enums.TipoCliente;
 import com.lucashcampos.projetodelivery.domain.pizza.Pizza;
 import com.lucashcampos.projetodelivery.domain.pizza.PizzaAdicional;
 import com.lucashcampos.projetodelivery.domain.pizza.PizzaMassa;
-import com.lucashcampos.projetodelivery.domain.pizza.PizzaTamanho;
+import com.lucashcampos.projetodelivery.domain.pizza.PizzaSaborTamanho;
 import com.lucashcampos.projetodelivery.repositories.CategoriaRepository;
 import com.lucashcampos.projetodelivery.repositories.CidadeRepository;
 import com.lucashcampos.projetodelivery.repositories.ClienteRepository;
@@ -43,7 +41,7 @@ import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaTamanhoReposito
 
 @Service
 public class DBService {
-	
+
 	@Autowired
 	private BCryptPasswordEncoder pe;
 
@@ -75,7 +73,7 @@ public class DBService {
 	private ItemPedidoRepository itemPedidoRepository;
 
 	@Autowired
-	private PizzaTamanhoRepository pizzaTamanhoRepository;
+	private PizzaTamanhoRepository pizzaSaborTamanhoRepository;
 
 	@Autowired
 	private PizzaMassaRepository pizzaMassaRepository;
@@ -102,12 +100,19 @@ public class DBService {
 		Produto p9 = new Produto(null, "Bolo no pote", 6.00);
 		Produto p10 = new Produto(null, "Pastel de queijo", 20.00);
 		Produto p11 = new Produto(null, "Dipirona", 6.00);
+		
 
 		// pizza
-		PizzaTamanho grande = new PizzaTamanho(null, "Grande", 8, 4);
-		PizzaTamanho media = new PizzaTamanho(null, "Media", 6, 2);
-		PizzaTamanho broto = new PizzaTamanho(null, "Broto", 4, 1);
-		pizzaTamanhoRepository.saveAll(Arrays.asList(grande, media, broto));
+		PizzaSaborTamanho PortuguesaGrande = new PizzaSaborTamanho(null, "Portuguesa",
+				"Molho, Mussarela, Tomate, presunto, ovo, cebola e orégano", "Grande", 8, 4, 35.00);		
+		PizzaSaborTamanho MussarelaGrande = new PizzaSaborTamanho(null, "Mussarela",
+				"Molho, Mussarela, Tomate e orégano", "Grande", 8, 4, 30.00);
+		PizzaSaborTamanho MussarelaMedia = new PizzaSaborTamanho(null, "Mussarela",
+				"Molho, Mussarela, Tomate e orégano", "Media", 6, 3, 26.00);
+		PizzaSaborTamanho MussarelaBroto = new PizzaSaborTamanho(null, "Mussarela",
+				"Molho, Mussarela, Tomate e orégano", "Broto", 2, 1, 22.00);
+		
+		pizzaSaborTamanhoRepository.saveAll(Arrays.asList(MussarelaGrande, MussarelaMedia, MussarelaBroto, PortuguesaGrande));
 
 		PizzaMassa bordaSimples = new PizzaMassa(null, "Borda simples", 2.00);
 		pizzaMassaRepository.saveAll(Arrays.asList(bordaSimples));
@@ -115,11 +120,12 @@ public class DBService {
 		PizzaAdicional ad1 = new PizzaAdicional(null, "Calabresa", 6.00);
 		pizzaAdicionalRepository.saveAll(Arrays.asList(ad1));
 
-		Pizza p4 = new Pizza("Pizza Mussarela", grande, "Molho, Mussarela, Tomate e orégano", 30.00);
+		Pizza p4 = new Pizza(Arrays.asList(MussarelaGrande), bordaSimples, Arrays.asList(ad1), "tirar tomate");
+		Pizza p12 = new Pizza(Arrays.asList(MussarelaGrande, PortuguesaGrande), bordaSimples, Arrays.asList(ad1), "tirar cebola");
 
 		cat1.getProdutos().addAll(Arrays.asList(p3, p5));
 		cat2.getProdutos().addAll(Arrays.asList(p1, p2, p6, p8));
-		cat3.getProdutos().addAll(Arrays.asList(p4));
+		cat3.getProdutos().addAll(Arrays.asList(p4, p12));
 		cat4.getProdutos().addAll(Arrays.asList(p8, p9));
 		cat5.getProdutos().addAll(Arrays.asList(p7, p10));
 		cat7.getProdutos().addAll(Arrays.asList(p11));
@@ -135,9 +141,11 @@ public class DBService {
 		p9.getCategorias().addAll(Arrays.asList(cat4));
 		p10.getCategorias().addAll(Arrays.asList(cat5));
 		p11.getCategorias().addAll(Arrays.asList(cat7));
+		p12.getCategorias().addAll(Arrays.asList(cat3));
+		
 
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
-		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11));
+		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12));
 
 		Estado est1 = new Estado(null, "Minas Gerais");
 		Estado est2 = new Estado(null, "São Paulo");
@@ -152,13 +160,14 @@ public class DBService {
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 
-		Cliente cli1 = new Cliente(null, "56198765545", "Maria Silva", "maria@gmail.com", TipoCliente.PESSOAFISICA, pe.encode("1234"));
+		Cliente cli1 = new Cliente(null, "56198765545", "Maria Silva", "maria@gmail.com", TipoCliente.PESSOAFISICA,
+				pe.encode("1234"));
 		cli1.getTelefones().addAll(Arrays.asList("5465465645", "56116161"));
-		
-		Cliente cli2 = new Cliente(null, "39140661059", "Ana Costa", "ana@gmail.com", TipoCliente.PESSOAFISICA, pe.encode("1234"));
+
+		Cliente cli2 = new Cliente(null, "39140661059", "Ana Costa", "ana@gmail.com", TipoCliente.PESSOAFISICA,
+				pe.encode("1234"));
 		cli2.getTelefones().addAll(Arrays.asList("55555454", "1111555555"));
 		cli2.addPerfil(Perfil.ADMIN);
-
 
 		Endereco e1 = new Endereco(null, "Rua das Flores", "300", "Apto 303", "Jardim", "38220834", c1, cli1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "5465465", c2, cli1);
@@ -186,25 +195,10 @@ public class DBService {
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pgto1, pgto2));
 
-		ItemPedido ip1 = new ItemPedido(p1, ped1, 0.00, 1.00, 15.00);
-		ItemPedido ip2 = new ItemPedido(p3, ped1, 0.00, 2.00, 20.00);
-		ItemPedido ip3 = new ItemPedido(p2, ped2, 0.00, 1.00, 8.00);
-
-		Double totalPizza = p4.getPreco();
-
-		PizzaMassa pizzaMassa = bordaSimples;
-		totalPizza += pizzaMassa.getPreco();
-
-		List<PizzaAdicional> adicionais = new ArrayList<>();
-		adicionais = Arrays.asList(ad1);
-
-		for (PizzaAdicional adicional : adicionais) {
-			totalPizza += adicional.getPreco();
-		}
-
-		ItemPedido ip4 = new ItemPedido(p4, ped1, 0.00, 1.00, totalPizza);
-		ip4.setAdicionais(adicionais);
-		ip4.setMassa(pizzaMassa);
+		ItemPedido ip1 = new ItemPedido(p1, ped1, 0.00, 1, p1.getPreco());
+		ItemPedido ip2 = new ItemPedido(p3, ped1, 0.00, 2, p3.getPreco());
+		ItemPedido ip3 = new ItemPedido(p2, ped2, 0.00, 1, p2.getPreco());
+		ItemPedido ip4 = new ItemPedido(p4, ped1, 0.00, 1, p4.getPreco());
 
 		ped1.getItens().addAll(Arrays.asList(ip1, ip2, ip4));
 		ped2.getItens().addAll(Arrays.asList(ip3));
@@ -213,6 +207,7 @@ public class DBService {
 		p2.getItens().addAll(Arrays.asList(ip3));
 		p3.getItens().addAll(Arrays.asList(ip2));
 		p4.getItens().addAll(Arrays.asList(ip1));
+		
 
 		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3, ip4));
 	}
