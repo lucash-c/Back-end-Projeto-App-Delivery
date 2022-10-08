@@ -20,8 +20,6 @@ import com.lucashcampos.projetodelivery.repositories.PedidoRepository;
 import com.lucashcampos.projetodelivery.security.UserSS;
 import com.lucashcampos.projetodelivery.services.exceptions.AuthorizationException;
 import com.lucashcampos.projetodelivery.services.exceptions.ObjectNotFoundException;
-import com.lucashcampos.projetodelivery.services.pizza.PizzaAdicionalService;
-import com.lucashcampos.projetodelivery.services.pizza.PizzaMassaService;
 
 @Service
 public class PedidoService {
@@ -40,13 +38,11 @@ public class PedidoService {
 
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
-
+	
 	@Autowired
-	PizzaMassaService pms;
+	private EmailService emailService;
 
-	@Autowired
-	PizzaAdicionalService pas;
-
+	
 	public Pedido find(Integer id) {
 
 		Optional<Pedido> obj = repo.findById(id);
@@ -73,6 +69,7 @@ public class PedidoService {
 		}
 
 		itemPedidoRepository.saveAll(obj.getItens());
+		emailService.sendOrderConfirmationEmail(obj);
 		System.out.println(obj);
 		return obj;
 	}
