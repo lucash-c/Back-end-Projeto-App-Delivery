@@ -1,6 +1,8 @@
 package com.lucashcampos.projetodelivery.services;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +16,16 @@ import com.lucashcampos.projetodelivery.domain.Cliente;
 import com.lucashcampos.projetodelivery.domain.ItemPedido;
 import com.lucashcampos.projetodelivery.domain.Pedido;
 import com.lucashcampos.projetodelivery.domain.enums.EstadoPagamento;
+import com.lucashcampos.projetodelivery.domain.pizza.Pizza;
+import com.lucashcampos.projetodelivery.domain.pizza.PizzaAdicional;
 import com.lucashcampos.projetodelivery.repositories.ItemPedidoRepository;
 import com.lucashcampos.projetodelivery.repositories.PagamentoRepository;
 import com.lucashcampos.projetodelivery.repositories.PedidoRepository;
 import com.lucashcampos.projetodelivery.security.UserSS;
 import com.lucashcampos.projetodelivery.services.exceptions.AuthorizationException;
 import com.lucashcampos.projetodelivery.services.exceptions.ObjectNotFoundException;
+import com.lucashcampos.projetodelivery.services.pizza.PizzaAdicionalService;
+import com.lucashcampos.projetodelivery.services.pizza.PizzaMassaService;
 
 @Service
 public class PedidoService {
@@ -39,6 +45,12 @@ public class PedidoService {
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
 
+	@Autowired
+	PizzaMassaService pms;
+
+	@Autowired
+	PizzaAdicionalService pas;
+
 	public Pedido find(Integer id) {
 
 		Optional<Pedido> obj = repo.findById(id);
@@ -50,6 +62,7 @@ public class PedidoService {
 	public Pedido insert(Pedido obj) {
 		obj.setId(null);
 		obj.setInstante(new Date());
+		obj.setCliente(clienteService.find(obj.getCliente().getId()));
 		obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj);
 		obj = repo.save(obj);
@@ -57,11 +70,21 @@ public class PedidoService {
 
 		for (ItemPedido ip : obj.getItens()) {
 			ip.setDesconto(0.0);
-			ip.setPreco(produtoService.find(ip.getProduto().getId()).getPreco());
+			ip.setProduto(produtoService.find(ip.getProduto().getId()));
+			ip.setPreco(ip.getProduto().getPreco());
 			ip.setPedido(obj);
+			if (ip.getProduto() instanceof Pizza) {
+				ip.setMassa(pms.find(ip.getMassa().getId()));
+				List<PizzaAdicional> list = new ArrayList<>();
+				for (PizzaAdicional adicional : ip.getAdicionais()) {
+					list.add(pas.find(adicional.getId()));
+				}
+				ip.setAdicionais(list);
+			}
 		}
 
 		itemPedidoRepository.saveAll(obj.getItens());
+		System.out.println(obj);
 		return obj;
 	}
 
