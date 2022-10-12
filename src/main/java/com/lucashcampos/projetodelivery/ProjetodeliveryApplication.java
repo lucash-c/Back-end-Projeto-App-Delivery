@@ -15,5 +15,4 @@ public class ProjetodeliveryApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 	}
-
 }

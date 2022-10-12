@@ -1,22 +1,44 @@
-{"properties": [
-  {
-    "name": "jwt.expiration",
-    "type": "java.lang.String",
-    "description": "A description for 'jwt.expiration'"
-  },
-  {
-    "name": "jwt.secret",
-    "type": "java.lang.String",
-    "description": "A description for 'jwt.secret'"
-  },
-  {
-    "name": "default.sender",
-    "type": "java.lang.String",
-    "description": "A description for 'default.sender'"
-  },
-  {
-    "name": "default.recipient",
-    "type": "java.lang.String",
-    "description": "A description for 'default.recipient'"
-  }
-]}
+{
+	"properties": [
+		{
+			"name": "jwt.expiration",
+			"type": "java.lang.String",
+			"description": "A description for 'jwt.expiration'"
+		},
+		{
+			"name": "jwt.secret",
+			"type": "java.lang.String",
+			"description": "A description for 'jwt.secret'"
+		},
+		{
+			"name": "default.sender",
+			"type": "java.lang.String",
+			"description": "A description for 'default.sender'"
+		},
+		{
+			"name": "default.recipient",
+			"type": "java.lang.String",
+			"description": "A description for 'default.recipient'"
+		},
+		{
+			"name": "s3.region",
+			"type": "java.lang.String",
+			"description": "A description for 's3.region'"
+		},
+		{
+			"name": "s3.bucket",
+			"type": "java.lang.String",
+			"description": "A description for 's3.bucket'"
+		},
+		{
+			"name": "aws.secret_access_key",
+			"type": "java.lang.String",
+			"description": "A description for 'aws.secret_access_key'"
+		},
+		{
+			"name": "aws.access_key_id",
+			"type": "java.lang.String",
+			"description": "A description for 'aws.access_key_id'"
+		}
+	]
+}
