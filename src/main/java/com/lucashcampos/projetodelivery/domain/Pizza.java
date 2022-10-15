@@ -1,4 +1,4 @@
-package com.lucashcampos.projetodelivery.domain.pizza;
+package com.lucashcampos.projetodelivery.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-
-import com.lucashcampos.projetodelivery.domain.Produto;
 
 @Entity
 public class Pizza extends Produto {
@@ -40,21 +38,21 @@ public class Pizza extends Produto {
 		this.sabores = sabores;
 		this.massa = massa;
 		this.adicionais = adicionais;
-		this.setObservacao(observacao);
+		this.observacao = observacao;
 
-		// somando valor da pizza
-		Double soma = 0.0;
-		for (PizzaSaborTamanho x : sabores) {
-			soma += x.getPreco();
-		}
-		soma = soma / sabores.size();
-
-		for (PizzaAdicional x : adicionais) {
-			soma += x.getPreco();
-		}
-
-		soma = soma + massa.getPreco();
-		super.setPreco(soma);
+//		// somando valor da pizza  ====>>>>>  CALCULAR NO FRONT 
+//		Double soma = 0.0;
+//		for (PizzaSaborTamanho x : sabores) {
+//			soma += x.getPreco();
+//		}
+//		soma = soma / sabores.size();
+//
+//		for (PizzaAdicional x : adicionais) {
+//			soma += x.getPreco();
+//		}
+//
+//		soma = soma + massa.getPreco();
+//		super.setPreco(soma);
 	}
 
 	public List<PizzaSaborTamanho> getSabores() {

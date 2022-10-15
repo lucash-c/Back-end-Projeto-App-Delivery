@@ -9,9 +9,6 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.lucashcampos.projetodelivery.domain.pizza.Pizza;
-import com.lucashcampos.projetodelivery.domain.pizza.PizzaAdicional;
-import com.lucashcampos.projetodelivery.domain.pizza.PizzaSaborTamanho;
 
 @Entity
 public class ItemPedido implements Serializable {

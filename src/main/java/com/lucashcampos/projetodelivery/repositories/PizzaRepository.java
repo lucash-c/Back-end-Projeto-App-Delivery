@@ -1,9 +1,9 @@
-package com.lucashcampos.projetodelivery.repositories.pizzas;
+package com.lucashcampos.projetodelivery.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.lucashcampos.projetodelivery.domain.pizza.Pizza;
+import com.lucashcampos.projetodelivery.domain.Pizza;
 
 @Repository
 public interface PizzaRepository extends JpaRepository<Pizza, Integer> {

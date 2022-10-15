@@ -18,14 +18,14 @@ import com.lucashcampos.projetodelivery.domain.Pagamento;
 import com.lucashcampos.projetodelivery.domain.PagamentoAVista;
 import com.lucashcampos.projetodelivery.domain.PagamentoComCartao;
 import com.lucashcampos.projetodelivery.domain.Pedido;
+import com.lucashcampos.projetodelivery.domain.Pizza;
+import com.lucashcampos.projetodelivery.domain.PizzaAdicional;
+import com.lucashcampos.projetodelivery.domain.PizzaMassa;
+import com.lucashcampos.projetodelivery.domain.PizzaSaborTamanho;
 import com.lucashcampos.projetodelivery.domain.Produto;
 import com.lucashcampos.projetodelivery.domain.enums.EstadoPagamento;
 import com.lucashcampos.projetodelivery.domain.enums.Perfil;
 import com.lucashcampos.projetodelivery.domain.enums.TipoCliente;
-import com.lucashcampos.projetodelivery.domain.pizza.Pizza;
-import com.lucashcampos.projetodelivery.domain.pizza.PizzaAdicional;
-import com.lucashcampos.projetodelivery.domain.pizza.PizzaMassa;
-import com.lucashcampos.projetodelivery.domain.pizza.PizzaSaborTamanho;
 import com.lucashcampos.projetodelivery.repositories.CategoriaRepository;
 import com.lucashcampos.projetodelivery.repositories.CidadeRepository;
 import com.lucashcampos.projetodelivery.repositories.ClienteRepository;
@@ -34,10 +34,10 @@ import com.lucashcampos.projetodelivery.repositories.EstadoRepository;
 import com.lucashcampos.projetodelivery.repositories.ItemPedidoRepository;
 import com.lucashcampos.projetodelivery.repositories.PagamentoRepository;
 import com.lucashcampos.projetodelivery.repositories.PedidoRepository;
+import com.lucashcampos.projetodelivery.repositories.PizzaAdicionalRepository;
+import com.lucashcampos.projetodelivery.repositories.PizzaMassaRepository;
+import com.lucashcampos.projetodelivery.repositories.PizzaSaborTamanhoRepository;
 import com.lucashcampos.projetodelivery.repositories.ProdutoRepository;
-import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaAdicionalRepository;
-import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaMassaRepository;
-import com.lucashcampos.projetodelivery.repositories.pizzas.PizzaTamanhoRepository;
 
 @Service
 public class DBService {
@@ -73,7 +73,7 @@ public class DBService {
 	private ItemPedidoRepository itemPedidoRepository;
 
 	@Autowired
-	private PizzaTamanhoRepository pizzaSaborTamanhoRepository;
+	private PizzaSaborTamanhoRepository pizzaSaborTamanhoRepository;
 
 	@Autowired
 	private PizzaMassaRepository pizzaMassaRepository;

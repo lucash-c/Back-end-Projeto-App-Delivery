@@ -1,4 +1,4 @@
-package com.lucashcampos.projetodelivery.domain.pizza;
+package com.lucashcampos.projetodelivery.domain;
 
 import java.io.Serializable;
 import java.util.Objects;

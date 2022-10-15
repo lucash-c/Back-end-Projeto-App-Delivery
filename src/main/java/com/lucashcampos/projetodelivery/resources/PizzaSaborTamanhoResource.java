@@ -1,9 +1,7 @@
-package com.lucashcampos.projetodelivery.resources.pizza;
+package com.lucashcampos.projetodelivery.resources;
 
 import java.net.URI;
 import java.util.List;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,30 +15,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.lucashcampos.projetodelivery.domain.pizza.PizzaMassa;
-import com.lucashcampos.projetodelivery.services.pizza.PizzaMassaService;
+import com.lucashcampos.projetodelivery.domain.PizzaSaborTamanho;
+import com.lucashcampos.projetodelivery.services.PizzaSaborTamanhoService;
 
 @RestController
-@RequestMapping(value = "/massas-pizza")
-public class PizzaMassaResource {
+@RequestMapping(value = "/cardapio-pizzas")
+public class PizzaSaborTamanhoResource {
 	@Autowired
-	private PizzaMassaService service;
+	private PizzaSaborTamanhoService service;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<PizzaMassa> find(@PathVariable Integer id) {
-		PizzaMassa obj = service.find(id);
+	public ResponseEntity<PizzaSaborTamanho> find(@PathVariable Integer id) {
+		PizzaSaborTamanho obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<PizzaMassa>> findAll() {
-		List<PizzaMassa> list = service.findAll();
+	public ResponseEntity<List<PizzaSaborTamanho>> findAll() {
+		List<PizzaSaborTamanho> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody PizzaMassa obj) {
+	public ResponseEntity<Void> insert(@RequestBody PizzaSaborTamanho obj) {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
@@ -48,7 +46,7 @@ public class PizzaMassaResource {
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Void> update(@RequestBody PizzaMassa obj, @PathVariable Integer id) {
+	public ResponseEntity<Void> update(@RequestBody PizzaSaborTamanho obj, @PathVariable Integer id) {
 		obj.setId(id);
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
@@ -62,11 +60,11 @@ public class PizzaMassaResource {
 	}
 
 	@RequestMapping(value = "/page", method = RequestMethod.GET)
-	public ResponseEntity<Page<PizzaMassa>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+	public ResponseEntity<Page<PizzaSaborTamanho>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
 			@RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
-		Page<PizzaMassa> list = service.findPage(page, linesPerPage, orderBy, direction);
+		Page<PizzaSaborTamanho> list = service.findPage(page, linesPerPage, orderBy, direction);
 		return ResponseEntity.ok().body(list);
 	}
 
