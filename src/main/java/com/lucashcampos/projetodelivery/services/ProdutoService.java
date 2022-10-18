@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 
 import com.lucashcampos.projetodelivery.domain.Categoria;
 import com.lucashcampos.projetodelivery.domain.Pizza;
-import com.lucashcampos.projetodelivery.domain.PizzaAdicional;
+import com.lucashcampos.projetodelivery.domain.Adicional;
 import com.lucashcampos.projetodelivery.domain.PizzaSaborTamanho;
 import com.lucashcampos.projetodelivery.domain.Produto;
 import com.lucashcampos.projetodelivery.dto.NewProdutoDTO;
 import com.lucashcampos.projetodelivery.repositories.CategoriaRepository;
-import com.lucashcampos.projetodelivery.repositories.PizzaAdicionalRepository;
+import com.lucashcampos.projetodelivery.repositories.AdicionalRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaMassaRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaSaborTamanhoRepository;
@@ -46,7 +46,7 @@ public class ProdutoService {
 	private PizzaMassaRepository pizzaMassaRepository;
 
 	@Autowired
-	private PizzaAdicionalRepository pizzaAdicionalRepository;
+	private AdicionalRepository pizzaAdicionalRepository;
 
 	public Produto find(Integer id) {
 
@@ -86,8 +86,8 @@ public class ProdutoService {
 			}
 			objDTO.setSabores(listSabores);
 			
-			List<PizzaAdicional> listAdicionais = new ArrayList<>();
-			for(PizzaAdicional item : objDTO.getAdicionais()) {
+			List<Adicional> listAdicionais = new ArrayList<>();
+			for(Adicional item : objDTO.getAdicionais()) {
 				listAdicionais.add(pizzaAdicionalRepository.findById(item.getId()).get());
 			}
 			objDTO.setAdicionais(listAdicionais);

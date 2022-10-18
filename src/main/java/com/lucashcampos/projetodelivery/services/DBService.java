@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.lucashcampos.projetodelivery.domain.Adicional;
 import com.lucashcampos.projetodelivery.domain.Categoria;
 import com.lucashcampos.projetodelivery.domain.Cidade;
 import com.lucashcampos.projetodelivery.domain.Cliente;
@@ -19,13 +20,19 @@ import com.lucashcampos.projetodelivery.domain.PagamentoAVista;
 import com.lucashcampos.projetodelivery.domain.PagamentoComCartao;
 import com.lucashcampos.projetodelivery.domain.Pedido;
 import com.lucashcampos.projetodelivery.domain.Pizza;
-import com.lucashcampos.projetodelivery.domain.PizzaAdicional;
 import com.lucashcampos.projetodelivery.domain.PizzaMassa;
 import com.lucashcampos.projetodelivery.domain.PizzaSaborTamanho;
 import com.lucashcampos.projetodelivery.domain.Produto;
+import com.lucashcampos.projetodelivery.domain.Sorvete;
+import com.lucashcampos.projetodelivery.domain.SorveteCobertura;
+import com.lucashcampos.projetodelivery.domain.SorveteSabor;
+import com.lucashcampos.projetodelivery.domain.SorveteTamanho;
 import com.lucashcampos.projetodelivery.domain.enums.EstadoPagamento;
 import com.lucashcampos.projetodelivery.domain.enums.Perfil;
+import com.lucashcampos.projetodelivery.domain.enums.TipoAdicional;
 import com.lucashcampos.projetodelivery.domain.enums.TipoCliente;
+import com.lucashcampos.projetodelivery.domain.enums.TipoProduto;
+import com.lucashcampos.projetodelivery.repositories.AdicionalRepository;
 import com.lucashcampos.projetodelivery.repositories.CategoriaRepository;
 import com.lucashcampos.projetodelivery.repositories.CidadeRepository;
 import com.lucashcampos.projetodelivery.repositories.ClienteRepository;
@@ -34,10 +41,13 @@ import com.lucashcampos.projetodelivery.repositories.EstadoRepository;
 import com.lucashcampos.projetodelivery.repositories.ItemPedidoRepository;
 import com.lucashcampos.projetodelivery.repositories.PagamentoRepository;
 import com.lucashcampos.projetodelivery.repositories.PedidoRepository;
-import com.lucashcampos.projetodelivery.repositories.PizzaAdicionalRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaMassaRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaSaborTamanhoRepository;
 import com.lucashcampos.projetodelivery.repositories.ProdutoRepository;
+import com.lucashcampos.projetodelivery.repositories.SorveteCoberturaRepository;
+import com.lucashcampos.projetodelivery.repositories.SorveteRepository;
+import com.lucashcampos.projetodelivery.repositories.SorveteSaborRepository;
+import com.lucashcampos.projetodelivery.repositories.SorveteTamanhoRepository;
 
 @Service
 public class DBService {
@@ -79,7 +89,19 @@ public class DBService {
 	private PizzaMassaRepository pizzaMassaRepository;
 
 	@Autowired
-	private PizzaAdicionalRepository pizzaAdicionalRepository;
+	private AdicionalRepository adicionalRepository;
+
+	@Autowired
+	private SorveteCoberturaRepository sorveteCoberturaRepository;
+
+	@Autowired
+	private SorveteSaborRepository sorveteSaborRepository;
+
+	@Autowired
+	private SorveteTamanhoRepository sorveteTamanhoRepository;
+
+	@Autowired
+	private SorveteRepository sorveteRepository;
 
 	public void InstantiateTestDatabase() throws ParseException {
 		Categoria cat1 = new Categoria(null, "Lanches");
@@ -103,13 +125,13 @@ public class DBService {
 
 		// pizza
 		PizzaSaborTamanho PortuguesaGrande = new PizzaSaborTamanho(null, "Portuguesa",
-				"Molho, Mussarela, Tomate, presunto, ovo, cebola e orégano", "Grande", 8, 4, 35.00);
+				"Molho, Mussarela, Tomate, presunto, ovo, cebola e orégano", "Grande", 8, 4, 35.00, 2);
 		PizzaSaborTamanho MussarelaGrande = new PizzaSaborTamanho(null, "Mussarela",
-				"Molho, Mussarela, Tomate e orégano", "Grande", 8, 4, 30.00);
+				"Molho, Mussarela, Tomate e orégano", "Grande", 8, 4, 30.00, 2);
 		PizzaSaborTamanho MussarelaMedia = new PizzaSaborTamanho(null, "Mussarela",
-				"Molho, Mussarela, Tomate e orégano", "Media", 6, 3, 26.00);
+				"Molho, Mussarela, Tomate e orégano", "Media", 6, 3, 26.00, 2);
 		PizzaSaborTamanho MussarelaBroto = new PizzaSaborTamanho(null, "Mussarela",
-				"Molho, Mussarela, Tomate e orégano", "Broto", 2, 1, 22.00);
+				"Molho, Mussarela, Tomate e orégano", "Broto", 2, 1, 22.00, 2);
 
 		pizzaSaborTamanhoRepository
 				.saveAll(Arrays.asList(MussarelaGrande, MussarelaMedia, MussarelaBroto, PortuguesaGrande));
@@ -117,12 +139,31 @@ public class DBService {
 		PizzaMassa bordaSimples = new PizzaMassa(null, "Borda simples", 2.00);
 		pizzaMassaRepository.saveAll(Arrays.asList(bordaSimples));
 
-		PizzaAdicional ad1 = new PizzaAdicional(null, "Calabresa", 6.00);
-		pizzaAdicionalRepository.saveAll(Arrays.asList(ad1));
+		Adicional ad1 = new Adicional(null, "Calabresa", 6.00, TipoAdicional.PIZZAS.getCod());
+		adicionalRepository.saveAll(Arrays.asList(ad1));
 
 		Pizza p4 = new Pizza(Arrays.asList(MussarelaGrande), bordaSimples, Arrays.asList(ad1), "tirar tomate");
 		Pizza p12 = new Pizza(Arrays.asList(MussarelaGrande, PortuguesaGrande), bordaSimples, Arrays.asList(ad1),
 				"tirar cebola");
+
+		SorveteCobertura coberturaCaramelo = new SorveteCobertura(null, "Caramelo", 0.0);
+		sorveteCoberturaRepository.save(coberturaCaramelo);
+		
+		SorveteSabor chocolate = new SorveteSabor(null, "Chocolate", 0.0);
+		sorveteSaborRepository.save(chocolate);
+
+		SorveteTamanho tamanhoSorvete = new SorveteTamanho(null, "Copinho de 1 bola", 4.00,
+				"Copinho de 1 bola com 1 sabor a sua escolha.", 1);
+		sorveteTamanhoRepository.save(tamanhoSorvete);
+		
+		Adicional adCastanha = new Adicional(null, "Castanha", 1.00, TipoAdicional.SORVETES.getCod());
+		adicionalRepository.saveAll(Arrays.asList(adCastanha));
+
+		Sorvete sorvete = new Sorvete(tamanhoSorvete, Arrays.asList(chocolate), Arrays.asList(adCastanha),
+				Arrays.asList(coberturaCaramelo), TipoProduto.SORVETE.getCod());
+		sorveteRepository.save(sorvete);
+		
+		
 
 		Produto p13 = new Produto(null, "Produto 13", 10.00);
 		Produto p14 = new Produto(null, "Produto 14", 10.00);
@@ -162,6 +203,7 @@ public class DBService {
 		Produto p48 = new Produto(null, "Produto 48", 10.00);
 		Produto p49 = new Produto(null, "Produto 49", 10.00);
 		Produto p50 = new Produto(null, "Produto 50", 10.00);
+
 		cat1.getProdutos()
 				.addAll(Arrays.asList(p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, p23, p24, p25, p26, p27, p28,
 						p29, p30, p31, p32, p34, p35, p36, p37, p38, p39, p40, p41, p42, p43, p44, p45, p46, p47, p48,
@@ -228,7 +270,7 @@ public class DBService {
 
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12));
-		
+
 		produtoRepository.saveAll(
 				Arrays.asList(p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, p23, p24, p25, p26, p27, p28, p29, p30,
 						p31, p32, p34, p35, p36, p37, p38, p39, p40, p41, p42, p43, p44, p45, p46, p47, p48, p49, p50));

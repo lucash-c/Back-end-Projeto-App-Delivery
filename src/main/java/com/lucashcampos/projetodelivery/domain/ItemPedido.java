@@ -131,7 +131,7 @@ public class ItemPedido implements Serializable {
 
 			if (pizza.getAdicionais().size() > 0) {
 				builder.append("\n\nAdicionais: ");
-				for (PizzaAdicional adicional : pizza.getAdicionais()) {
+				for (Adicional adicional : pizza.getAdicionais()) {
 					builder.append(adicional.getNome());
 					builder.append(", ");
 				}

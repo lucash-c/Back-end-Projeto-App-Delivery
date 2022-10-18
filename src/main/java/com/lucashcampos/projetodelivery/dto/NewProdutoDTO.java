@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lucashcampos.projetodelivery.domain.Categoria;
-import com.lucashcampos.projetodelivery.domain.PizzaAdicional;
+import com.lucashcampos.projetodelivery.domain.Adicional;
 import com.lucashcampos.projetodelivery.domain.PizzaMassa;
 import com.lucashcampos.projetodelivery.domain.PizzaSaborTamanho;
 import com.lucashcampos.projetodelivery.domain.Produto;
@@ -18,7 +18,7 @@ public class NewProdutoDTO implements Serializable {
 	private List<Categoria> categorias = new ArrayList<>();
 	private List<PizzaSaborTamanho> sabores = new ArrayList<>();
 	private String observacao;
-	private List<PizzaAdicional> adicionais = new ArrayList<>();
+	private List<Adicional> adicionais = new ArrayList<>();
 	private PizzaMassa massa;
 
 	public NewProdutoDTO() {
@@ -65,11 +65,11 @@ public class NewProdutoDTO implements Serializable {
 		this.observacao = observacao;
 	}
 
-	public List<PizzaAdicional> getAdicionais() {
+	public List<Adicional> getAdicionais() {
 		return adicionais;
 	}
 
-	public void setAdicionais(List<PizzaAdicional> adicionais) {
+	public void setAdicionais(List<Adicional> adicionais) {
 		this.adicionais = adicionais;
 	}
 

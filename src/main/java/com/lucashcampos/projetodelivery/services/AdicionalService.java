@@ -10,34 +10,34 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.lucashcampos.projetodelivery.domain.PizzaAdicional;
-import com.lucashcampos.projetodelivery.repositories.PizzaAdicionalRepository;
+import com.lucashcampos.projetodelivery.domain.Adicional;
+import com.lucashcampos.projetodelivery.repositories.AdicionalRepository;
 import com.lucashcampos.projetodelivery.services.exceptions.DataIntegrityException;
 import com.lucashcampos.projetodelivery.services.exceptions.ObjectNotFoundException;
 
 @Service
-public class PizzaAdicionalService {
+public class AdicionalService {
 
 	@Autowired
-	private PizzaAdicionalRepository repo;
+	private AdicionalRepository repo;
 
-	public PizzaAdicional find(Integer id) {
-		Optional<PizzaAdicional> obj = repo.findById(id);
+	public Adicional find(Integer id) {
+		Optional<Adicional> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id " + id + ", Tipo: " + PizzaAdicional.class.getName()));
+				"Objeto não encontrado! Id " + id + ", Tipo: " + Adicional.class.getName()));
 	}
 
-	public List<PizzaAdicional> findAll() {
+	public List<Adicional> findAll() {
 		return repo.findAll();
 	}
 
-	public PizzaAdicional insert(PizzaAdicional obj) {
+	public Adicional insert(Adicional obj) {
 		obj.setId(null);
 		return repo.save(obj);
 	}
 
-	public PizzaAdicional update(PizzaAdicional obj) {
-		PizzaAdicional newObj = find(obj.getId());
+	public Adicional update(Adicional obj) {
+		Adicional newObj = find(obj.getId());
 		updateData(newObj, obj);
 		return repo.save(newObj);
 	}
@@ -52,12 +52,12 @@ public class PizzaAdicionalService {
 
 	}
 
-	public Page<PizzaAdicional> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+	public Page<Adicional> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
 	}
 
-	private void updateData(PizzaAdicional newObj, PizzaAdicional obj) {
+	private void updateData(Adicional newObj, Adicional obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setPreco(obj.getPreco());
 	}

@@ -19,6 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lucashcampos.projetodelivery.domain.enums.TipoProduto;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -30,6 +31,8 @@ public class Produto implements Serializable {
 	private Integer id;
 	private String nome;
 	private Double preco;
+	private Integer tipo;
+	
 
 	@JsonIgnore
 	@ManyToMany
@@ -56,6 +59,8 @@ public class Produto implements Serializable {
 		this.nome = nome;
 		this.preco = preco;
 		this.categorias = categorias;
+		this.tipo= 3;
+		
 	}
 
 	@JsonIgnore
@@ -89,6 +94,14 @@ public class Produto implements Serializable {
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
+	}
+
+	public TipoProduto getTipo() {
+		return TipoProduto.toEnum(tipo);
+	}
+
+	public void setTipo(TipoProduto tipo) {
+		this.tipo = tipo.getCod();
 	}
 
 	public List<Categoria> getCategorias() {

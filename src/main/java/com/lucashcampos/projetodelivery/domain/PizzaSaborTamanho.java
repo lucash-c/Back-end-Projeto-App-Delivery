@@ -23,19 +23,23 @@ public class PizzaSaborTamanho implements Serializable {
 	private Integer pedacos;
 	private Integer pessoas; // quantidade de pessoas que serve
 	private Double preco;
+	private Integer quantidadeSabor; // quantidade maxima de partes que a pizza podera ser dividida ou sabores que o
+										// front permitira ao cliente escolher
 
 	public PizzaSaborTamanho() {
 
 	}
 
-	public PizzaSaborTamanho(Integer id, String sabor, String descricao, String tamanho, Integer pedacos, Integer pessoas, Double preco) {
+	public PizzaSaborTamanho(Integer id, String sabor, String descricao, String tamanho, Integer pedacos,
+			Integer pessoas, Double preco, Integer quantidadeSabor) {
 		this.id = id;
 		this.sabor = sabor;
-		this.descricao= descricao;
+		this.descricao = descricao;
 		this.tamanho = tamanho;
 		this.pedacos = pedacos;
 		this.pessoas = pessoas;
 		this.preco = preco;
+		this.quantidadeSabor = quantidadeSabor;
 	}
 
 	public Integer getId() {
@@ -94,6 +98,14 @@ public class PizzaSaborTamanho implements Serializable {
 		this.descricao = descricao;
 	}
 
+	public Integer getQuantidadeSabor() {
+		return quantidadeSabor;
+	}
+
+	public void setQuantidadeSabor(Integer quantidadeSabor) {
+		this.quantidadeSabor = quantidadeSabor;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -110,9 +122,4 @@ public class PizzaSaborTamanho implements Serializable {
 		PizzaSaborTamanho other = (PizzaSaborTamanho) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
-
-	
-
 }

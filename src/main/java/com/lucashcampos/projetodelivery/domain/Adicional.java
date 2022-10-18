@@ -9,9 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.lucashcampos.projetodelivery.domain.enums.TipoAdicional;
+
 @Entity
-@Table(name = "ADICIONAIS_PARA_PIZZA")
-public class PizzaAdicional implements Serializable {
+@Table(name = "ADICIONAIS")
+public class Adicional implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -19,16 +21,18 @@ public class PizzaAdicional implements Serializable {
 	private Integer id;
 	private String nome;
 	private Double preco;
+	private Integer tipo;
 
-	public PizzaAdicional() {
+	public Adicional() {
 
 	}
 
-	public PizzaAdicional(Integer id, String nome, Double preco) {
+	public Adicional(Integer id, String nome, Double preco, Integer tipo) {
 
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
+		this.tipo = tipo;
 	}
 
 	public Integer getId() {
@@ -55,6 +59,14 @@ public class PizzaAdicional implements Serializable {
 		this.preco = preco;
 	}
 
+	public TipoAdicional getTipo() {
+		return TipoAdicional.toEnum(tipo);
+	}
+
+	public void setTipo(TipoAdicional tipo) {
+		this.tipo = tipo.getCod();
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -68,7 +80,7 @@ public class PizzaAdicional implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PizzaAdicional other = (PizzaAdicional) obj;
+		Adicional other = (Adicional) obj;
 		return Objects.equals(id, other.id);
 	}
 
