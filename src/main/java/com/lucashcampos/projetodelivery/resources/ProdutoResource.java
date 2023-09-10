@@ -51,9 +51,18 @@ public class ProdutoResource {
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody NewProdutoDTO objDTO) {
-
+		
 		Produto obj = service.insert(objDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody NewProdutoDTO objDTO, @PathVariable Integer id) {
+
+		objDTO.setId(id);
+		service.update(objDTO);
+		return ResponseEntity.noContent().build();
 	}
 }

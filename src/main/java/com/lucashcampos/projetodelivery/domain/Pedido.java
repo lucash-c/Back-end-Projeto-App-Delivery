@@ -45,6 +45,11 @@ public class Pedido implements Serializable {
 
 	@OneToMany(mappedBy = "id.pedido")
 	private Set<ItemPedido> itens = new HashSet<>();
+	
+	@ManyToOne
+    @JoinColumn(name = "restaurante_id")
+    private Restaurante restaurante;
+	
 
 	public Pedido() {
 

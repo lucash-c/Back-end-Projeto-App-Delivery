@@ -16,6 +16,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,15 +30,21 @@ public class Produto implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	private String descricao;
 	private String nome;
 	private Double preco;
 	private Integer tipo;
+	private String imagem;
 	
 
 	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "PRODUTO_CATEGORIA", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
 	private List<Categoria> categorias = new ArrayList<>();
+	
+	@ManyToOne
+    @JoinColumn(name = "restaurante_id")
+    private Restaurante restaurante;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "id.produto")
@@ -47,10 +54,18 @@ public class Produto implements Serializable {
 
 	}
 
-	public Produto(Integer id, String nome, Double preco) {
+	public Produto(Integer id, String nome, Double preco, Restaurante restaurante) {
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
+		this.restaurante = restaurante;
+	}
+	
+	public Produto(Integer id, String nome, Double preco, String descricao) {
+		this.id = id;
+		this.nome = nome;
+		this.preco = preco;
+		this.descricao = descricao;
 	}
 
 	public Produto(Integer id, String nome, Double preco, List<Categoria> categorias) {
@@ -59,8 +74,15 @@ public class Produto implements Serializable {
 		this.nome = nome;
 		this.preco = preco;
 		this.categorias = categorias;
-		this.tipo= 3;
-		
+	}
+	
+	public Produto(Integer id, String nome, Double preco, List<Categoria> categorias, Restaurante restaurante) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.preco = preco;
+		this.categorias = categorias;
+		this.restaurante = restaurante;
 	}
 
 	@JsonIgnore
@@ -88,6 +110,14 @@ public class Produto implements Serializable {
 		this.nome = nome;
 	}
 
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 	public Double getPreco() {
 		return preco;
 	}
@@ -110,6 +140,27 @@ public class Produto implements Serializable {
 
 	public void setCategorias(List<Categoria> categorias) {
 		this.categorias = categorias;
+	}
+	
+
+	public Restaurante getRestaurante() {
+		return restaurante;
+	}
+
+	public void setRestaurante(Restaurante restaurante) {
+		this.restaurante = restaurante;
+	}
+
+	public void setTipo(Integer tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
 	}
 
 	public Set<ItemPedido> getItens() {

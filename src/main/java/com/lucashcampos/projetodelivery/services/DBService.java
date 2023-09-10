@@ -23,6 +23,7 @@ import com.lucashcampos.projetodelivery.domain.Pizza;
 import com.lucashcampos.projetodelivery.domain.PizzaMassa;
 import com.lucashcampos.projetodelivery.domain.PizzaSaborTamanho;
 import com.lucashcampos.projetodelivery.domain.Produto;
+import com.lucashcampos.projetodelivery.domain.Restaurante;
 import com.lucashcampos.projetodelivery.domain.Sorvete;
 import com.lucashcampos.projetodelivery.domain.SorveteCobertura;
 import com.lucashcampos.projetodelivery.domain.SorveteSabor;
@@ -44,6 +45,7 @@ import com.lucashcampos.projetodelivery.repositories.PedidoRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaMassaRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaSaborTamanhoRepository;
 import com.lucashcampos.projetodelivery.repositories.ProdutoRepository;
+import com.lucashcampos.projetodelivery.repositories.RestauranteRepository;
 import com.lucashcampos.projetodelivery.repositories.SorveteCoberturaRepository;
 import com.lucashcampos.projetodelivery.repositories.SorveteRepository;
 import com.lucashcampos.projetodelivery.repositories.SorveteSaborRepository;
@@ -103,7 +105,14 @@ public class DBService {
 	@Autowired
 	private SorveteRepository sorveteRepository;
 
+	@Autowired
+	private RestauranteRepository restauranteRepository;
+
 	public void InstantiateTestDatabase() throws ParseException {
+
+		Restaurante r1 = new Restaurante(null, "Restaurante do Lucas LTDA", "4155545456", "Lucas",
+				"Restaurante do Lucas", Arrays.asList(1, 2));
+
 		Categoria cat1 = new Categoria(null, "Lanches");
 		Categoria cat2 = new Categoria(null, "Bebidas");
 		Categoria cat3 = new Categoria(null, "Pizzas");
@@ -112,16 +121,16 @@ public class DBService {
 		Categoria cat6 = new Categoria(null, "Mercado");
 		Categoria cat7 = new Categoria(null, "Farmacia");
 
-		Produto p1 = new Produto(null, "Coca-cola 2l", 15.00);
-		Produto p2 = new Produto(null, "Suco de laranja", 8.00);
-		Produto p3 = new Produto(null, "X-Bacon", 20.00);
-		Produto p5 = new Produto(null, "X-Egg", 18.00);
-		Produto p6 = new Produto(null, "Suco de Morango", 20.00);
-		Produto p7 = new Produto(null, "Pastel de Frango", 10.00);
-		Produto p8 = new Produto(null, "Milk Shake Ovomaltine", 9.00);
-		Produto p9 = new Produto(null, "Bolo no pote", 6.00);
-		Produto p10 = new Produto(null, "Pastel de queijo", 20.00);
-		Produto p11 = new Produto(null, "Dipirona", 6.00);
+		Produto p1 = new Produto(null, "Coca-cola 2l", 15.00, r1);
+		Produto p2 = new Produto(null, "Suco de laranja", 8.00, r1);
+		Produto p3 = new Produto(null, "X-Bacon", 20.00, r1);
+		Produto p5 = new Produto(null, "X-Egg", 18.00, r1);
+		Produto p6 = new Produto(null, "Suco de Morango", 20.00, r1);
+		Produto p7 = new Produto(null, "Pastel de Frango", 10.00, r1);
+		Produto p8 = new Produto(null, "Milk Shake Ovomaltine", 9.00, r1);
+		Produto p9 = new Produto(null, "Bolo no pote", 6.00, r1);
+		Produto p10 = new Produto(null, "Pastel de queijo", 20.00, r1);
+		Produto p11 = new Produto(null, "Dipirona", 6.00, r1);
 
 		// pizza
 		PizzaSaborTamanho PortuguesaGrande = new PizzaSaborTamanho(null, "Portuguesa",
@@ -148,61 +157,59 @@ public class DBService {
 
 		SorveteCobertura coberturaCaramelo = new SorveteCobertura(null, "Caramelo", 0.0);
 		sorveteCoberturaRepository.save(coberturaCaramelo);
-		
+
 		SorveteSabor chocolate = new SorveteSabor(null, "Chocolate", 0.0);
 		sorveteSaborRepository.save(chocolate);
 
 		SorveteTamanho tamanhoSorvete = new SorveteTamanho(null, "Copinho de 1 bola", 4.00,
 				"Copinho de 1 bola com 1 sabor a sua escolha.", 1);
 		sorveteTamanhoRepository.save(tamanhoSorvete);
-		
+
 		Adicional adCastanha = new Adicional(null, "Castanha", 1.00, TipoAdicional.SORVETES.getCod());
 		adicionalRepository.saveAll(Arrays.asList(adCastanha));
 
 		Sorvete sorvete = new Sorvete(tamanhoSorvete, Arrays.asList(chocolate), Arrays.asList(adCastanha),
 				Arrays.asList(coberturaCaramelo), TipoProduto.SORVETE.getCod());
 		sorveteRepository.save(sorvete);
-		
-		
 
-		Produto p13 = new Produto(null, "Produto 13", 10.00);
-		Produto p14 = new Produto(null, "Produto 14", 10.00);
-		Produto p15 = new Produto(null, "Produto 15", 10.00);
-		Produto p16 = new Produto(null, "Produto 16", 10.00);
-		Produto p17 = new Produto(null, "Produto 17", 10.00);
-		Produto p18 = new Produto(null, "Produto 18", 10.00);
-		Produto p19 = new Produto(null, "Produto 19", 10.00);
-		Produto p20 = new Produto(null, "Produto 20", 10.00);
-		Produto p21 = new Produto(null, "Produto 21", 10.00);
-		Produto p22 = new Produto(null, "Produto 22", 10.00);
-		Produto p23 = new Produto(null, "Produto 23", 10.00);
-		Produto p24 = new Produto(null, "Produto 24", 10.00);
-		Produto p25 = new Produto(null, "Produto 25", 10.00);
-		Produto p26 = new Produto(null, "Produto 26", 10.00);
-		Produto p27 = new Produto(null, "Produto 27", 10.00);
-		Produto p28 = new Produto(null, "Produto 28", 10.00);
-		Produto p29 = new Produto(null, "Produto 29", 10.00);
-		Produto p30 = new Produto(null, "Produto 30", 10.00);
-		Produto p31 = new Produto(null, "Produto 31", 10.00);
-		Produto p32 = new Produto(null, "Produto 32", 10.00);
-		Produto p33 = new Produto(null, "Produto 33", 10.00);
-		Produto p34 = new Produto(null, "Produto 34", 10.00);
-		Produto p35 = new Produto(null, "Produto 35", 10.00);
-		Produto p36 = new Produto(null, "Produto 36", 10.00);
-		Produto p37 = new Produto(null, "Produto 37", 10.00);
-		Produto p38 = new Produto(null, "Produto 38", 10.00);
-		Produto p39 = new Produto(null, "Produto 39", 10.00);
-		Produto p40 = new Produto(null, "Produto 40", 10.00);
-		Produto p41 = new Produto(null, "Produto 41", 10.00);
-		Produto p42 = new Produto(null, "Produto 42", 10.00);
-		Produto p43 = new Produto(null, "Produto 43", 10.00);
-		Produto p44 = new Produto(null, "Produto 44", 10.00);
-		Produto p45 = new Produto(null, "Produto 45", 10.00);
-		Produto p46 = new Produto(null, "Produto 46", 10.00);
-		Produto p47 = new Produto(null, "Produto 47", 10.00);
-		Produto p48 = new Produto(null, "Produto 48", 10.00);
-		Produto p49 = new Produto(null, "Produto 49", 10.00);
-		Produto p50 = new Produto(null, "Produto 50", 10.00);
+		Produto p13 = new Produto(null, "Produto 13", 10.00, r1);
+		Produto p14 = new Produto(null, "Produto 14", 10.00, r1);
+		Produto p15 = new Produto(null, "Produto 15", 10.00, r1);
+		Produto p16 = new Produto(null, "Produto 16", 10.00, r1);
+		Produto p17 = new Produto(null, "Produto 17", 10.00, r1);
+		Produto p18 = new Produto(null, "Produto 18", 10.00, r1);
+		Produto p19 = new Produto(null, "Produto 19", 10.00, r1);
+		Produto p20 = new Produto(null, "Produto 20", 10.00, r1);
+		Produto p21 = new Produto(null, "Produto 21", 10.00, r1);
+		Produto p22 = new Produto(null, "Produto 22", 10.00, r1);
+		Produto p23 = new Produto(null, "Produto 23", 10.00, r1);
+		Produto p24 = new Produto(null, "Produto 24", 10.00, r1);
+		Produto p25 = new Produto(null, "Produto 25", 10.00, r1);
+		Produto p26 = new Produto(null, "Produto 26", 10.00, r1);
+		Produto p27 = new Produto(null, "Produto 27", 10.00, r1);
+		Produto p28 = new Produto(null, "Produto 28", 10.00, r1);
+		Produto p29 = new Produto(null, "Produto 29", 10.00, r1);
+		Produto p30 = new Produto(null, "Produto 30", 10.00, r1);
+		Produto p31 = new Produto(null, "Produto 31", 10.00, r1);
+		Produto p32 = new Produto(null, "Produto 32", 10.00, r1);
+		Produto p33 = new Produto(null, "Produto 33", 10.00, r1);
+		Produto p34 = new Produto(null, "Produto 34", 10.00, r1);
+		Produto p35 = new Produto(null, "Produto 35", 10.00, r1);
+		Produto p36 = new Produto(null, "Produto 36", 10.00, r1);
+		Produto p37 = new Produto(null, "Produto 37", 10.00, r1);
+		Produto p38 = new Produto(null, "Produto 38", 10.00, r1);
+		Produto p39 = new Produto(null, "Produto 39", 10.00, r1);
+		Produto p40 = new Produto(null, "Produto 40", 10.00, r1);
+		Produto p41 = new Produto(null, "Produto 41", 10.00, r1);
+		Produto p42 = new Produto(null, "Produto 42", 10.00, r1);
+		Produto p43 = new Produto(null, "Produto 43", 10.00, r1);
+		Produto p44 = new Produto(null, "Produto 44", 10.00, r1);
+		Produto p45 = new Produto(null, "Produto 45", 10.00, r1);
+		Produto p46 = new Produto(null, "Produto 46", 10.00, r1);
+		Produto p47 = new Produto(null, "Produto 47", 10.00, r1);
+		Produto p48 = new Produto(null, "Produto 48", 10.00, r1);
+		Produto p49 = new Produto(null, "Produto 49", 10.00, r1);
+		Produto p50 = new Produto(null, "Produto 50", 10.00, r1);
 
 		cat1.getProdutos()
 				.addAll(Arrays.asList(p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, p23, p24, p25, p26, p27, p28,
@@ -267,13 +274,18 @@ public class DBService {
 		p10.getCategorias().addAll(Arrays.asList(cat5));
 		p11.getCategorias().addAll(Arrays.asList(cat7));
 		p12.getCategorias().addAll(Arrays.asList(cat3));
-
+		
+		restauranteRepository.save(r1);
+		
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
+
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12));
 
 		produtoRepository.saveAll(
 				Arrays.asList(p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, p23, p24, p25, p26, p27, p28, p29, p30,
 						p31, p32, p34, p35, p36, p37, p38, p39, p40, p41, p42, p43, p44, p45, p46, p47, p48, p49, p50));
+
+		
 
 		Estado est1 = new Estado(null, "Minas Gerais");
 		Estado est2 = new Estado(null, "São Paulo");

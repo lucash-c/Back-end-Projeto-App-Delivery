@@ -1,13 +1,12 @@
 package com.lucashcampos.projetodelivery.domain.enums;
 
-public enum TipoProduto {
-
-	PIZZA(0, "Pizza"), SORVETE(1, "Sorvete"), COMUM(2, "Comum");
+public enum EspecialidadeRestaurante {
+	PIZZARIA(0, "Pizzaria"), SORVETERIA(1, "Sorveteria"), ESPETARIA(2, "Espetaria"), JAPONESA(2, "Japonesa");
 
 	private int cod;
 	private String descricao;
 
-	private TipoProduto(int cod, String descricao) {
+	private EspecialidadeRestaurante (int cod, String descricao) {
 		this.cod = cod;
 		this.descricao = descricao;
 	}
@@ -20,12 +19,12 @@ public enum TipoProduto {
 		return descricao;
 	}
 
-	public static TipoProduto toEnum(Integer cod) {
+	public static EspecialidadeRestaurante toEnum(Integer cod) {
 		if (cod == null) {
 			return null;
 		}
 
-		for (TipoProduto x : TipoProduto.values()) {
+		for (EspecialidadeRestaurante x : EspecialidadeRestaurante.values()) {
 			if (cod.equals(x.getCod()))
 				return x;
 		}
