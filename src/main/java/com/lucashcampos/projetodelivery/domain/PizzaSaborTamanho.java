@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -25,6 +27,10 @@ public class PizzaSaborTamanho implements Serializable {
 	private Double preco;
 	private Integer quantidadeSabor; // quantidade maxima de partes que a pizza podera ser dividida ou sabores que o
 										// front permitira ao cliente escolher
+
+	@ManyToOne
+	@JoinColumn(name = "restaurante_id")
+	private Restaurante restaurante;
 
 	public PizzaSaborTamanho() {
 

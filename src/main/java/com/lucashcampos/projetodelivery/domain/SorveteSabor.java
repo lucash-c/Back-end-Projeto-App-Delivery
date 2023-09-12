@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,6 +21,10 @@ public class SorveteSabor implements Serializable {
 	private String nome;
 	private String descricao;
 	private Double valorAdicional;
+	
+	@ManyToOne
+	@JoinColumn(name = "restaurante_id")
+	private Restaurante restaurante;
 
 	public SorveteSabor() {
 

@@ -7,13 +7,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "CARDAPIO_PARA_SORVETE")
 public class SorveteTamanho implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -21,6 +23,10 @@ public class SorveteTamanho implements Serializable {
 	private Double preco;
 	private String descricao;
 	Integer quantidadeSabores;
+
+	@ManyToOne
+	@JoinColumn(name = "restaurante_id")
+	private Restaurante restaurante;
 
 	public SorveteTamanho() {
 
@@ -31,7 +37,7 @@ public class SorveteTamanho implements Serializable {
 		this.nome = nome;
 		this.preco = preco;
 		this.descricao = descricao;
-		this.quantidadeSabores= quantidadeSabores;
+		this.quantidadeSabores = quantidadeSabores;
 	}
 
 	public Integer getId() {
@@ -64,7 +70,7 @@ public class SorveteTamanho implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}	
+	}
 
 	public Integer getQuantidadeSabores() {
 		return quantidadeSabores;

@@ -36,7 +36,7 @@ public class Restaurante implements Serializable {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "endereco_id")
-	private Endereco endereco;
+	private Endereco endereco;	
 	private String telefone;
 	private String whatsapp;
 	private Double mediaSatisfacao;
@@ -50,6 +50,22 @@ public class Restaurante implements Serializable {
 
 	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
 	private List<Produto> produtos = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+    private List<SorveteSabor> sorveteSabores = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+    private List<SorveteCobertura> sorveteCoberturas = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+    private List<SorveteTamanho> sorveteTamanhos = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+    private List<PizzaMassa> pizzaMassas = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+    private List<PizzaSaborTamanho> pizzaSaboresTamanhos = new ArrayList<>();	
+	
 
 	public Restaurante() {
 

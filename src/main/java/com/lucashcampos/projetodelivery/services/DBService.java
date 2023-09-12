@@ -110,6 +110,38 @@ public class DBService {
 
 	public void InstantiateTestDatabase() throws ParseException {
 
+		Estado est1 = new Estado(null, "Minas Gerais");
+		Estado est2 = new Estado(null, "São Paulo");
+
+		Cidade c1 = new Cidade(null, "Uberlandia", est1);
+		Cidade c2 = new Cidade(null, "São Paulo", est2);
+		Cidade c3 = new Cidade(null, "Campinas", est2);
+
+		est1.getCidades().addAll(Arrays.asList(c1));
+		est2.getCidades().addAll(Arrays.asList(c2, c3));
+
+		estadoRepository.saveAll(Arrays.asList(est1, est2));
+		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
+
+		Cliente cli1 = new Cliente(null, "56198765545", "Maria Silva", "lucash_c@yahoo.com.br",
+				TipoCliente.PESSOAFISICA, pe.encode("1234"));
+		cli1.getTelefones().addAll(Arrays.asList("5465465645", "56116161"));
+
+		Cliente cli2 = new Cliente(null, "39140661059", "Rafaela Maelyse", "rafaelamaelyse@outlook.com",
+				TipoCliente.PESSOAFISICA, pe.encode("1234"));
+		cli2.getTelefones().addAll(Arrays.asList("55555454", "1111555555"));
+		cli2.addPerfil(Perfil.ADMIN);
+
+		Endereco e1 = new Endereco(null, "Rua das Flores", "300", "Apto 303", "Jardim", "38220834", c1);
+		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "5465465", c2);
+		Endereco e3 = new Endereco(null, "Avenida Floriano", "2106", null, "Centro", "8858585", c2);
+
+		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
+
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+
 		Restaurante r1 = new Restaurante(null, "Restaurante do Lucas LTDA", "4155545456", "Lucas",
 				"Restaurante do Lucas", Arrays.asList(1, 2));
 
@@ -274,9 +306,9 @@ public class DBService {
 		p10.getCategorias().addAll(Arrays.asList(cat5));
 		p11.getCategorias().addAll(Arrays.asList(cat7));
 		p12.getCategorias().addAll(Arrays.asList(cat3));
-		
+
 		restauranteRepository.save(r1);
-		
+
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12));
@@ -284,40 +316,6 @@ public class DBService {
 		produtoRepository.saveAll(
 				Arrays.asList(p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, p23, p24, p25, p26, p27, p28, p29, p30,
 						p31, p32, p34, p35, p36, p37, p38, p39, p40, p41, p42, p43, p44, p45, p46, p47, p48, p49, p50));
-
-		
-
-		Estado est1 = new Estado(null, "Minas Gerais");
-		Estado est2 = new Estado(null, "São Paulo");
-
-		Cidade c1 = new Cidade(null, "Uberlandia", est1);
-		Cidade c2 = new Cidade(null, "São Paulo", est2);
-		Cidade c3 = new Cidade(null, "Campinas", est2);
-
-		est1.getCidades().addAll(Arrays.asList(c1));
-		est2.getCidades().addAll(Arrays.asList(c2, c3));
-
-		estadoRepository.saveAll(Arrays.asList(est1, est2));
-		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
-
-		Cliente cli1 = new Cliente(null, "56198765545", "Maria Silva", "lucash_c@yahoo.com.br",
-				TipoCliente.PESSOAFISICA, pe.encode("1234"));
-		cli1.getTelefones().addAll(Arrays.asList("5465465645", "56116161"));
-
-		Cliente cli2 = new Cliente(null, "39140661059", "Rafaela Maelyse", "rafaelamaelyse@outlook.com",
-				TipoCliente.PESSOAFISICA, pe.encode("1234"));
-		cli2.getTelefones().addAll(Arrays.asList("55555454", "1111555555"));
-		cli2.addPerfil(Perfil.ADMIN);
-
-		Endereco e1 = new Endereco(null, "Rua das Flores", "300", "Apto 303", "Jardim", "38220834", c1, cli1);
-		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "5465465", c2, cli1);
-		Endereco e3 = new Endereco(null, "Avenida Floriano", "2106", null, "Centro", "8858585", c2, cli2);
-
-		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
-		cli2.getEnderecos().addAll(Arrays.asList(e3));
-
-		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
-		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 

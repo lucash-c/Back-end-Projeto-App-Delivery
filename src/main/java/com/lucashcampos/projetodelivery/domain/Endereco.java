@@ -1,6 +1,8 @@
 package com.lucashcampos.projetodelivery.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -8,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -31,19 +34,18 @@ public class Endereco implements Serializable {
 	private Cidade cidade;
 
 	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "cliente_id")
-	private Cliente cliente;
-	
+	@ManyToMany(mappedBy = "enderecos")
+	private List<Cliente> clientes = new ArrayList<>();
+
 	@OneToOne(mappedBy = "endereco")
-    private Restaurante restaurante;
+	private Restaurante restaurante;
 
 	public Endereco() {
 
 	}
 
 	public Endereco(Integer id, String logradouro, String numero, String complemento, String bairro, String cep,
-			Cidade cidade, Cliente cliente) {
+			Cidade cidade) {
 
 		this.id = id;
 		this.logradouro = logradouro;
@@ -51,7 +53,6 @@ public class Endereco implements Serializable {
 		this.complemento = complemento;
 		this.bairro = bairro;
 		this.cep = cep;
-		this.cliente = cliente;
 		this.setCidade(cidade);
 	}
 
@@ -101,14 +102,6 @@ public class Endereco implements Serializable {
 
 	public void setCep(String cep) {
 		this.cep = cep;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
 	}
 
 	public Cidade getCidade() {

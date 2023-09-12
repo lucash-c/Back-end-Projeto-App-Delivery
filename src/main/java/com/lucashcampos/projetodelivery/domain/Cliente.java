@@ -8,7 +8,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -16,6 +15,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -37,7 +39,8 @@ public class Cliente implements Serializable {
 	@JsonIgnore
 	private String senha;
 
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+	@ManyToMany
+	@JoinTable(name = "cliente_endereco", joinColumns = @JoinColumn(name = "cliente_id"), inverseJoinColumns = @JoinColumn(name = "endereco_id"))
 	private List<Endereco> enderecos = new ArrayList<>();
 
 	@ElementCollection
@@ -64,6 +67,20 @@ public class Cliente implements Serializable {
 		this.email = email;
 		this.senha = senha;
 		this.tipo = (tipo == null) ? null : tipo.getCod();
+
+		addPerfil(Perfil.CLIENTE);
+	}
+
+	public Cliente(Integer id, String cpf_cnpj, String nome, String email, TipoCliente tipo, String senha,
+			Endereco endereco) {
+
+		this.id = id;
+		this.cpf_cnpj = cpf_cnpj;
+		this.nome = nome;
+		this.email = email;
+		this.senha = senha;
+		this.tipo = (tipo == null) ? null : tipo.getCod();
+		this.enderecos.add(endereco);
 
 		addPerfil(Perfil.CLIENTE);
 	}

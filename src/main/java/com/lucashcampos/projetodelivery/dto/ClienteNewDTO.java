@@ -43,6 +43,8 @@ public class ClienteNewDTO implements Serializable {
 	private String telefone2;
 
 	private Integer cidadeId;
+	
+	
 
 	public ClienteNewDTO() {
 
