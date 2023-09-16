@@ -80,6 +80,14 @@ public class SorveteTamanho implements Serializable {
 		this.quantidadeSabores = quantidadeSabores;
 	}
 
+	public Restaurante getRestaurante() {
+		return restaurante;
+	}
+
+	public void setRestaurante(Restaurante restaurante) {
+		this.restaurante = restaurante;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

@@ -14,14 +14,14 @@ import javax.persistence.Table;
 @Table(name = "SABORES_PARA_SORVETE")
 public class SorveteSabor implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
 	private String descricao;
 	private Double valorAdicional;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "restaurante_id")
 	private Restaurante restaurante;
@@ -66,6 +66,14 @@ public class SorveteSabor implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Restaurante getRestaurante() {
+		return restaurante;
+	}
+
+	public void setRestaurante(Restaurante restaurante) {
+		this.restaurante = restaurante;
 	}
 
 }

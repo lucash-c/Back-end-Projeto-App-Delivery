@@ -59,4 +59,12 @@ public class SorveteCobertura implements Serializable {
 		this.valorAdicional = valorAdicional;
 	}
 
+	public Restaurante getRestaurante() {
+		return restaurante;
+	}
+
+	public void setRestaurante(Restaurante restaurante) {
+		this.restaurante = restaurante;
+	}
+
 }
