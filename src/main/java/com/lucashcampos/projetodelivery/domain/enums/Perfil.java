@@ -1,7 +1,7 @@
 package com.lucashcampos.projetodelivery.domain.enums;
 
 public enum Perfil {
-	ADMIN(1, "ROLE_ADMIN"), CLIENTE(2, "ROLE_CLIENTE");
+	ADMIN(1, "ROLE_ADMIN"), CLIENTE(2, "ROLE_CLIENTE"), PARCEIRO(3,"ROLE_PARCEIRO");
 
 	private int cod;
 	private String descricao;

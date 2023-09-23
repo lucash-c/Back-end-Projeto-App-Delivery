@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lucashcampos.projetodelivery.domain.Cidade;
 import com.lucashcampos.projetodelivery.domain.Cliente;
 import com.lucashcampos.projetodelivery.domain.Endereco;
 import com.lucashcampos.projetodelivery.domain.enums.Perfil;
@@ -119,9 +118,8 @@ public class ClienteService {
 	public Cliente fromDTO(ClienteNewDTO objDTO) {
 		Cliente cli = new Cliente(null, objDTO.getCpf_cnpj(), objDTO.getNome(), objDTO.getEmail(),
 				TipoCliente.toEnum(objDTO.getTipo()), pe.encode(objDTO.getSenha()));
-		Cidade cid = new Cidade(objDTO.getCidadeId(), null, null);
 		Endereco end = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getComplemento(),
-				objDTO.getBairro(), objDTO.getCep(), cid);
+				 objDTO.getCep());
 		cli.getEnderecos().add(end);
 		cli.getTelefones().add(objDTO.getTelefone1());
 		if (objDTO.getTelefone2() != null) {

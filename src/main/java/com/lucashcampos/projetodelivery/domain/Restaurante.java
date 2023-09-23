@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lucashcampos.projetodelivery.domain.enums.EspecialidadeRestaurante;
 
 @Entity
@@ -30,13 +31,13 @@ public class Restaurante implements Serializable {
 	private String cnpjCpf;
 	private String nomeResponsavel;
 	private String nomeFantasia;
-	
+
 	@ElementCollection(targetClass = Integer.class)
 	private List<Integer> especialidades = new ArrayList<>();
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "endereco_id")
-	private Endereco endereco;	
+	private Endereco endereco;
 	private String telefone;
 	private String whatsapp;
 	private Double mediaSatisfacao;
@@ -44,43 +45,61 @@ public class Restaurante implements Serializable {
 	private String site;
 	private String instagram;
 	private String facebook;
-
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
-	private List<Pedido> pedidos = new ArrayList<>();
-
+	private List<Pedido> pedidos = new ArrayList<>();	
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
 	private List<Produto> produtos = new ArrayList<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
-    private List<SorveteSabor> sorveteSabores = new ArrayList<>();
+	private List<SorveteSabor> sorveteSabores = new ArrayList<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
-    private List<SorveteCobertura> sorveteCoberturas = new ArrayList<>();
+	private List<SorveteCobertura> sorveteCoberturas = new ArrayList<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
-    private List<SorveteTamanho> sorveteTamanhos = new ArrayList<>();
+	private List<SorveteTamanho> sorveteTamanhos = new ArrayList<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
-    private List<PizzaMassa> pizzaMassas = new ArrayList<>();
+	private List<PizzaMassa> pizzaMassas = new ArrayList<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
-    private List<PizzaSaborTamanho> pizzaSaboresTamanhos = new ArrayList<>();	
+	private List<PizzaSaborTamanho> pizzaSaboresTamanhos = new ArrayList<>();
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+	private List<Categoria> categorias = new ArrayList<>();
 
 	public Restaurante() {
 
 	}
 
-	public Restaurante(Integer id, String razaoSocial, String cnpjCpf, String nomeResponsavel, String nomeFantasia,
-			List<Integer> especialidades) {
+	public Restaurante(Integer id, String razaoSocial, String cnpjCpf, String nomeResponsavel, String nomeFantasia, Endereco endereco, String telefone, String whatsapp, Double mediaSatisfacao, 
+			String logo, String site, String instagram, String facebook, List<Integer> especialidades) {
 
 		this.id = id;
 		this.razaoSocial = razaoSocial;
 		this.cnpjCpf = cnpjCpf;
 		this.nomeResponsavel = nomeResponsavel;
 		this.nomeFantasia = nomeFantasia;
+		this.endereco = endereco;
+		this.telefone = telefone;
+		this.whatsapp = whatsapp;
+		this.mediaSatisfacao = mediaSatisfacao;
+		this.logo = logo;
+		this.site = site;
+		this.instagram = instagram;
+		this.facebook = facebook;
 		this.especialidades = especialidades;
-		
+
 	}
 
 	public Integer getId() {
@@ -203,6 +222,104 @@ public class Restaurante implements Serializable {
 
 	public void setFacebook(String facebook) {
 		this.facebook = facebook;
+	}
+
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
+	}
+
+	public List<Produto> getProdutos() {
+		return produtos;
+	}
+
+	public void setProdutos(List<Produto> produtos) {
+		this.produtos = produtos;
+	}
+
+	public List<SorveteSabor> getSorveteSabores() {
+		return sorveteSabores;
+	}
+
+	public void setSorveteSabores(List<SorveteSabor> sorveteSabores) {
+		this.sorveteSabores = sorveteSabores;
+	}
+
+	public List<SorveteCobertura> getSorveteCoberturas() {
+		return sorveteCoberturas;
+	}
+
+	public List<SorveteTamanho> getSorveteTamanhos() {
+		return sorveteTamanhos;
+	}
+
+	public List<PizzaMassa> getPizzaMassas() {
+		return pizzaMassas;
+	}
+
+	public List<PizzaSaborTamanho> getPizzaSaboresTamanhos() {
+		return pizzaSaboresTamanhos;
+	}
+
+	public List<Categoria> getCategorias() {
+		return categorias;
+	}
+		
+	public void setSorveteCoberturas(List<SorveteCobertura> sorveteCoberturas) {
+		this.sorveteCoberturas = sorveteCoberturas;
+	}
+
+	public void setSorveteTamanhos(List<SorveteTamanho> sorveteTamanhos) {
+		this.sorveteTamanhos = sorveteTamanhos;
+	}
+
+	public void setPizzaMassas(List<PizzaMassa> pizzaMassas) {
+		this.pizzaMassas = pizzaMassas;
+	}
+
+	public void setPizzaSaboresTamanhos(List<PizzaSaborTamanho> pizzaSaboresTamanhos) {
+		this.pizzaSaboresTamanhos = pizzaSaboresTamanhos;
+	}
+
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Restaurante [id=");
+		builder.append(id);
+		builder.append(", razaoSocial=");
+		builder.append(razaoSocial);
+		builder.append(", cnpjCpf=");
+		builder.append(cnpjCpf);
+		builder.append(", nomeResponsavel=");
+		builder.append(nomeResponsavel);
+		builder.append(", nomeFantasia=");
+		builder.append(nomeFantasia);
+		builder.append(", endereco=");
+		builder.append(endereco);
+		builder.append(", telefone=");
+		builder.append(telefone);
+		builder.append(", whatsapp=");
+		builder.append(whatsapp);
+		builder.append(", mediaSatisfacao=");
+		builder.append(mediaSatisfacao);
+		builder.append(", logo=");
+		builder.append(logo);
+		builder.append(", site=");
+		builder.append(site);
+		builder.append(", instagram=");
+		builder.append(instagram);
+		builder.append(", facebook=");
+		builder.append(facebook);
+			
+		builder.append("]");
+		return builder.toString();
 	}
 
 	@Override

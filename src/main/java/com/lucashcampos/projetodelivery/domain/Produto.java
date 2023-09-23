@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,16 +39,16 @@ public class Produto implements Serializable {
 	
 
 	@JsonIgnore
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.DETACH) // Evitar exclusão em cascata
 	@JoinTable(name = "PRODUTO_CATEGORIA", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
 	private List<Categoria> categorias = new ArrayList<>();
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "restaurante_id")
     private Restaurante restaurante;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "id.produto")
+	@OneToMany(mappedBy = "id.produto", cascade = CascadeType.REMOVE)
 	private Set<ItemPedido> itens = new HashSet<>();
 
 	public Produto() {

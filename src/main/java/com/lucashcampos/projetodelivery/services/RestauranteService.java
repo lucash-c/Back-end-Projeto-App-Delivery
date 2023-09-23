@@ -2,6 +2,7 @@ package com.lucashcampos.projetodelivery.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,7 +10,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.lucashcampos.projetodelivery.domain.Endereco;
 import com.lucashcampos.projetodelivery.domain.Restaurante;
+import com.lucashcampos.projetodelivery.dto.RestauranteDTO;
 import com.lucashcampos.projetodelivery.repositories.RestauranteRepository;
 import com.lucashcampos.projetodelivery.services.exceptions.ObjectNotFoundException;
 
@@ -90,6 +93,20 @@ public class RestauranteService {
 
 		if (obj.getFacebook() != null)
 			newObj.setFacebook(obj.getFacebook());
+	}
+
+	public Restaurante fromDTO(RestauranteDTO objDTO) {
+
+		Endereco endereco = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getComplemento(),
+				objDTO.getCep());
+		
+		//cria uma lista com os IDs das especialidades do restaurante
+		List<Integer> idsEspecialidades = objDTO.getEspecialidades().stream()
+				.map(especialidade -> especialidade.getCod()).collect(Collectors.toList());
+
+		return new Restaurante(null, objDTO.getRazaoSocial(), objDTO.getCnpjCpf(), objDTO.getNomeResponsavel(),
+				objDTO.getNomeFantasia(), endereco, objDTO.getTelefone(), objDTO.getWhatsapp(), objDTO.getMediaSatisfacao(), objDTO.getLogo(),
+				objDTO.getSite(), objDTO.getInstagram(), objDTO.getFacebook(), idsEspecialidades);
 	}
 
 }

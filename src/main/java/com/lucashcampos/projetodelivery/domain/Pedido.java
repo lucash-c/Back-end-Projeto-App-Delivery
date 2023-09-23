@@ -35,18 +35,18 @@ public class Pedido implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
 	private Pagamento pagamento;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "endereco_entrega_id")
 	private Endereco enderecoDeEntrega;
 
-	@OneToMany(mappedBy = "id.pedido")
+	@OneToMany(mappedBy = "id.pedido", cascade = CascadeType.REMOVE)
 	private Set<ItemPedido> itens = new HashSet<>();
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "restaurante_id")
     private Restaurante restaurante;
 	
@@ -61,6 +61,15 @@ public class Pedido implements Serializable {
 		this.instante = instante;
 		this.cliente = cliente;
 		this.enderecoDeEntrega = enderecoDeEntrega;
+	}
+	
+	public Pedido(Integer id, Date instante, Cliente cliente, Endereco enderecoDeEntrega, Restaurante restaurante) {
+
+		this.id = id;
+		this.instante = instante;
+		this.cliente = cliente;
+		this.enderecoDeEntrega = enderecoDeEntrega;
+		this.restaurante = restaurante;
 	}
 
 	public double getValorTotal() {
