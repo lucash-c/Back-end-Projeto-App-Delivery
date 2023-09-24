@@ -66,8 +66,8 @@ public class SorveteCoberturaService {
 		if (obj.getValorAdicional() != null)
 			newObj.setValorAdicional(obj.getValorAdicional());
 
-		if (obj.getRestaurante() != null)
-			newObj.setRestaurante(obj.getRestaurante());
+		if (obj.getLoja() != null)
+			newObj.setLoja(obj.getLoja());
 	}
 
 }

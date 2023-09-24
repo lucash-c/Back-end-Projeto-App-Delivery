@@ -9,7 +9,7 @@ import com.lucashcampos.projetodelivery.domain.Categoria;
 import com.lucashcampos.projetodelivery.domain.PizzaMassa;
 import com.lucashcampos.projetodelivery.domain.PizzaSaborTamanho;
 import com.lucashcampos.projetodelivery.domain.Produto;
-import com.lucashcampos.projetodelivery.domain.Restaurante;
+import com.lucashcampos.projetodelivery.domain.Loja;
 import com.lucashcampos.projetodelivery.domain.SorveteCobertura;
 import com.lucashcampos.projetodelivery.domain.SorveteSabor;
 import com.lucashcampos.projetodelivery.domain.SorveteTamanho;
@@ -22,7 +22,7 @@ public class NewProdutoDTO implements Serializable {
 	private String descricao;
 	private String imagem;
 	private Double preco;
-	private Restaurante restaurante;
+	private Loja loja;
 	private List<Categoria> categorias = new ArrayList<>();
 	private List<PizzaSaborTamanho> saboresPizza = new ArrayList<>();
 	private String observacao;
@@ -149,12 +149,12 @@ public class NewProdutoDTO implements Serializable {
 		this.coberturas = coberturas;
 	}
 	
-	public Restaurante getRestaurante() {
-		return restaurante;
+	public Loja getLoja() {
+		return loja;
 	}
 
-	public void setRestaurante(Restaurante restaurante) {
-		this.restaurante = restaurante;
+	public void setLoja(Loja loja) {
+		this.loja = loja;
 	}
 
 	public Produto toProduto() {

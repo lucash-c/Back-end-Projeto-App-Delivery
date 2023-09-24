@@ -17,11 +17,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.lucashcampos.projetodelivery.domain.enums.EspecialidadeRestaurante;
+import com.lucashcampos.projetodelivery.domain.enums.EspecialidadeLoja;
 
 @Entity
-@Table(name = "RESTAURANTES")
-public class Restaurante implements Serializable {
+@Table(name = "LOJAS")
+public class Loja implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -45,45 +45,50 @@ public class Restaurante implements Serializable {
 	private String site;
 	private String instagram;
 	private String facebook;
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
-	private List<Pedido> pedidos = new ArrayList<>();	
-	
+	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
+	private List<Pedido> pedidos = new ArrayList<>();
+
 	@JsonIgnore
-	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
 	private List<Produto> produtos = new ArrayList<>();
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
 	private List<SorveteSabor> sorveteSabores = new ArrayList<>();
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
 	private List<SorveteCobertura> sorveteCoberturas = new ArrayList<>();
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
 	private List<SorveteTamanho> sorveteTamanhos = new ArrayList<>();
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
 	private List<PizzaMassa> pizzaMassas = new ArrayList<>();
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
 	private List<PizzaSaborTamanho> pizzaSaboresTamanhos = new ArrayList<>();
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
 	private List<Categoria> categorias = new ArrayList<>();
 
-	public Restaurante() {
+	@JsonIgnore
+	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
+	private List<Adicional> adicionais = new ArrayList<>();
+
+	public Loja() {
 
 	}
 
-	public Restaurante(Integer id, String razaoSocial, String cnpjCpf, String nomeResponsavel, String nomeFantasia, Endereco endereco, String telefone, String whatsapp, Double mediaSatisfacao, 
-			String logo, String site, String instagram, String facebook, List<Integer> especialidades) {
+	public Loja(Integer id, String razaoSocial, String cnpjCpf, String nomeResponsavel, String nomeFantasia,
+			Endereco endereco, String telefone, String whatsapp, Double mediaSatisfacao, String logo, String site,
+			String instagram, String facebook, List<Integer> especialidades) {
 
 		this.id = id;
 		this.razaoSocial = razaoSocial;
@@ -142,19 +147,19 @@ public class Restaurante implements Serializable {
 		this.nomeFantasia = nomeFantasia;
 	}
 
-	public List<EspecialidadeRestaurante> getEspecialidades() {
-		List<EspecialidadeRestaurante> listEspecs = new ArrayList<>();
+	public List<EspecialidadeLoja> getEspecialidades() {
+		List<EspecialidadeLoja> listEspecs = new ArrayList<>();
 
 		for (Integer espec : especialidades) {
-			listEspecs.add(EspecialidadeRestaurante.toEnum(espec));
+			listEspecs.add(EspecialidadeLoja.toEnum(espec));
 		}
 
 		return listEspecs;
 	}
 
-	public void setEspecialidades(List<EspecialidadeRestaurante> listEspecs) {
+	public void setEspecialidades(List<EspecialidadeLoja> listEspecs) {
 		List<Integer> newListEspecs = new ArrayList<>();
-		for (EspecialidadeRestaurante espec : listEspecs) {
+		for (EspecialidadeLoja espec : listEspecs) {
 			newListEspecs.add(espec.getCod());
 		}
 		this.especialidades = newListEspecs;
@@ -267,7 +272,7 @@ public class Restaurante implements Serializable {
 	public List<Categoria> getCategorias() {
 		return categorias;
 	}
-		
+
 	public void setSorveteCoberturas(List<SorveteCobertura> sorveteCoberturas) {
 		this.sorveteCoberturas = sorveteCoberturas;
 	}
@@ -288,10 +293,18 @@ public class Restaurante implements Serializable {
 		this.categorias = categorias;
 	}
 
+	public List<Adicional> getAdicionais() {
+		return adicionais;
+	}
+
+	public void setAdicionais(List<Adicional> adicionais) {
+		this.adicionais = adicionais;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Restaurante [id=");
+		builder.append("Loja [id=");
 		builder.append(id);
 		builder.append(", razaoSocial=");
 		builder.append(razaoSocial);
@@ -317,7 +330,7 @@ public class Restaurante implements Serializable {
 		builder.append(instagram);
 		builder.append(", facebook=");
 		builder.append(facebook);
-			
+
 		builder.append("]");
 		return builder.toString();
 	}
@@ -335,7 +348,7 @@ public class Restaurante implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Restaurante other = (Restaurante) obj;
+		Loja other = (Loja) obj;
 		return Objects.equals(id, other.id);
 	}
 

@@ -3,9 +3,9 @@ package com.lucashcampos.projetodelivery.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.lucashcampos.projetodelivery.domain.Restaurante;
+import com.lucashcampos.projetodelivery.domain.Loja;
 
 @Repository
-public interface RestauranteRepository extends JpaRepository<Restaurante, Integer> {
+public interface LojaRepository extends JpaRepository<Loja, Integer> {
 
 }

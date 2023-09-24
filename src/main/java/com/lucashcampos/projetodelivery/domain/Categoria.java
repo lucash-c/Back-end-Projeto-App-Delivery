@@ -26,8 +26,8 @@ public class Categoria implements Serializable {
 	private List<Produto> produtos = new ArrayList<>();
 
 	@ManyToOne
-	@JoinColumn(name = "restaurante_id")
-	private Restaurante restaurante;
+	@JoinColumn(name = "loja_id")
+	private Loja loja;
 
 	public Categoria() {
 
@@ -62,12 +62,12 @@ public class Categoria implements Serializable {
 		this.produtos = produtos;
 	}
 
-	public Restaurante getRestaurante() {
-		return restaurante;
+	public Loja getRestaurante() {
+		return loja;
 	}
 
-	public void setRestaurante(Restaurante restaurante) {
-		this.restaurante = restaurante;
+	public void setRestaurante(Loja loja) {
+		this.loja = loja;
 	}
 
 	@Override

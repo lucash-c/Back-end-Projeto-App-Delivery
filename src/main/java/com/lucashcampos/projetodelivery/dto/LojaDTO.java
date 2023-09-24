@@ -9,10 +9,10 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.lucashcampos.projetodelivery.domain.Restaurante;
-import com.lucashcampos.projetodelivery.domain.enums.EspecialidadeRestaurante;
+import com.lucashcampos.projetodelivery.domain.Loja;
+import com.lucashcampos.projetodelivery.domain.enums.EspecialidadeLoja;
 
-public class RestauranteDTO implements Serializable {
+public class LojaDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
@@ -58,13 +58,13 @@ public class RestauranteDTO implements Serializable {
 	private String facebook;
 
 	@Size(min = 1, message = "Deve haver pelo menos uma especialidade adicionada!")
-	private List<EspecialidadeRestaurante> especialidades;
+	private List<EspecialidadeLoja> especialidades;
 
-	public RestauranteDTO() {
+	public LojaDTO() {
 
 	}
 
-	public RestauranteDTO(Restaurante obj) {
+	public LojaDTO(Loja obj) {
 		id = obj.getId();
 		razaoSocial = obj.getRazaoSocial();
 		cnpjCpf = obj.getCnpjCpf();
@@ -213,11 +213,11 @@ public class RestauranteDTO implements Serializable {
 		this.facebook = facebook;
 	}
 
-	public List<EspecialidadeRestaurante> getEspecialidades() {
+	public List<EspecialidadeLoja> getEspecialidades() {
 		return especialidades;
 	}
 
-	public void setEspecialidades(List<EspecialidadeRestaurante> especialidades) {
+	public void setEspecialidades(List<EspecialidadeLoja> especialidades) {
 		this.especialidades = especialidades;
 	}
 

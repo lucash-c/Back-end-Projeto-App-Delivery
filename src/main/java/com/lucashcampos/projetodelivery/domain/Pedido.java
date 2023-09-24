@@ -47,8 +47,8 @@ public class Pedido implements Serializable {
 	private Set<ItemPedido> itens = new HashSet<>();
 	
 	@ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "restaurante_id")
-    private Restaurante restaurante;
+    @JoinColumn(name = "loja_id")
+    private Loja loja;
 	
 
 	public Pedido() {
@@ -63,13 +63,13 @@ public class Pedido implements Serializable {
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 	
-	public Pedido(Integer id, Date instante, Cliente cliente, Endereco enderecoDeEntrega, Restaurante restaurante) {
+	public Pedido(Integer id, Date instante, Cliente cliente, Endereco enderecoDeEntrega, Loja loja) {
 
 		this.id = id;
 		this.instante = instante;
 		this.cliente = cliente;
 		this.enderecoDeEntrega = enderecoDeEntrega;
-		this.restaurante = restaurante;
+		this.loja = loja;
 	}
 
 	public double getValorTotal() {

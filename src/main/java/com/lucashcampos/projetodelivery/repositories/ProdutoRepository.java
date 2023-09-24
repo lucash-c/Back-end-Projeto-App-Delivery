@@ -21,7 +21,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 	Page<Produto> search(@Param("nome") String nome, @Param("categorias") List<Categoria> categorias,
 			Pageable pageRequest);
 	
-	 List<Produto> findByRestauranteId(Integer restauranteId);
+	 List<Produto> findByLojaId(Integer lojaId);
 }
 
 

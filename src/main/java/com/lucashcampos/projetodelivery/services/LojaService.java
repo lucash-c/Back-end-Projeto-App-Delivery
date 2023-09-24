@@ -11,34 +11,34 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.lucashcampos.projetodelivery.domain.Endereco;
-import com.lucashcampos.projetodelivery.domain.Restaurante;
-import com.lucashcampos.projetodelivery.dto.RestauranteDTO;
-import com.lucashcampos.projetodelivery.repositories.RestauranteRepository;
+import com.lucashcampos.projetodelivery.domain.Loja;
+import com.lucashcampos.projetodelivery.dto.LojaDTO;
+import com.lucashcampos.projetodelivery.repositories.LojaRepository;
 import com.lucashcampos.projetodelivery.services.exceptions.ObjectNotFoundException;
 
 @Service
-public class RestauranteService {
+public class LojaService {
 
 	@Autowired
-	private RestauranteRepository repo;
+	private LojaRepository repo;
 
-	public Restaurante find(Integer id) {
-		Optional<Restaurante> obj = repo.findById(id);
+	public Loja find(Integer id) {
+		Optional<Loja> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id " + id + ", Tipo: " + Restaurante.class.getName()));
+				"Objeto não encontrado! Id " + id + ", Tipo: " + Loja.class.getName()));
 	}
 
-	public List<Restaurante> findAll() {
+	public List<Loja> findAll() {
 		return repo.findAll();
 	}
 
-	public Restaurante insert(Restaurante obj) {
+	public Loja insert(Loja obj) {
 		obj.setId(null);
 		return repo.save(obj);
 	}
 
-	public Restaurante update(Restaurante obj) {
-		Restaurante newObj = find(obj.getId());
+	public Loja update(Loja obj) {
+		Loja newObj = find(obj.getId());
 		updateData(newObj, obj);
 		return repo.save(newObj);
 	}
@@ -48,12 +48,12 @@ public class RestauranteService {
 		repo.deleteById(id);
 	}
 
-	public Page<Restaurante> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+	public Page<Loja> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
 	}
 
-	private void updateData(Restaurante newObj, Restaurante obj) {
+	private void updateData(Loja newObj, Loja obj) {
 
 		if (obj.getRazaoSocial() != null)
 			newObj.setRazaoSocial(obj.getRazaoSocial());
@@ -95,16 +95,16 @@ public class RestauranteService {
 			newObj.setFacebook(obj.getFacebook());
 	}
 
-	public Restaurante fromDTO(RestauranteDTO objDTO) {
+	public Loja fromDTO(LojaDTO objDTO) {
 
 		Endereco endereco = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getComplemento(),
 				objDTO.getCep());
 		
-		//cria uma lista com os IDs das especialidades do restaurante
+		//cria uma lista com os IDs das especialidades da loja
 		List<Integer> idsEspecialidades = objDTO.getEspecialidades().stream()
 				.map(especialidade -> especialidade.getCod()).collect(Collectors.toList());
 
-		return new Restaurante(null, objDTO.getRazaoSocial(), objDTO.getCnpjCpf(), objDTO.getNomeResponsavel(),
+		return new Loja(null, objDTO.getRazaoSocial(), objDTO.getCnpjCpf(), objDTO.getNomeResponsavel(),
 				objDTO.getNomeFantasia(), endereco, objDTO.getTelefone(), objDTO.getWhatsapp(), objDTO.getMediaSatisfacao(), objDTO.getLogo(),
 				objDTO.getSite(), objDTO.getInstagram(), objDTO.getFacebook(), idsEspecialidades);
 	}

@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.lucashcampos.projetodelivery.domain.enums.TipoAdicional;
@@ -22,6 +24,10 @@ public class Adicional implements Serializable {
 	private String nome;
 	private Double preco;
 	private Integer tipo;
+
+	@ManyToOne
+	@JoinColumn(name = "loja_id")
+	private Loja loja;
 
 	public Adicional() {
 
@@ -65,6 +71,14 @@ public class Adicional implements Serializable {
 
 	public void setTipo(TipoAdicional tipo) {
 		this.tipo = tipo.getCod();
+	}	
+
+	public Loja getLoja() {
+		return loja;
+	}
+
+	public void setLoja(Loja loja) {
+		this.loja = loja;
 	}
 
 	@Override

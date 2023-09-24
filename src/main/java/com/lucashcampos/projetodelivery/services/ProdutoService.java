@@ -105,7 +105,7 @@ public class ProdutoService {
 		}
 
 		Produto prod = objDTO.toProduto();
-		prod.setRestaurante(objDTO.getRestaurante());
+		prod.setLoja(objDTO.getLoja());
 		for (Categoria cat : objDTO.getCategorias()) {
 			cat.getProdutos().add(prod);
 			categoriaService.update(cat);
@@ -191,7 +191,7 @@ public class ProdutoService {
 		}
 
 		pizza.setPreco(preco);
-		pizza.setRestaurante(objDTO.getRestaurante());
+		pizza.setLoja(objDTO.getLoja());
 
 		pizzaSaborTamanhoRepository.saveAll(pizza.getSabores());
 		pizzaMassaRepository.save(pizza.getMassa());
@@ -245,7 +245,7 @@ public class ProdutoService {
 		}
 
 		sorvete.setPreco(preco);
-		sorvete.setRestaurante(objDTO.getRestaurante());
+		sorvete.setLoja(objDTO.getLoja());
 
 		sorveteCoberturaRepository.saveAll(sorvete.getCoberturas());
 		sorveteSaborRepository.saveAll(sorvete.getSabores());

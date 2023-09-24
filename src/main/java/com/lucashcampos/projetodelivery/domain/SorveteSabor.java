@@ -23,8 +23,8 @@ public class SorveteSabor implements Serializable {
 	private Double valorAdicional;
 
 	@ManyToOne
-	@JoinColumn(name = "restaurante_id")
-	private Restaurante restaurante;
+	@JoinColumn(name = "loja_id")
+	private Loja loja;
 
 	public SorveteSabor() {
 
@@ -68,12 +68,12 @@ public class SorveteSabor implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public Restaurante getRestaurante() {
-		return restaurante;
+	public Loja getLoja() {
+		return loja;
 	}
 
-	public void setRestaurante(Restaurante restaurante) {
-		this.restaurante = restaurante;
+	public void setLoja(Loja loja) {
+		this.loja = loja;
 	}
 
 }

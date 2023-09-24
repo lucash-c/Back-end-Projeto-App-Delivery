@@ -44,8 +44,8 @@ public class Produto implements Serializable {
 	private List<Categoria> categorias = new ArrayList<>();
 	
 	@ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "restaurante_id")
-    private Restaurante restaurante;
+    @JoinColumn(name = "loja_id")
+    private Loja loja;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "id.produto", cascade = CascadeType.REMOVE)
@@ -55,11 +55,11 @@ public class Produto implements Serializable {
 
 	}
 
-	public Produto(Integer id, String nome, Double preco, Restaurante restaurante) {
+	public Produto(Integer id, String nome, Double preco, Loja loja) {
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
-		this.restaurante = restaurante;
+		this.loja = loja;
 	}
 	
 	public Produto(Integer id, String nome, Double preco, String descricao) {
@@ -77,13 +77,13 @@ public class Produto implements Serializable {
 		this.categorias = categorias;
 	}
 	
-	public Produto(Integer id, String nome, Double preco, List<Categoria> categorias, Restaurante restaurante) {
+	public Produto(Integer id, String nome, Double preco, List<Categoria> categorias, Loja loja) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
 		this.categorias = categorias;
-		this.restaurante = restaurante;
+		this.loja = loja;
 	}
 
 	@JsonIgnore
@@ -144,12 +144,12 @@ public class Produto implements Serializable {
 	}
 	
 
-	public Restaurante getRestaurante() {
-		return restaurante;
+	public Loja getLoja() {
+		return loja;
 	}
 
-	public void setRestaurante(Restaurante restaurante) {
-		this.restaurante = restaurante;
+	public void setLoja(Loja loja) {
+		this.loja = loja;
 	}
 
 	public void setTipo(Integer tipo) {

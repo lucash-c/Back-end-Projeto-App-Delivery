@@ -29,8 +29,8 @@ public class PizzaSaborTamanho implements Serializable {
 										// front permitira ao cliente escolher
 
 	@ManyToOne
-	@JoinColumn(name = "restaurante_id")
-	private Restaurante restaurante;
+	@JoinColumn(name = "loja_id")
+	private Loja loja;
 
 	public PizzaSaborTamanho() {
 
@@ -110,6 +110,14 @@ public class PizzaSaborTamanho implements Serializable {
 
 	public void setQuantidadeSabor(Integer quantidadeSabor) {
 		this.quantidadeSabor = quantidadeSabor;
+	}
+
+	public Loja getLoja() {
+		return loja;
+	}
+
+	public void setLoja(Loja loja) {
+		this.loja = loja;
 	}
 
 	@Override

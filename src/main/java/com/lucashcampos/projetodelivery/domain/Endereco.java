@@ -31,7 +31,7 @@ public class Endereco implements Serializable {
 	private List<Cliente> clientes = new ArrayList<>();
 
 	@OneToOne(mappedBy = "endereco")
-	private Restaurante restaurante;
+	private Loja loja;
 
 	public Endereco() {
 

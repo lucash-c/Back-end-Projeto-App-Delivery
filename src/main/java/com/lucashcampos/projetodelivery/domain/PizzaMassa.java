@@ -23,8 +23,8 @@ public class PizzaMassa implements Serializable {
 	private Double preco;
 
 	@ManyToOne
-	@JoinColumn(name = "restaurante_id")
-	private Restaurante restaurante;
+	@JoinColumn(name = "loja_id")
+	private Loja loja;
 
 	public PizzaMassa() {
 
@@ -59,6 +59,14 @@ public class PizzaMassa implements Serializable {
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
+	}	
+
+	public Loja getLoja() {
+		return loja;
+	}
+
+	public void setLoja(Loja loja) {
+		this.loja = loja;
 	}
 
 	@Override

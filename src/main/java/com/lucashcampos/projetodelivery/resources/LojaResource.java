@@ -18,34 +18,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.lucashcampos.projetodelivery.domain.Restaurante;
-import com.lucashcampos.projetodelivery.dto.RestauranteDTO;
-import com.lucashcampos.projetodelivery.services.RestauranteService;
+import com.lucashcampos.projetodelivery.domain.Loja;
+import com.lucashcampos.projetodelivery.dto.LojaDTO;
+import com.lucashcampos.projetodelivery.services.LojaService;
 
 @RestController
 @RequestMapping(value = "/restaurantes")
-public class RestauranteResource {
+public class LojaResource {
 	@Autowired
-	private RestauranteService service;
+	private LojaService service;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Restaurante> find(@PathVariable Integer id) {
-		Restaurante obj = service.find(id);
+	public ResponseEntity<Loja> find(@PathVariable Integer id) {
+		Loja obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<RestauranteDTO>> findAll() {
-		List<Restaurante> list = service.findAll();
-		List<RestauranteDTO> listDTO = list.stream().map(obj -> new RestauranteDTO(obj)).collect(Collectors.toList());
+	public ResponseEntity<List<LojaDTO>> findAll() {
+		List<Loja> list = service.findAll();
+		List<LojaDTO> listDTO = list.stream().map(obj -> new LojaDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDTO);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody RestauranteDTO objDTO) {
+	public ResponseEntity<Void> insert(@Valid @RequestBody LojaDTO objDTO) {
 		objDTO.setMediaSatisfacao(0.0);
-		Restaurante obj = service.fromDTO(objDTO);
+		Loja obj = service.fromDTO(objDTO);
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
@@ -53,8 +53,8 @@ public class RestauranteResource {
 
 	@PreAuthorize("hasAnyRole('ADMIN','PARCEIRO')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Void> update(@Valid @RequestBody RestauranteDTO objDTO, @PathVariable Integer id) {
-		Restaurante obj = service.fromDTO(objDTO);
+	public ResponseEntity<Void> update(@Valid @RequestBody LojaDTO objDTO, @PathVariable Integer id) {
+		Loja obj = service.fromDTO(objDTO);
 		obj.setId(id);
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
@@ -68,12 +68,12 @@ public class RestauranteResource {
 	}
 
 	@RequestMapping(value = "/page", method = RequestMethod.GET)
-	public ResponseEntity<Page<RestauranteDTO>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+	public ResponseEntity<Page<LojaDTO>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
 			@RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
-		Page<Restaurante> list = service.findPage(page, linesPerPage, orderBy, direction);
-		Page<RestauranteDTO> listDTO = list.map(obj -> new RestauranteDTO(obj));
+		Page<Loja> list = service.findPage(page, linesPerPage, orderBy, direction);
+		Page<LojaDTO> listDTO = list.map(obj -> new LojaDTO(obj));
 		return ResponseEntity.ok().body(listDTO);
 	}
 

@@ -72,8 +72,8 @@ public class SorveteTamanhoService {
 		if (obj.getQuantidadeSabores() != null)
 			newObj.setQuantidadeSabores(obj.getQuantidadeSabores());
 
-		if (obj.getRestaurante() != null)
-			newObj.setRestaurante(obj.getRestaurante());
+		if (obj.getLoja() != null)
+			newObj.setLoja(obj.getLoja());
 	}
 
 }

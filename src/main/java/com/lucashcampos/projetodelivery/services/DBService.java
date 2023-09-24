@@ -24,12 +24,12 @@ import com.lucashcampos.projetodelivery.domain.Pizza;
 import com.lucashcampos.projetodelivery.domain.PizzaMassa;
 import com.lucashcampos.projetodelivery.domain.PizzaSaborTamanho;
 import com.lucashcampos.projetodelivery.domain.Produto;
-import com.lucashcampos.projetodelivery.domain.Restaurante;
+import com.lucashcampos.projetodelivery.domain.Loja;
 import com.lucashcampos.projetodelivery.domain.Sorvete;
 import com.lucashcampos.projetodelivery.domain.SorveteCobertura;
 import com.lucashcampos.projetodelivery.domain.SorveteSabor;
 import com.lucashcampos.projetodelivery.domain.SorveteTamanho;
-import com.lucashcampos.projetodelivery.domain.enums.EspecialidadeRestaurante;
+import com.lucashcampos.projetodelivery.domain.enums.EspecialidadeLoja;
 import com.lucashcampos.projetodelivery.domain.enums.EstadoPagamento;
 import com.lucashcampos.projetodelivery.domain.enums.Perfil;
 import com.lucashcampos.projetodelivery.domain.enums.TipoAdicional;
@@ -45,7 +45,7 @@ import com.lucashcampos.projetodelivery.repositories.PedidoRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaMassaRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaSaborTamanhoRepository;
 import com.lucashcampos.projetodelivery.repositories.ProdutoRepository;
-import com.lucashcampos.projetodelivery.repositories.RestauranteRepository;
+import com.lucashcampos.projetodelivery.repositories.LojaRepository;
 import com.lucashcampos.projetodelivery.repositories.SorveteCoberturaRepository;
 import com.lucashcampos.projetodelivery.repositories.SorveteRepository;
 import com.lucashcampos.projetodelivery.repositories.SorveteSaborRepository;
@@ -100,10 +100,10 @@ public class DBService {
 	private SorveteRepository sorveteRepository;
 
 	@Autowired
-	private RestauranteRepository restauranteRepository;
+	private LojaRepository lojaRepository;
 
 	@Autowired
-	private RestauranteService restauranteService;
+	private LojaService lojaService;
 
 	@Transactional
 	public void InstantiateTestDatabase() throws ParseException {
@@ -128,38 +128,38 @@ public class DBService {
 		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
 
 		// Restaurante 1
-		Restaurante r1 = new Restaurante(null, "Restaurante A", "12345678000190", // CNPJ fictício
+		Loja r1 = new Loja(null, "Restaurante A", "12345678000190", // CNPJ fictício
 				"João da Silva", "Comida Boa", new Endereco(null, "Rua A", "123", "Apt 101", "12345-678"),
 				"(11) 5555-5555", "(11) 99999-9999", 4.5, "logo1.jpg", "www.restaurantea.com", "restaurantea_instagram",
-				"restaurantea_facebook", List.of(EspecialidadeRestaurante.PIZZARIA.getCod()));
+				"restaurantea_facebook", List.of(EspecialidadeLoja.PIZZARIA.getCod()));
 
 		// Restaurante 2
-		Restaurante r2 = new Restaurante(null, "Restaurante B", "98765432100055", // CNPJ fictício
+		Loja r2 = new Loja(null, "Restaurante B", "98765432100055", // CNPJ fictício
 				"Maria Souza", "Sabor Gourmet", new Endereco(null, "Av. B", "456", "Sala 201", "54321-987"),
 				"(22) 3333-3333", "(22) 88888-8888", 4.2, "logo2.jpg", "www.saborgourmet.com", "saborgourmet_instagram",
-				"saborgourmet_facebook", List.of(EspecialidadeRestaurante.JAPONESA.getCod()));
+				"saborgourmet_facebook", List.of(EspecialidadeLoja.JAPONESA.getCod()));
 
 		// Restaurante 3
-		Restaurante r3 = new Restaurante(3, "Restaurante C", "11223344556677", // CNPJ fictício
+		Loja r3 = new Loja(3, "Restaurante C", "11223344556677", // CNPJ fictício
 				"Pedro Oliveira", "Delícias Caseiras", new Endereco(null, "Rua C", "789", "Casa", "78901-234"),
 				"(33) 4444-4444", "(33) 77777-7777", 4.0, "logo3.jpg", "www.delicias.com", "delicias_instagram",
-				"delicias_facebook", List.of(EspecialidadeRestaurante.ESPETARIA.getCod()));
+				"delicias_facebook", List.of(EspecialidadeLoja.ESPETARIA.getCod()));
 
 		// Restaurante 4
-		Restaurante r4 = new Restaurante(4, "Restaurante D", "99887766554433", // CNPJ fictício
+		Loja r4 = new Loja(4, "Restaurante D", "99887766554433", // CNPJ fictício
 				"Ana Rodrigues", "Sabor Brasileiro", new Endereco(null, "Av. D", "1011", "Sala 301", "98765-432"),
 				"(44) 5555-5555", "(44) 66666-6666", 4.8, "logo4.jpg", "www.saborbrasileiro.com",
 				"saborbrasileiro_instagram", "saborbrasileiro_facebook",
-				List.of(EspecialidadeRestaurante.ESPETARIA.getCod()));
+				List.of(EspecialidadeLoja.ESPETARIA.getCod()));
 
 		// Restaurante 5
-		Restaurante r5 = new Restaurante(5, "Restaurante E", "11223344556677", // CNPJ fictício (mesmo CNPJ do
+		Loja r5 = new Loja(5, "Restaurante E", "11223344556677", // CNPJ fictício (mesmo CNPJ do
 																				// restaurante 3 para fins de exemplo)
 				"Fernanda Carvalho", "Pizza Express", new Endereco(null, "Rua E", "555", "Apt 501", "55555-555"),
 				"(55) 7777-7777", "(55) 99999-9999", 4.4, "logo5.jpg", "www.pizzaexpress.com", "pizzaexpress_instagram",
-				"pizzaexpress_facebook", List.of(EspecialidadeRestaurante.PIZZARIA.getCod()));
+				"pizzaexpress_facebook", List.of(EspecialidadeLoja.PIZZARIA.getCod()));
 
-		restauranteRepository.saveAll(Arrays.asList(r1, r2, r3, r4, r5));
+		lojaRepository.saveAll(Arrays.asList(r1, r2, r3, r4, r5));
 
 		Categoria cat1 = new Categoria(null, "Lanches");
 		Categoria cat2 = new Categoria(null, "Bebidas");
@@ -362,11 +362,11 @@ public class DBService {
 
 		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3, ip4));
 
-		Restaurante rTeste = restauranteService.find(1);
+		Loja rTeste = lojaService.find(1);
 		System.out.println(
 				"////////////////////////////////////////////////////////////////////////////////////////////////////");
 		System.out.println(rTeste.toString());
-		List<Produto> produtos = produtoRepository.findByRestauranteId(r1.getId());
+		List<Produto> produtos = produtoRepository.findByLojaId(r1.getId());
 		for (Produto prod : produtos) {
 			System.out.println(prod.getNome());
 		}
