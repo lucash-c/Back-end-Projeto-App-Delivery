@@ -20,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lucashcampos.projetodelivery.domain.enums.EstadoPedido;
 
 @Entity
 public class Pedido implements Serializable {
@@ -31,6 +32,8 @@ public class Pedido implements Serializable {
 
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private Date instante;
+
+	private Integer estado = EstadoPedido.EM_PREPARO.getCod();
 
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
 	private Pagamento pagamento;
@@ -45,11 +48,10 @@ public class Pedido implements Serializable {
 
 	@OneToMany(mappedBy = "id.pedido", cascade = CascadeType.REMOVE)
 	private Set<ItemPedido> itens = new HashSet<>();
-	
+
 	@ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "loja_id")
-    private Loja loja;
-	
+	@JoinColumn(name = "loja_id")
+	private Loja loja;
 
 	public Pedido() {
 
@@ -62,7 +64,7 @@ public class Pedido implements Serializable {
 		this.cliente = cliente;
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
-	
+
 	public Pedido(Integer id, Date instante, Cliente cliente, Endereco enderecoDeEntrega, Loja loja) {
 
 		this.id = id;
@@ -126,6 +128,22 @@ public class Pedido implements Serializable {
 
 	public void setItens(Set<ItemPedido> itens) {
 		this.itens = itens;
+	}
+
+	public Integer getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Integer estado) {
+		this.estado = estado;
+	}
+
+	public Loja getLoja() {
+		return loja;
+	}
+
+	public void setLoja(Loja loja) {
+		this.loja = loja;
 	}
 
 	@Override

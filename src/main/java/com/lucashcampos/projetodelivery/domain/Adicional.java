@@ -24,6 +24,7 @@ public class Adicional implements Serializable {
 	private String nome;
 	private Double preco;
 	private Integer tipo;
+	private Boolean isActive = true;
 
 	@ManyToOne
 	@JoinColumn(name = "loja_id")
@@ -39,6 +40,7 @@ public class Adicional implements Serializable {
 		this.nome = nome;
 		this.preco = preco;
 		this.tipo = tipo;
+
 	}
 
 	public Integer getId() {
@@ -71,7 +73,7 @@ public class Adicional implements Serializable {
 
 	public void setTipo(TipoAdicional tipo) {
 		this.tipo = tipo.getCod();
-	}	
+	}
 
 	public Loja getLoja() {
 		return loja;
@@ -79,6 +81,14 @@ public class Adicional implements Serializable {
 
 	public void setLoja(Loja loja) {
 		this.loja = loja;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	@Override

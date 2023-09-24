@@ -23,6 +23,7 @@ public class SorveteTamanho implements Serializable {
 	private Double preco;
 	private String descricao;
 	Integer quantidadeSabores;
+	private Boolean isActive = true;
 
 	@ManyToOne
 	@JoinColumn(name = "loja_id")
@@ -86,6 +87,14 @@ public class SorveteTamanho implements Serializable {
 
 	public void setLoja(Loja loja) {
 		this.loja = loja;
+	}	
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	@Override

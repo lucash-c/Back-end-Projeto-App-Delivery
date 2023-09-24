@@ -21,10 +21,13 @@ public class PizzaMassa implements Serializable {
 	private Integer id;
 	private String nome;
 	private Double preco;
+	private Boolean isActive = true;
 
 	@ManyToOne
 	@JoinColumn(name = "loja_id")
 	private Loja loja;
+	
+	
 
 	public PizzaMassa() {
 
@@ -67,6 +70,14 @@ public class PizzaMassa implements Serializable {
 
 	public void setLoja(Loja loja) {
 		this.loja = loja;
+	}	
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	@Override

@@ -45,6 +45,8 @@ public class Loja implements Serializable {
 	private String site;
 	private String instagram;
 	private String facebook;
+	private Boolean isActive = true;
+	private Boolean isOpen = false;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
@@ -299,6 +301,22 @@ public class Loja implements Serializable {
 
 	public void setAdicionais(List<Adicional> adicionais) {
 		this.adicionais = adicionais;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public Boolean getIsOpen() {
+		return isOpen;
+	}
+
+	public void setIsOpen(Boolean isOpen) {
+		this.isOpen = isOpen;
 	}
 
 	@Override

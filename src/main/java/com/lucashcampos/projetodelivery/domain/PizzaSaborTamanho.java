@@ -25,8 +25,9 @@ public class PizzaSaborTamanho implements Serializable {
 	private Integer pedacos;
 	private Integer pessoas; // quantidade de pessoas que serve
 	private Double preco;
+	private Boolean isActive = true;
 	private Integer quantidadeSabor; // quantidade maxima de partes que a pizza podera ser dividida ou sabores que o
-										// front permitira ao cliente escolher
+	 								 // front permitira ao cliente escolher
 
 	@ManyToOne
 	@JoinColumn(name = "loja_id")
@@ -118,6 +119,14 @@ public class PizzaSaborTamanho implements Serializable {
 
 	public void setLoja(Loja loja) {
 		this.loja = loja;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	@Override

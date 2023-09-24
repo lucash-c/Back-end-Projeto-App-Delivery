@@ -1,6 +1,7 @@
 package com.lucashcampos.projetodelivery.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +21,7 @@ public class SorveteCobertura implements Serializable {
 	private Integer id;
 	private String nome;
 	private Double valorAdicional;
+	private Boolean isActive = true;
 
 	@ManyToOne
 	@JoinColumn(name = "loja_id")
@@ -65,6 +67,31 @@ public class SorveteCobertura implements Serializable {
 
 	public void setLoja(Loja loja) {
 		this.loja = loja;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SorveteCobertura other = (SorveteCobertura) obj;
+		return Objects.equals(id, other.id);
 	}
 
 }

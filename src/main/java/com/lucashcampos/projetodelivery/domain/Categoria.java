@@ -21,6 +21,7 @@ public class Categoria implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+	private Boolean isActive = true;
 
 	@ManyToMany(mappedBy = "categorias")
 	private List<Produto> produtos = new ArrayList<>();
@@ -67,6 +68,22 @@ public class Categoria implements Serializable {
 	}
 
 	public void setRestaurante(Loja loja) {
+		this.loja = loja;
+	}
+	
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public Loja getLoja() {
+		return loja;
+	}
+
+	public void setLoja(Loja loja) {
 		this.loja = loja;
 	}
 

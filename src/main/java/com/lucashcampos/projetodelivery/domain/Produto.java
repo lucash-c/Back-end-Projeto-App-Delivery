@@ -36,16 +36,16 @@ public class Produto implements Serializable {
 	private Double preco;
 	private Integer tipo;
 	private String imagem;
-	
+	private Boolean isActive = true;
 
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.DETACH) // Evitar exclusão em cascata
 	@JoinTable(name = "PRODUTO_CATEGORIA", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
 	private List<Categoria> categorias = new ArrayList<>();
-	
+
 	@ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "loja_id")
-    private Loja loja;
+	@JoinColumn(name = "loja_id")
+	private Loja loja;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "id.produto", cascade = CascadeType.REMOVE)
@@ -60,13 +60,15 @@ public class Produto implements Serializable {
 		this.nome = nome;
 		this.preco = preco;
 		this.loja = loja;
+
 	}
-	
+
 	public Produto(Integer id, String nome, Double preco, String descricao) {
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
 		this.descricao = descricao;
+
 	}
 
 	public Produto(Integer id, String nome, Double preco, List<Categoria> categorias) {
@@ -75,8 +77,9 @@ public class Produto implements Serializable {
 		this.nome = nome;
 		this.preco = preco;
 		this.categorias = categorias;
+
 	}
-	
+
 	public Produto(Integer id, String nome, Double preco, List<Categoria> categorias, Loja loja) {
 		super();
 		this.id = id;
@@ -84,6 +87,7 @@ public class Produto implements Serializable {
 		this.preco = preco;
 		this.categorias = categorias;
 		this.loja = loja;
+
 	}
 
 	@JsonIgnore
@@ -142,7 +146,6 @@ public class Produto implements Serializable {
 	public void setCategorias(List<Categoria> categorias) {
 		this.categorias = categorias;
 	}
-	
 
 	public Loja getLoja() {
 		return loja;
@@ -170,6 +173,14 @@ public class Produto implements Serializable {
 
 	public void setItens(Set<ItemPedido> itens) {
 		this.itens = itens;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	@Override
