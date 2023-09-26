@@ -1,5 +1,6 @@
 package com.lucashcampos.projetodelivery.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +65,17 @@ public class CategoriaService {
 
 	private void updateData(Categoria newObj, Categoria obj) {
 		newObj.setNome(obj.getNome());
+	}
+
+	public List<Categoria> findAllByLojaId(Integer lojaId) {
+	    List<Categoria> categorias = repo.findByLojaId(lojaId).orElse(new ArrayList<>());
+	    
+	    if (categorias.isEmpty()) {
+	        throw new ObjectNotFoundException("Não foi encontrado nenhuma categoria para esta loja! Id " + lojaId
+	            + ", Tipo: " + Categoria.class.getName());
+	    }
+	    
+	    return categorias;
 	}
 
 }

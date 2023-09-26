@@ -47,6 +47,7 @@ public class Loja implements Serializable {
 	private String facebook;
 	private Boolean isActive = true;
 	private Boolean isOpen = false;
+	private Integer Espera = 20; //tempo previsto de espera em minutos
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
@@ -230,7 +231,7 @@ public class Loja implements Serializable {
 	public void setFacebook(String facebook) {
 		this.facebook = facebook;
 	}
-
+	@JsonIgnore
 	public List<Pedido> getPedidos() {
 		return pedidos;
 	}
@@ -301,6 +302,14 @@ public class Loja implements Serializable {
 
 	public void setAdicionais(List<Adicional> adicionais) {
 		this.adicionais = adicionais;
+	}
+	
+	public Integer getEspera() {
+		return Espera;
+	}
+
+	public void setEspera(Integer espera) {
+		Espera = espera;
 	}
 
 	public Boolean getIsActive() {

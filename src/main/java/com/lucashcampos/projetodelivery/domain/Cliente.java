@@ -140,7 +140,7 @@ public class Cliente implements Serializable {
 	public void setCpf_cnpj(String cpf_cnpj) {
 		this.cpf_cnpj = cpf_cnpj;
 	}
-
+	@JsonIgnore
 	public List<Pedido> getPedidos() {
 		return pedidos;
 	}

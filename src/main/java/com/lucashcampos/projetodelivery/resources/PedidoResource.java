@@ -36,13 +36,23 @@ public class PedidoResource {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
+	
+	@RequestMapping(value = "/loja={id}",method = RequestMethod.GET)
+	public ResponseEntity<Page<Pedido>> findPage(@PathVariable Integer id, @RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+			@RequestParam(value = "orderBy", defaultValue = "instante") String orderBy,
+			@RequestParam(value = "direction", defaultValue = "DESC") String direction
+			) {
+		Page<Pedido> list = service.findPage(id, page, linesPerPage, orderBy, direction);
+		return ResponseEntity.ok().body(list); 
+	}
 
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<Page<Pedido>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+	@RequestMapping(value = "/",method = RequestMethod.GET)
+	public ResponseEntity<Page<Pedido>> findPageByCliente(@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
 			@RequestParam(value = "orderBy", defaultValue = "instante") String orderBy,
 			@RequestParam(value = "direction", defaultValue = "DESC") String direction) {
-		Page<Pedido> list = service.findPage(page, linesPerPage, orderBy, direction);
+		Page<Pedido> list = service.findPageByCliente(page, linesPerPage, orderBy, direction);
 		return ResponseEntity.ok().body(list);
 	}
 }

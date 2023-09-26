@@ -33,6 +33,13 @@ public class CategoriaResource {
 		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
+	
+	@RequestMapping(value = "/loja={lojaId}",method = RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> findAllByLoja(@PathVariable Integer lojaId) {
+		List<Categoria> list = service.findAllByLojaId(lojaId);
+		List<CategoriaDTO> listDTO = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
+	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> findAll() {

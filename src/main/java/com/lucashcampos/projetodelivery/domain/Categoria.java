@@ -38,6 +38,12 @@ public class Categoria implements Serializable {
 		this.id = id;
 		this.nome = nome;
 	}
+	
+	public Categoria(Integer id, String nome, Loja loja) {
+		this.id = id;
+		this.nome = nome;
+		this.loja = loja;
+	}
 
 	public Integer getId() {
 		return id;
@@ -61,14 +67,6 @@ public class Categoria implements Serializable {
 
 	public void setProdutos(List<Produto> produtos) {
 		this.produtos = produtos;
-	}
-
-	public Loja getRestaurante() {
-		return loja;
-	}
-
-	public void setRestaurante(Loja loja) {
-		this.loja = loja;
 	}
 	
 	public Boolean getIsActive() {

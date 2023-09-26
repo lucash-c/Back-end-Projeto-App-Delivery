@@ -161,13 +161,13 @@ public class DBService {
 
 		lojaRepository.saveAll(Arrays.asList(r1, r2, r3, r4, r5));
 
-		Categoria cat1 = new Categoria(null, "Lanches");
-		Categoria cat2 = new Categoria(null, "Bebidas");
-		Categoria cat3 = new Categoria(null, "Pizzas");
-		Categoria cat4 = new Categoria(null, "Doces");
-		Categoria cat5 = new Categoria(null, "Pastéis");
-		Categoria cat6 = new Categoria(null, "Mercado");
-		Categoria cat7 = new Categoria(null, "Farmacia");
+		Categoria cat1 = new Categoria(null, "Lanches", r1);
+		Categoria cat2 = new Categoria(null, "Bebidas", r1);
+		Categoria cat3 = new Categoria(null, "Pizzas", r2);
+		Categoria cat4 = new Categoria(null, "Doces", r2);
+		Categoria cat5 = new Categoria(null, "Pastéis", r3);
+		Categoria cat6 = new Categoria(null, "Mercado", r4);
+		Categoria cat7 = new Categoria(null, "Farmacia", r5);
 
 		Produto p1 = new Produto(null, "Coca-cola 2l", 15.00, r1);
 		Produto p2 = new Produto(null, "Suco de laranja", 8.00, r1);
@@ -334,7 +334,7 @@ public class DBService {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
 		Pedido ped1 = new Pedido(null, sdf.parse("10/09/2022 10:32"), cli1, e1, r1);
-		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2022 10:50"), cli1, e2);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2022 10:50"), cli1, e2, r2);
 
 		Pagamento pgto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
 		ped1.setPagamento(pgto1);

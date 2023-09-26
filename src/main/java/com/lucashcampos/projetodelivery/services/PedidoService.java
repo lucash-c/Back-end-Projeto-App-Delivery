@@ -73,7 +73,7 @@ public class PedidoService {
 		return obj;
 	}
 
-	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+	public Page<Pedido> findPageByCliente(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		UserSS user = UserService.authenticated();
 
 		if (user == null) {
@@ -83,5 +83,17 @@ public class PedidoService {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		Cliente cliente = clienteService.find(user.getId());
 		return repo.findByCliente(cliente, pageRequest);
+	}
+	
+	public Page<Pedido> findPage(Integer lojaId, Integer page, Integer linesPerPage, String orderBy, String direction) {
+		UserSS user = UserService.authenticated();
+
+		if (user == null) {
+			throw new AuthorizationException("Acesso negado!");
+		}
+
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		
+		return repo.findByLojaId(lojaId, pageRequest);
 	}
 }
