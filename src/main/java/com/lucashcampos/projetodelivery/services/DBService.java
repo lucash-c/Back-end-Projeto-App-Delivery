@@ -308,7 +308,7 @@ public class DBService {
 		cat3.getProdutos().addAll(Arrays.asList(p4, p12));
 		cat4.getProdutos().addAll(Arrays.asList(p8, p9));
 		cat5.getProdutos().addAll(Arrays.asList(p7, p10));
-		cat7.getProdutos().addAll(Arrays.asList(p11));
+		//cat7.getProdutos().addAll(Arrays.asList(p11));
 
 		p1.getCategorias().addAll(Arrays.asList(cat2));
 		p2.getCategorias().addAll(Arrays.asList(cat2));
@@ -320,7 +320,7 @@ public class DBService {
 		p8.getCategorias().addAll(Arrays.asList(cat2, cat4));
 		p9.getCategorias().addAll(Arrays.asList(cat4));
 		p10.getCategorias().addAll(Arrays.asList(cat5));
-		p11.getCategorias().addAll(Arrays.asList(cat7));
+		//p11.getCategorias().addAll(Arrays.asList(cat7));
 		p12.getCategorias().addAll(Arrays.asList(cat3));
 
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));

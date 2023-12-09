@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,7 +27,7 @@ public class Categoria implements Serializable {
 	@ManyToMany(mappedBy = "categorias")
 	private List<Produto> produtos = new ArrayList<>();
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "loja_id")
 	private Loja loja;
 

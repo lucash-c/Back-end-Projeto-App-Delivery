@@ -23,7 +23,7 @@ import com.lucashcampos.projetodelivery.dto.LojaDTO;
 import com.lucashcampos.projetodelivery.services.LojaService;
 
 @RestController
-@RequestMapping(value = "/restaurantes")
+@RequestMapping(value = "/lojas")
 public class LojaResource {
 	@Autowired
 	private LojaService service;

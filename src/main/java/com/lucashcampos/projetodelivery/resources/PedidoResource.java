@@ -44,6 +44,7 @@ public class PedidoResource {
 			@RequestParam(value = "direction", defaultValue = "DESC") String direction
 			) {
 		Page<Pedido> list = service.findPage(id, page, linesPerPage, orderBy, direction);
+		System.out.println("Funcionando");
 		return ResponseEntity.ok().body(list); 
 	}
 
