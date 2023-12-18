@@ -3,10 +3,12 @@ package com.lucashcampos.projetodelivery.services;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Service;
 
 import com.lucashcampos.projetodelivery.domain.Cliente;
 import com.lucashcampos.projetodelivery.domain.Pedido;
 
+@Service
 public interface EmailService {
 
 	void sendOrderConfirmationEmail(Pedido obj);
