@@ -1,25 +1,19 @@
-# Estágio de construção
-FROM maven:3.8-openjdk-17 AS build
+FROM ubuntu:latest AS build
 
-COPY . /app
-WORKDIR /app
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
+COPY . .
 
+RUN apt-get install maven -y
 RUN mvn clean install
 
-# Estágio final
+# Usa a imagem oficial do OpenJDK 17 como imagem base
 FROM openjdk:17-jdk-slim
 
+# Exponha a porta em que a sua aplicação Spring Boot será executada (ajuste conforme necessário)
 EXPOSE 8080
 
-COPY --from=build /app/target/projetodelivery-0.0.1-SNAPSHOT.jar /app.jar
+# Copie o arquivo JAR da sua aplicação para o contêiner
+COPY --from=build /target/projetodelivery-0.0.1-SNAPSHOT.jar app.jar
 
-ENTRYPOINT ["java", "-jar", "/app.jar"]
-
-
-
-
-
-
-
-# Comando para executar a sua aplicação quando o contêiner for iniciado
-CMD ["java", "-jar", "projetodelivery.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]]
