@@ -1,7 +1,7 @@
 package com.lucashcampos.projetodelivery.domain.enums;
 
 public enum EspecialidadeLoja {
-	PIZZARIA(0, "Pizzaria"), SORVETERIA(1, "Sorveteria"), ESPETARIA(2, "Espetaria"), JAPONESA(2, "Japonesa");
+	PIZZARIA(0, "Pizzaria"), SORVETERIA(1, "Sorveteria"), ESPETARIA(2, "Espetaria"), JAPONESA(3, "Japonesa"), LANCHONETE(4, "Lanchonete"), BRASILEIRA(5, "Brasileira");
 
 	private int cod;
 	private String descricao;
