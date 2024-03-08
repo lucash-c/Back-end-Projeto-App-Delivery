@@ -34,7 +34,7 @@ public class Produto implements Serializable {
 	private String descricao;
 	private String nome;
 	private Double preco;
-	private Integer tipo;
+	private Integer tipo = 2; // Comum
 	private String imagem;
 	private Boolean isActive = true;
 

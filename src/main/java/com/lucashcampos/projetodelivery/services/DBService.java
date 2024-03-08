@@ -160,14 +160,15 @@ public class DBService {
 				"pizzaexpress_facebook", List.of(EspecialidadeLoja.PIZZARIA.getCod()));
 
 		lojaRepository.saveAll(Arrays.asList(r1, r2, r3, r4, r5));
+	
 
-		Categoria cat1 = new Categoria(null, "Lanches", r1);
-		Categoria cat2 = new Categoria(null, "Bebidas", r1);
-		Categoria cat3 = new Categoria(null, "Pizzas", r2);
-		Categoria cat4 = new Categoria(null, "Doces", r2);
-		Categoria cat5 = new Categoria(null, "Pastéis", r3);
-		Categoria cat6 = new Categoria(null, "Mercado", r4);
-		Categoria cat7 = new Categoria(null, "Farmacia", r5);
+		Categoria cat1 = new Categoria(null, "Lanches", r1, TipoProduto.COMUM);
+		Categoria cat2 = new Categoria(null, "Bebidas", r1, TipoProduto.COMUM);
+		Categoria cat3 = new Categoria(null, "Pizzas", r2, TipoProduto.PIZZA);
+		Categoria cat4 = new Categoria(null, "Doces", r2, TipoProduto.COMUM);
+		Categoria cat5 = new Categoria(null, "Pastéis", r3, TipoProduto.COMUM);
+		Categoria cat6 = new Categoria(null, "Mercado", r4, TipoProduto.COMUM);
+		Categoria cat7 = new Categoria(null, "Farmacia", r5, TipoProduto.COMUM);
 
 		Produto p1 = new Produto(null, "Coca-cola 2l", 15.00, r1);
 		Produto p2 = new Produto(null, "Suco de laranja", 8.00, r1);
