@@ -14,6 +14,8 @@ import com.lucashcampos.projetodelivery.domain.enums.TipoProduto;
 @Entity
 public class Sorvete extends Produto {
 	private static final long serialVersionUID = 1L;
+	private Integer maxSabores; 
+	private Integer maxCoberturas;	
 	
 	@ManyToOne
 	@JoinColumn(name = "tamanho_id")
@@ -78,7 +80,21 @@ public class Sorvete extends Produto {
 	public void setTamanho(SorveteTamanho tamanho) {
 		this.tamanho = tamanho;
 	}
-	
-	
 
+	public Integer getMaxSabores() {
+		return maxSabores;
+	}
+
+	public void setMaxSabores(Integer maxSabores) {
+		this.maxSabores = maxSabores;
+	}
+
+	public Integer getMaxCoberturas() {
+		return maxCoberturas;
+	}
+
+	public void setMaxCoberturas(Integer maxCoberturas) {
+		this.maxCoberturas = maxCoberturas;
+	}
+	
 }

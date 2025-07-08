@@ -15,14 +15,19 @@ public class PagamentoAVista extends Pagamento {
 
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date dataPagamento;
+	private String trocoPara;
+	private String metodo;  // pix, debito ou dinheiro
+	
 
 	public PagamentoAVista() {
 
 	}
 
-	public PagamentoAVista(Integer id, EstadoPagamento estado, Pedido pedido, Date dataPagamento) {
+	public PagamentoAVista(Integer id, EstadoPagamento estado, Pedido pedido, Date dataPagamento, String trocoPara, String metodo) {
 		super(id, estado, pedido);
 		this.dataPagamento = dataPagamento;
+		this.trocoPara = trocoPara;
+		this.metodo = metodo;
 	}
 
 	public Date getDataPagamento() {
@@ -32,5 +37,23 @@ public class PagamentoAVista extends Pagamento {
 	public void setDataPagamento(Date dataPagamento) {
 		this.dataPagamento = dataPagamento;
 	}
+
+	public String getTrocoPara() {
+		return trocoPara;
+	}
+
+	public void setTrocoPara(String trocoPara) {
+		this.trocoPara = trocoPara;
+	}
+
+	public String getMetodo() {
+		return metodo;
+	}
+
+	public void setMetodo(String metodo) {
+		this.metodo = metodo;
+	}
+	
+	
 
 }

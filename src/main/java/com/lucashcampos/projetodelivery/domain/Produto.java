@@ -15,12 +15,11 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.lucashcampos.projetodelivery.domain.enums.TipoProduto;
 
 @Entity
@@ -32,16 +31,17 @@ public class Produto implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String descricao;
+	private String codBarras;
 	private String nome;
 	private Double preco;
-	private Integer tipo = 2; // Comum
+	private Integer tipo;
 	private String imagem;
+	private Boolean isVisible = true;
 	private Boolean isActive = true;
 
-	@JsonIgnore
-	@ManyToMany(cascade = CascadeType.DETACH) // Evitar exclusão em cascata
-	@JoinTable(name = "PRODUTO_CATEGORIA", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
-	private List<Categoria> categorias = new ArrayList<>();
+	@ManyToOne(cascade = CascadeType.DETACH)
+	@JoinColumn(name = "categoria_id")
+	private Categoria categoria;
 
 	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "loja_id")
@@ -60,6 +60,7 @@ public class Produto implements Serializable {
 		this.nome = nome;
 		this.preco = preco;
 		this.loja = loja;
+		this.tipo = 2;
 
 	}
 
@@ -71,21 +72,21 @@ public class Produto implements Serializable {
 
 	}
 
-	public Produto(Integer id, String nome, Double preco, List<Categoria> categorias) {
+	public Produto(Integer id, String nome, Double preco, Categoria categoria) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
-		this.categorias = categorias;
+		this.categoria = categoria;
 
 	}
 
-	public Produto(Integer id, String nome, Double preco, List<Categoria> categorias, Loja loja) {
+	public Produto(Integer id, String nome, Double preco, Categoria categoria, Loja loja) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
-		this.categorias = categorias;
+		this.categoria = categoria;
 		this.loja = loja;
 
 	}
@@ -135,18 +136,19 @@ public class Produto implements Serializable {
 		return TipoProduto.toEnum(tipo);
 	}
 
+	@JsonSetter("tipo")
 	public void setTipo(TipoProduto tipo) {
 		this.tipo = tipo.getCod();
 	}
 
-	public List<Categoria> getCategorias() {
-		return categorias;
+	public Categoria getCategoria() {
+		return categoria;
 	}
 
-	public void setCategorias(List<Categoria> categorias) {
-		this.categorias = categorias;
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
-	
+
 	@JsonIgnore
 	public Loja getLoja() {
 		return loja;
@@ -182,6 +184,22 @@ public class Produto implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}	
+
+	public Boolean getIsVisible() {
+		return isVisible;
+	}
+
+	public String getCodBarras() {
+		return codBarras;
+	}
+
+	public void setCodBarras(String codBarras) {
+		this.codBarras = codBarras;
+	}
+
+	public void setIsVisible(Boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 
 	@Override

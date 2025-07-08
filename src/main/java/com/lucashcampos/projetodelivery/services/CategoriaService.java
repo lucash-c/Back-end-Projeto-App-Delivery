@@ -3,6 +3,7 @@ package com.lucashcampos.projetodelivery.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,8 +13,14 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.lucashcampos.projetodelivery.domain.Categoria;
+import com.lucashcampos.projetodelivery.domain.Loja;
+import com.lucashcampos.projetodelivery.domain.Produto;
 import com.lucashcampos.projetodelivery.dto.CategoriaDTO;
+import com.lucashcampos.projetodelivery.dto.CategoriaProdutoDTO;
+import com.lucashcampos.projetodelivery.dto.ProdutoDTO;
 import com.lucashcampos.projetodelivery.repositories.CategoriaRepository;
+import com.lucashcampos.projetodelivery.repositories.LojaRepository;
+import com.lucashcampos.projetodelivery.repositories.ProdutoRepository;
 import com.lucashcampos.projetodelivery.services.exceptions.DataIntegrityException;
 import com.lucashcampos.projetodelivery.services.exceptions.ObjectNotFoundException;
 
@@ -22,6 +29,12 @@ public class CategoriaService {
 
 	@Autowired
 	private CategoriaRepository repo;
+
+	@Autowired
+	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private LojaRepository lojaRepository;
 
 	public Categoria find(Integer id) {
 		Optional<Categoria> obj = repo.findById(id);
@@ -35,6 +48,7 @@ public class CategoriaService {
 
 	public Categoria insert(Categoria obj) {
 		obj.setId(null);
+		
 		return repo.save(obj);
 	}
 
@@ -59,26 +73,36 @@ public class CategoriaService {
 		return repo.findAll(pageRequest);
 	}
 
-	public Categoria fromDTO(CategoriaDTO objDTO) {
-		return new Categoria(objDTO.getId(), objDTO.getNome(), objDTO.getLoja(), objDTO.getTipo());
+	public Categoria fromDTO(CategoriaDTO objDTO) {	
+		Loja loja = lojaRepository.findById(objDTO.getLojaId()).get();
+		return new Categoria(objDTO.getId(), objDTO.getNome(), loja, objDTO.getIsActive());
 	}
 
 	private void updateData(Categoria newObj, Categoria obj) {
-		newObj.setNome(obj.getNome());
-		newObj.setTipo(obj.getTipo());
-		newObj.setLoja(obj.getLoja());
+		newObj.setNome(obj.getNome());		
+		newObj.setLoja(lojaRepository.findById(obj.getLoja().getId()).get());
 		newObj.setIsActive(obj.getIsActive());
 	}
 
-	public List<Categoria> findAllByLojaId(Integer lojaId) {
-	    List<Categoria> categorias = repo.findByLojaId(lojaId).orElse(new ArrayList<>());
-	    
-	    if (categorias.isEmpty()) {
-	        throw new ObjectNotFoundException("Não foi encontrado nenhuma categoria para esta loja! Id " + lojaId
-	            + ", Tipo: " + Categoria.class.getName());
-	    }
-	    
-	    return categorias;
+	public List<CategoriaProdutoDTO> findAllByLojaId(Integer lojaId) {
+		List<Categoria> categorias = repo.findByLojaId(lojaId).orElse(new ArrayList<>());
+
+		if (categorias.isEmpty()) {
+			throw new ObjectNotFoundException("Não foi encontrado nenhuma categoria para esta loja! Id " + lojaId
+					+ ", Tipo: " + Categoria.class.getName());
+		}
+
+		List<CategoriaProdutoDTO> categoriaProdutoDTOs = new ArrayList<>();
+		for (Categoria categoria : categorias) {
+			List<Produto> produtos = produtoRepository.findByCategorias_Id(categoria.getId());
+
+			List<ProdutoDTO> produtoDTOs = produtos.stream().map(produto -> new ProdutoDTO(produto))
+					.collect(Collectors.toList());
+
+			categoriaProdutoDTOs.add(new CategoriaProdutoDTO(categoria.getId(), categoria.getNome(), produtoDTOs));
+		}
+
+		return categoriaProdutoDTOs;
 	}
 
 }

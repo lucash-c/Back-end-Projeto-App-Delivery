@@ -23,12 +23,15 @@ public class Endereco implements Serializable {
 	private Integer id;
 	private String logradouro;
 	private String numero;
+	private String bairro;
+	private String cidade;
+	private String estado;
 	private String complemento;
 	private String cep;
 
 	@JsonIgnore
 	@ManyToMany(mappedBy = "enderecos")
-	private List<Cliente> clientes = new ArrayList<>();
+	private List<Usuario> usuarios = new ArrayList<>();
 
 	@OneToOne(mappedBy = "endereco")
 	private Loja loja;
@@ -43,6 +46,19 @@ public class Endereco implements Serializable {
 		this.id = id;
 		this.logradouro = logradouro;
 		this.numero = numero;
+		this.complemento = complemento;
+		this.cep = cep;
+	}	
+
+	public Endereco(Integer id, String logradouro, String numero, String bairro, String cidade, String estado,
+			String complemento, String cep) {
+		super();
+		this.id = id;
+		this.logradouro = logradouro;
+		this.numero = numero;
+		this.bairro = bairro;
+		this.cidade = cidade;
+		this.estado = estado;
 		this.complemento = complemento;
 		this.cep = cep;
 	}
@@ -85,6 +101,30 @@ public class Endereco implements Serializable {
 
 	public void setCep(String cep) {
 		this.cep = cep;
+	}	
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 	@Override

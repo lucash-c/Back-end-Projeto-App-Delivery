@@ -8,24 +8,24 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.lucashcampos.projetodelivery.domain.Cliente;
+import com.lucashcampos.projetodelivery.domain.Usuario;
 import com.lucashcampos.projetodelivery.domain.enums.TipoCliente;
-import com.lucashcampos.projetodelivery.dto.ClienteNewDTO;
-import com.lucashcampos.projetodelivery.repositories.ClienteRepository;
+import com.lucashcampos.projetodelivery.dto.UsuarioNewDTO;
+import com.lucashcampos.projetodelivery.repositories.UsuarioRepository;
 import com.lucashcampos.projetodelivery.resources.exception.FieldMessage;
 import com.lucashcampos.projetodelivery.services.validation.utils.BR;
 
-public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert, ClienteNewDTO> {
+public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert, UsuarioNewDTO> {
 
 	@Autowired
-	private ClienteRepository clienteRepository;
+	private UsuarioRepository usuarioRepository;
 
 	@Override
 	public void initialize(ClienteInsert ann) {
 	}
 
 	@Override
-	public boolean isValid(ClienteNewDTO objDTO, ConstraintValidatorContext context) {
+	public boolean isValid(UsuarioNewDTO objDTO, ConstraintValidatorContext context) {
 		List<FieldMessage> list = new ArrayList<>();
 
 		if (objDTO.getTipo().equals(TipoCliente.PESSOAFISICA.getCod()) && !BR.isValidCPF(objDTO.getCpf_cnpj())) {
@@ -36,7 +36,7 @@ public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert
 			list.add(new FieldMessage("cpf_cnpj", "CNPJ inválido!"));
 		}
 
-		Cliente aux = clienteRepository.findByEmail(objDTO.getEmail());
+		Usuario aux = usuarioRepository.findByEmail(objDTO.getEmail());
 		if (aux != null) {
 			list.add(new FieldMessage("email", "Este email ja foi cadastrado."));
 		}

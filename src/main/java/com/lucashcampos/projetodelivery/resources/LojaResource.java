@@ -20,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lucashcampos.projetodelivery.domain.Loja;
 import com.lucashcampos.projetodelivery.dto.LojaDTO;
+import com.lucashcampos.projetodelivery.dto.NewLojaDTO;
 import com.lucashcampos.projetodelivery.services.LojaService;
 
 @RestController
@@ -29,21 +30,28 @@ public class LojaResource {
 	private LojaService service;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Loja> find(@PathVariable Integer id) {
-		Loja obj = service.find(id);
-		return ResponseEntity.ok().body(obj);
+	public ResponseEntity<LojaDTO> find(@PathVariable Integer id) {
+	    Loja obj = service.find(id);
+	    LojaDTO objDTO = LojaDTO.fromLoja(obj);
+	    return ResponseEntity.ok().body(objDTO);
 	}
+	
+	@RequestMapping(value= "/usuario/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Loja>> buscarLojasPorUsuario(@PathVariable Integer id) {
+        List<Loja> lojas = service.findByUserId(id);
+        return ResponseEntity.ok().body(lojas);
+    }
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<LojaDTO>> findAll() {
-		List<Loja> list = service.findAll();
-		List<LojaDTO> listDTO = list.stream().map(obj -> new LojaDTO(obj)).collect(Collectors.toList());
-		return ResponseEntity.ok().body(listDTO);
+	    List<Loja> list = service.findAll();
+	    List<LojaDTO> listDTO = list.stream().map(LojaDTO::fromLoja).collect(Collectors.toList());
+	    return ResponseEntity.ok().body(listDTO);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody LojaDTO objDTO) {
+	public ResponseEntity<Void> insert(@Valid @RequestBody NewLojaDTO objDTO) {
 		objDTO.setMediaSatisfacao(0.0);
 		Loja obj = service.fromDTO(objDTO);
 		obj = service.insert(obj);
@@ -53,7 +61,7 @@ public class LojaResource {
 
 	@PreAuthorize("hasAnyRole('ADMIN','PARCEIRO')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Void> update(@Valid @RequestBody LojaDTO objDTO, @PathVariable Integer id) {
+	public ResponseEntity<Void> update(@Valid @RequestBody NewLojaDTO objDTO, @PathVariable Integer id) {
 		Loja obj = service.fromDTO(objDTO);
 		obj.setId(id);
 		obj = service.update(obj);
@@ -68,12 +76,12 @@ public class LojaResource {
 	}
 
 	@RequestMapping(value = "/page", method = RequestMethod.GET)
-	public ResponseEntity<Page<LojaDTO>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+	public ResponseEntity<Page<NewLojaDTO>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
 			@RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
 		Page<Loja> list = service.findPage(page, linesPerPage, orderBy, direction);
-		Page<LojaDTO> listDTO = list.map(obj -> new LojaDTO(obj));
+		Page<NewLojaDTO> listDTO = list.map(obj -> new NewLojaDTO(obj));
 		return ResponseEntity.ok().body(listDTO);
 	}
 

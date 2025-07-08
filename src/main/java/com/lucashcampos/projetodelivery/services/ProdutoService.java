@@ -11,7 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.lucashcampos.projetodelivery.domain.Adicional;
-import com.lucashcampos.projetodelivery.domain.Categoria;
+import com.lucashcampos.projetodelivery.domain.Loja;
 import com.lucashcampos.projetodelivery.domain.Pizza;
 import com.lucashcampos.projetodelivery.domain.PizzaSaborTamanho;
 import com.lucashcampos.projetodelivery.domain.Produto;
@@ -19,9 +19,12 @@ import com.lucashcampos.projetodelivery.domain.Sorvete;
 import com.lucashcampos.projetodelivery.domain.SorveteCobertura;
 import com.lucashcampos.projetodelivery.domain.SorveteSabor;
 import com.lucashcampos.projetodelivery.domain.enums.TipoProduto;
+import com.lucashcampos.projetodelivery.dto.NewPizzaDTO;
 import com.lucashcampos.projetodelivery.dto.NewProdutoDTO;
+import com.lucashcampos.projetodelivery.dto.NewSorveteDTO;
 import com.lucashcampos.projetodelivery.repositories.AdicionalRepository;
 import com.lucashcampos.projetodelivery.repositories.CategoriaRepository;
+import com.lucashcampos.projetodelivery.repositories.LojaRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaMassaRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaSaborTamanhoRepository;
@@ -68,91 +71,106 @@ public class ProdutoService {
 	@Autowired
 	private SorveteRepository sorveteRepository;
 
+	@Autowired
+	private LojaRepository lojaRepository;
+
 	public Produto find(Integer id) {
 
 		Optional<Produto> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id " + id + ", Tipo: " + Produto.class.getName()));
 	}
-
-	public Page<Produto> search(String nome, List<Integer> ids, Integer page, Integer linesPerPage, String orderBy,
-			String direction) {
-		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		List<Categoria> categorias = categoriaRepository.findAllById(ids);
-		return repo.search(nome, categorias, pageRequest);
-
+	public Page<Produto> search(String nome, Integer categoriaId, Integer page, Integer linesPerPage, String orderBy, String direction) {
+	    PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+	    return repo.search(nome, categoriaId, pageRequest);
 	}
+
+	public Page<Produto> searchByLojaId(Integer lojaId, String search, Integer page, Integer linesPerPage,
+			String orderBy, String direction) {
+		if (search != null && !search.isEmpty()) {
+			// Se o nome for fornecido, ignora a paginação e retorna todos os produtos
+			// correspondentes
+			return repo.findByLojaIdAndNomeOrCodBarrasContainsIgnoreCase(lojaId, search,
+					PageRequest.of(0, Integer.MAX_VALUE, Direction.valueOf(direction), orderBy));
+		} else {
+			// Caso contrário, usa a paginação normal
+			PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+			return repo.findByLojaId(lojaId, pageRequest);
+		}
+	}
+	
+	public Page<Produto> searchByCategoryId(Integer categoryId, Integer page, Integer linesPerPage,
+			String orderBy, String direction) {		
+			PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+			return repo.findByCategoryId(categoryId, pageRequest);		
+	}
+
 
 	public Produto insert(NewProdutoDTO objDTO) {
 
-		List<Categoria> list = new ArrayList<>();
-		for (Categoria cat : objDTO.getCategorias()) {
-			Categoria categoria = categoriaRepository.findById(cat.getId()).get();
-			list.add(categoria);
-		}
-		objDTO.setCategorias(list);
-
-		if (objDTO.getTipo().getCod() == 1) { // se for sorvete
-
-			Sorvete sorvete = mountSorvete(objDTO);
-			return sorveteRepository.save(sorvete);
-		}
-
-		if (objDTO.getTipo().getCod() == 0) { // se for pizza
-
-			Pizza pizza = mountPizza(objDTO);
-			return pizzaRepository.save(pizza);
-		}
-
+		objDTO.setCategoria(categoriaRepository.findById(objDTO.getCategoria().getId()).get());
 		Produto prod = objDTO.toProduto();
 		prod.setLoja(objDTO.getLoja());
-		for (Categoria cat : objDTO.getCategorias()) {
-			cat.getProdutos().add(prod);
-			categoriaService.update(cat);
-		}
+		categoriaService.update(prod.getCategoria());
 		return repo.save(prod);
-
 	}
 
 	public Produto update(NewProdutoDTO objDTO) {
 
-		List<Categoria> list = new ArrayList<>();
-		for (Categoria cat : objDTO.getCategorias()) {
-			Categoria categoria = categoriaRepository.findById(cat.getId()).get();
-			list.add(categoria);
-		}
-		objDTO.setCategorias(list);
-
-		if (objDTO.getTipo().getCod() == 2) { // se for sorvete
-
-			Sorvete sorvete = mountSorvete(objDTO);
-			sorvete.setId(objDTO.getId());
-		
-			return sorveteRepository.save(sorvete);
-		}
-
-		if (objDTO.getTipo().getCod() == 1) { // se for pizza
-
-			Pizza pizza = mountPizza(objDTO);
-			pizza.setId(objDTO.getId());
-		
-			return pizzaRepository.save(pizza);
-		}
-
 		Produto prod = objDTO.toProduto();
-		prod.setCategorias(objDTO.getCategorias());
-		for (Categoria cat : prod.getCategorias()) {
-			cat.getProdutos().add(prod);
-			categoriaService.update(cat);
-		}
 		prod.setId(objDTO.getId());
 		prod.setDescricao(objDTO.getDescricao());
 		prod.setImagem(objDTO.getImagem());
+		prod.setCategoria(objDTO.getCategoria());
+		categoriaService.update(prod.getCategoria());
 		return repo.save(prod);
-
 	}
 
-	private Pizza mountPizza(NewProdutoDTO objDTO) {
+	public Produto updateProduto(NewProdutoDTO objDTO) {
+
+		// Busca o produto existente. Lança uma exceção se o produto não for encontrado.
+		Produto prod = find(objDTO.getId());
+		if (prod == null) {
+			throw new IllegalArgumentException("Produto com o ID especificado não encontrado.");
+		}
+
+		if (objDTO.getDescricao() != null) {
+			prod.setDescricao(objDTO.getDescricao());
+		}
+
+		if (objDTO.getCodBarras() != null) {
+			prod.setCodBarras(objDTO.getCodBarras());
+		}
+
+		if (objDTO.getImagem() != null) {
+			prod.setImagem(objDTO.getImagem());
+		}
+
+		if (objDTO.getCategoria() != null) {
+			prod.setCategoria(objDTO.getCategoria());			
+		}
+
+		if (objDTO.getNome() != null) {
+			prod.setNome(objDTO.getNome());
+		}
+
+		if (objDTO.getPreco() != null) {
+			prod.setPreco(objDTO.getPreco());
+		}
+
+		if (objDTO.getIsActive() != null) {
+			prod.setIsActive(objDTO.getIsActive());
+		}
+
+		if (objDTO.getIsVisible() != null) {
+			prod.setIsVisible(objDTO.getIsVisible());
+		}
+
+		// Salva e retorna o produto atualizado no repositório.
+		return repo.save(prod);
+	}
+
+	public Pizza insertPizza(NewPizzaDTO objDTO) {
 
 		List<PizzaSaborTamanho> listSabores = new ArrayList<>();
 		for (PizzaSaborTamanho item : objDTO.getSaboresPizza()) {
@@ -165,16 +183,18 @@ public class ProdutoService {
 			listAdicionais.add(adicionalRepository.findById(item.getId()).get());
 		}
 		objDTO.setAdicionais(listAdicionais);
+		objDTO.setCategoria(categoriaRepository.findById(objDTO.getCategoria().getId()).get());
 
 		objDTO.setMassa(pizzaMassaRepository.findById(objDTO.getMassa().getId()).get());
 
+		Loja loja = lojaRepository.findById(objDTO.getLoja().getId())
+				.orElseThrow(() -> new RuntimeException("Loja não encontrada"));
+
+		objDTO.setLoja(loja);
 		Pizza pizza = new Pizza(objDTO.getSaboresPizza(), objDTO.getMassa(), objDTO.getAdicionais(),
-				objDTO.getObservacao());
-		pizza.setCategorias(objDTO.getCategorias());
-		for (Categoria cat : pizza.getCategorias()) {
-			cat.getProdutos().add(pizza);
-			categoriaService.update(cat);
-		}
+				objDTO.getObservacao(), objDTO.getMaxSabores(), objDTO.getTamanho(), objDTO.getCobrarMediaSabores());
+		pizza.setCategoria(objDTO.getCategoria());
+		pizza.setLoja(objDTO.getLoja());
 
 		Double preco = 0.0;
 
@@ -189,18 +209,27 @@ public class ProdutoService {
 		for (Adicional item : pizza.getAdicionais()) {
 			preco += item.getPreco();
 		}
-
+		pizza.setNome(objDTO.getNome());
 		pizza.setPreco(preco);
+		pizza.setTipo(2);
 		pizza.setLoja(objDTO.getLoja());
-
+		pizza.setImagem(objDTO.getImagem());
+		pizza.setPessoas(objDTO.getPessoas());
+		pizza.setPedacos(objDTO.getPedacos());
+		
+		categoriaService.update(pizza.getCategoria());
 		pizzaSaborTamanhoRepository.saveAll(pizza.getSabores());
 		pizzaMassaRepository.save(pizza.getMassa());
 		adicionalRepository.saveAll(pizza.getAdicionais());
 
-		return pizza;
+		return pizzaRepository.save(pizza);
+
 	}
 
-	private Sorvete mountSorvete(NewProdutoDTO objDTO) {
+	public Sorvete insertSorvete(NewSorveteDTO objDTO) {
+
+		objDTO.setLoja(lojaRepository.findById(objDTO.getLoja().getId()).get());
+		objDTO.setCategoria(categoriaRepository.findById(objDTO.getCategoria().getId()).get());
 
 		List<SorveteCobertura> listCoberturas = new ArrayList<>();
 		for (SorveteCobertura item : objDTO.getCoberturas()) {
@@ -223,11 +252,7 @@ public class ProdutoService {
 
 		Sorvete sorvete = new Sorvete(objDTO.getTamanhoSorvete(), objDTO.getSaboresSorvete(), objDTO.getAdicionais(),
 				objDTO.getCoberturas(), TipoProduto.SORVETE.getCod());
-		sorvete.setCategorias(objDTO.getCategorias());
-		for (Categoria cat : sorvete.getCategorias()) {
-			cat.getProdutos().add(sorvete);
-			categoriaService.update(cat);
-		}
+		sorvete.setCategoria(objDTO.getCategoria());
 
 		Double preco = 0.0;
 		preco += sorvete.getTamanho().getPreco();
@@ -246,12 +271,71 @@ public class ProdutoService {
 
 		sorvete.setPreco(preco);
 		sorvete.setLoja(objDTO.getLoja());
-
+		sorvete.setImagem(objDTO.getImagem());
+		
+		categoriaService.update(sorvete.getCategoria());
+		categoriaService.update(sorvete.getCategoria());
 		sorveteCoberturaRepository.saveAll(sorvete.getCoberturas());
 		sorveteSaborRepository.saveAll(sorvete.getSabores());
 		adicionalRepository.saveAll(sorvete.getAdicionais());
 
-		return sorvete;
+		return sorveteRepository.save(sorvete);
+
+	}
+
+	public Pizza pizzaUpdate(NewPizzaDTO objDTO) {
+
+		objDTO.setCategoria(categoriaRepository.findById(objDTO.getCategoria().getId()).get());
+
+		List<PizzaSaborTamanho> listSabores = new ArrayList<>();
+		for (PizzaSaborTamanho item : objDTO.getSaboresPizza()) {
+			listSabores.add(pizzaSaborTamanhoRepository.findById(item.getId()).get());
+		}
+		objDTO.setSaboresPizza(listSabores);
+
+		List<Adicional> listAdicionais = new ArrayList<>();
+		for (Adicional item : objDTO.getAdicionais()) {
+			listAdicionais.add(adicionalRepository.findById(item.getId()).get());
+		}
+		objDTO.setAdicionais(listAdicionais);
+
+		objDTO.setMassa(pizzaMassaRepository.findById(objDTO.getMassa().getId()).get());
+
+		Loja loja = lojaRepository.findById(objDTO.getLoja().getId())
+				.orElseThrow(() -> new RuntimeException("Loja não encontrada"));
+
+		objDTO.setLoja(loja);
+		Pizza pizza = new Pizza(objDTO.getSaboresPizza(), objDTO.getMassa(), objDTO.getAdicionais(),
+				objDTO.getObservacao(), objDTO.getMaxSabores(), objDTO.getTamanho(), objDTO.getCobrarMediaSabores());
+		pizza.setCategoria(objDTO.getCategoria());
+		pizza.setLoja(objDTO.getLoja());
+
+		Double preco = 0.0;
+
+		for (PizzaSaborTamanho item : pizza.getSabores()) {
+			preco += item.getPreco();
+		}
+
+		preco = preco / pizza.getSabores().size();
+
+		preco += pizza.getMassa().getPreco();
+
+		for (Adicional item : pizza.getAdicionais()) {
+			preco += item.getPreco();
+		}
+		pizza.setNome(objDTO.getNome());
+		pizza.setPreco(preco);
+		pizza.setLoja(objDTO.getLoja());
+		pizza.setImagem(objDTO.getImagem());
+		pizza.setPessoas(objDTO.getPessoas());
+		pizza.setPedacos(objDTO.getPedacos());
+		pizza.setCategoria(objDTO.getCategoria());
+		
+		categoriaService.update(pizza.getCategoria());
+		pizzaSaborTamanhoRepository.saveAll(pizza.getSabores());
+		pizzaMassaRepository.save(pizza.getMassa());
+		adicionalRepository.saveAll(pizza.getAdicionais());
+		return pizzaRepository.save(pizza);
 	}
 
 }

@@ -7,37 +7,29 @@ import java.util.List;
 import com.lucashcampos.projetodelivery.domain.Adicional;
 import com.lucashcampos.projetodelivery.domain.Categoria;
 import com.lucashcampos.projetodelivery.domain.Loja;
-import com.lucashcampos.projetodelivery.domain.PizzaMassa;
-import com.lucashcampos.projetodelivery.domain.PizzaSaborTamanho;
-import com.lucashcampos.projetodelivery.domain.Produto;
 import com.lucashcampos.projetodelivery.domain.SorveteCobertura;
 import com.lucashcampos.projetodelivery.domain.SorveteSabor;
 import com.lucashcampos.projetodelivery.domain.SorveteTamanho;
-import com.lucashcampos.projetodelivery.domain.enums.TipoProduto;
 
-public class NewProdutoDTO implements Serializable {
+public class NewSorveteDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
 	private Integer id;
 	private String nome;
 	private String descricao;
-	private String codBarras;
 	private String imagem;
 	private Double preco;
 	private Loja loja;
-	private Categoria categoria;
-	private List<PizzaSaborTamanho> saboresPizza = new ArrayList<>();
+	private Categoria categoria;	
 	private Integer quantidadeSabor;
 	private String observacao;
 	private List<Adicional> adicionais = new ArrayList<>();
-	private PizzaMassa massa;
-	private Integer tipo;
 	private SorveteTamanho tamanhoSorvete;
 	private List<SorveteSabor> saboresSorvete = new ArrayList<>();
 	private List<SorveteCobertura> coberturas;
-	private Boolean isActive;
-	private Boolean isVisible;
 
-	public NewProdutoDTO() {
+	
+	public NewSorveteDTO() {
 
 	}
 
@@ -89,14 +81,6 @@ public class NewProdutoDTO implements Serializable {
 		this.categoria = categoria;
 	}
 
-	public List<PizzaSaborTamanho> getSaboresPizza() {
-		return saboresPizza;
-	}
-
-	public void setSaboresPizza(List<PizzaSaborTamanho> saboresPizza) {
-		this.saboresPizza = saboresPizza;
-	}
-
 	public String getObservacao() {
 		return observacao;
 	}
@@ -111,22 +95,6 @@ public class NewProdutoDTO implements Serializable {
 
 	public void setAdicionais(List<Adicional> adicionais) {
 		this.adicionais = adicionais;
-	}
-
-	public PizzaMassa getMassa() {
-		return massa;
-	}
-
-	public void setMassa(PizzaMassa massa) {
-		this.massa = massa;
-	}
-
-	public TipoProduto getTipo() {
-		return TipoProduto.toEnum(tipo);
-	}
-
-	public void setTipo(TipoProduto tipo) {
-		this.tipo = tipo.getCod();
 	}
 
 	public SorveteTamanho getTamanhoSorvete() {
@@ -152,7 +120,7 @@ public class NewProdutoDTO implements Serializable {
 	public void setCoberturas(List<SorveteCobertura> coberturas) {
 		this.coberturas = coberturas;
 	}
-
+	
 	public Loja getLoja() {
 		return loja;
 	}
@@ -161,58 +129,12 @@ public class NewProdutoDTO implements Serializable {
 		this.loja = loja;
 	}
 
-	public String getCodBarras() {
-		return codBarras;
-	}
-
-	public void setCodBarras(String codBarras) {
-		this.codBarras = codBarras;
-	}
-
 	public Integer getQuantidadeSabor() {
 		return quantidadeSabor;
 	}
 
 	public void setQuantidadeSabor(Integer quantidadeSabor) {
 		this.quantidadeSabor = quantidadeSabor;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
-
-	public Boolean getIsVisible() {
-		return isVisible;
-	}
-
-	public void setIsVisible(Boolean isVisible) {
-		this.isVisible = isVisible;
-	}
-
-	public Produto toProduto() {
-		Produto prod = new Produto(null, nome, preco, categoria != null ? categoria : new Categoria());
-		prod.setTipo(getTipo() != null ? getTipo() : TipoProduto.COMUM);
-		
-		if (getDescricao() != null) {
-			prod.setDescricao(getDescricao());
-		}
-
-		if (getCodBarras() != null) {
-			prod.setCodBarras(getCodBarras());
-		}
-		
-		if (getImagem() != null) {
-	        prod.setImagem(getImagem());
-	    }
-		
-		prod.setIsVisible(getIsVisible() != null ? getIsVisible() : true);
-	    prod.setIsActive(getIsActive() != null ? getIsActive() : true);
-
-		return prod;
 	}
 
 }

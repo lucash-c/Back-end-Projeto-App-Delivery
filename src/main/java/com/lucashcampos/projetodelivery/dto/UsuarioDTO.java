@@ -7,13 +7,12 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.lucashcampos.projetodelivery.domain.Cliente;
+import com.lucashcampos.projetodelivery.domain.Usuario;
 import com.lucashcampos.projetodelivery.services.validation.ClienteUpdate;
 
 @ClienteUpdate
-public class ClienteDTO implements Serializable {
+public class UsuarioDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-
 	private Integer id;
 
 	@NotEmpty(message = "Preenchimento obrigatório")
@@ -24,11 +23,11 @@ public class ClienteDTO implements Serializable {
 	@Email(message = "E-mail inválido!")
 	private String email;
 
-	public ClienteDTO() {
+	public UsuarioDTO() {
 
 	}
 
-	public ClienteDTO(Cliente obj) {
+	public UsuarioDTO(Usuario obj) {
 		id = obj.getId();
 		nome = obj.getNome();
 		email = obj.getEmail();

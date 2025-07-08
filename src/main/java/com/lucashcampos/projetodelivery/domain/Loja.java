@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -31,7 +32,8 @@ public class Loja implements Serializable {
 	private String cnpjCpf;
 	private String nomeResponsavel;
 	private String nomeFantasia;
-
+	
+	@JsonIgnore
 	@ElementCollection(targetClass = Integer.class)
 	private List<Integer> especialidades = new ArrayList<>();
 
@@ -45,9 +47,11 @@ public class Loja implements Serializable {
 	private String site;
 	private String instagram;
 	private String facebook;
+	private Boolean isVisible = true;
 	private Boolean isActive = true;
 	private Boolean isOpen = false;
-	private Integer Espera = 20; //tempo previsto de espera em minutos
+	private Integer prazoRetirada; //tempo previsto de espera em minutos
+	private Integer limiteDistanciaKm;	
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
@@ -83,21 +87,31 @@ public class Loja implements Serializable {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
-	private List<Adicional> adicionais = new ArrayList<>();
+	private List<Adicional> adicionais = new ArrayList<>();		
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "loja", cascade = CascadeType.ALL)
+	private List<Frete> fretes = new ArrayList<>();	
+	
+	@JsonIgnore
+	@ManyToMany(mappedBy = "lojas")
+	private List<Usuario> usuarios = new ArrayList<>();
 
 	public Loja() {
 
 	}
 
-	public Loja(Integer id, String razaoSocial, String cnpjCpf, String nomeResponsavel, String nomeFantasia,
-			Endereco endereco, String telefone, String whatsapp, Double mediaSatisfacao, String logo, String site,
-			String instagram, String facebook, List<Integer> especialidades) {
-
-		this.id = id;
+	
+	public Loja(String razaoSocial, String cnpjCpf, String nomeResponsavel, String nomeFantasia,
+			List<Integer> especialidades, Endereco endereco, String telefone, String whatsapp, Double mediaSatisfacao,
+			String logo, String site, String instagram, String facebook, Integer prazoRetirada,
+			Integer limiteDistanciaKm, List<Frete> fretes, List<Usuario> usuarios) {
+		
 		this.razaoSocial = razaoSocial;
 		this.cnpjCpf = cnpjCpf;
 		this.nomeResponsavel = nomeResponsavel;
 		this.nomeFantasia = nomeFantasia;
+		this.especialidades = especialidades;
 		this.endereco = endereco;
 		this.telefone = telefone;
 		this.whatsapp = whatsapp;
@@ -106,8 +120,10 @@ public class Loja implements Serializable {
 		this.site = site;
 		this.instagram = instagram;
 		this.facebook = facebook;
-		this.especialidades = especialidades;
-
+		this.prazoRetirada = prazoRetirada;
+		this.limiteDistanciaKm = limiteDistanciaKm;
+		this.fretes = fretes;
+		this.usuarios = usuarios;
 	}
 
 	public Integer getId() {
@@ -303,14 +319,6 @@ public class Loja implements Serializable {
 	public void setAdicionais(List<Adicional> adicionais) {
 		this.adicionais = adicionais;
 	}
-	
-	public Integer getEspera() {
-		return Espera;
-	}
-
-	public void setEspera(Integer espera) {
-		Espera = espera;
-	}
 
 	public Boolean getIsActive() {
 		return isActive;
@@ -326,6 +334,46 @@ public class Loja implements Serializable {
 
 	public void setIsOpen(Boolean isOpen) {
 		this.isOpen = isOpen;
+	}
+	
+	public Integer getPrazoRetirada() {
+		return prazoRetirada;
+	}
+
+	public void setPrazoRetirada(Integer prazoRetirada) {
+		this.prazoRetirada = prazoRetirada;
+	}
+
+	public Integer getLimiteDistanciaKm() {
+		return limiteDistanciaKm;
+	}
+
+	public void setLimiteDistanciaKm(Integer limiteDistanciaKm) {
+		this.limiteDistanciaKm = limiteDistanciaKm;
+	}
+
+	public List<Frete> getFretes() {
+		return fretes;
+	}
+
+	public void setFretes(List<Frete> fretes) {
+		this.fretes = fretes;
+	}
+
+	public Boolean getIsVisible() {
+		return isVisible;
+	}
+
+	public void setIsVisible(Boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+	
+	public List<Usuario> getUsuarios() {
+	    return usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+	    this.usuarios = usuarios;
 	}
 
 	@Override

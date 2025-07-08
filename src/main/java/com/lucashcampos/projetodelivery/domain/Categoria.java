@@ -11,10 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-import com.lucashcampos.projetodelivery.domain.enums.TipoProduto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Categoria implements Serializable {
@@ -24,10 +24,11 @@ public class Categoria implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
-	private Integer tipo;
-	private Boolean isActive = true;
-
-	@ManyToMany(mappedBy = "categorias")
+	private Boolean isVisible = true;
+	private Boolean isActive;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Produto> produtos = new ArrayList<>();
 	
 	@ManyToOne(cascade = CascadeType.DETACH)
@@ -38,11 +39,11 @@ public class Categoria implements Serializable {
 
 	}
 
-	public Categoria(Integer id, String nome, Loja loja, TipoProduto tipo) {
+	public Categoria(Integer id, String nome, Loja loja, Boolean isActive) {
 		this.id = id;
 		this.nome = nome;
 		this.loja = loja;
-		this.tipo = tipo.getCod();
+		this.isActive = isActive;
 	}
 
 	public Integer getId() {
@@ -60,15 +61,7 @@ public class Categoria implements Serializable {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	public TipoProduto getTipo() {
-		return TipoProduto.toEnum(tipo);
-	}
-
-	public void setTipo(TipoProduto tipo) {
-		this.tipo = tipo.getCod();
-	}
-
+	
 	public List<Produto> getProdutos() {
 		return produtos;
 	}
@@ -92,6 +85,14 @@ public class Categoria implements Serializable {
 
 	public void setLoja(Loja loja) {
 		this.loja = loja;
+	}	
+
+	public Boolean getIsVisible() {
+		return isVisible;
+	}
+
+	public void setIsVisible(Boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 
 	@Override

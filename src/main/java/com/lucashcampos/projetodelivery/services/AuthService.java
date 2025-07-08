@@ -6,15 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.lucashcampos.projetodelivery.domain.Cliente;
-import com.lucashcampos.projetodelivery.repositories.ClienteRepository;
+import com.lucashcampos.projetodelivery.domain.Usuario;
+import com.lucashcampos.projetodelivery.repositories.UsuarioRepository;
 import com.lucashcampos.projetodelivery.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class AuthService {
 	
 	@Autowired
-	private ClienteRepository clienteRepository;
+	private UsuarioRepository usuarioRepository;
 
 	@Autowired
 	private BCryptPasswordEncoder pe;
@@ -25,17 +25,17 @@ public class AuthService {
 	private Random rand = new Random();
 
 	public void sendNewPassword(String email) {
-		Cliente cliente = clienteRepository.findByEmail(email);
-		if (cliente == null) {
+		Usuario usuario = usuarioRepository.findByEmail(email);
+		if (usuario == null) {
 			throw new ObjectNotFoundException("Email não encontrado");
 		}
 
 		String newPass = newPassword();
-		cliente.setSenha(pe.encode(newPass));
+		usuario.setSenha(pe.encode(newPass));
 
-		clienteRepository.save(cliente);
+		usuarioRepository.save(usuario);
 
-		emailService.sendNewPasswordEmail(cliente, newPass);
+		emailService.sendNewPasswordEmail(usuario, newPass);
 	}
 
 	private String newPassword() {

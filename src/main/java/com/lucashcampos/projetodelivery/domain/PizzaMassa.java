@@ -21,13 +21,12 @@ public class PizzaMassa implements Serializable {
 	private Integer id;
 	private String nome;
 	private Double preco;
+	private Boolean isVisible = true;
 	private Boolean isActive = true;
 
 	@ManyToOne
 	@JoinColumn(name = "loja_id")
-	private Loja loja;
-	
-	
+	private Loja loja;	
 
 	public PizzaMassa() {
 
@@ -78,6 +77,14 @@ public class PizzaMassa implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}	
+
+	public Boolean getIsVisible() {
+		return isVisible;
+	}
+
+	public void setIsVisible(Boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 
 	@Override

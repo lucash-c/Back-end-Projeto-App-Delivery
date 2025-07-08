@@ -1,19 +1,24 @@
 package com.lucashcampos.projetodelivery.dto;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.lucashcampos.projetodelivery.domain.enums.Perfil;
 import com.lucashcampos.projetodelivery.services.validation.ClienteInsert;
 
 @ClienteInsert
-public class ClienteNewDTO implements Serializable {
+public class UsuarioNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String cpf_cnpj; //validação feita na classe de anotação ClienteInsert
+	private String cpf_cnpj; // validação feita na classe de anotação ClienteInsert
 
 	@NotEmpty(message = "Preenchimento obrigatório")
 	@Length(min = 3, max = 120, message = "O nome deve conter no minimo 3 caracteres!")
@@ -22,31 +27,44 @@ public class ClienteNewDTO implements Serializable {
 	@NotEmpty(message = "Preenchimento obrigatório")
 	@Email(message = "E-mail inválido!")
 	private String email;
-	private Integer tipo;
-	
+
+	@NotNull(message = "Tipo não pode ser vazio")
+	private Integer tipo;	
+
 	@NotEmpty(message = "Preenchimento obrigatório")
-	private String senha; 
-	
+	private String senha;
+
 	@NotEmpty(message = "Preenchimento obrigatório")
 	private String logradouro;
-	
+
 	@NotEmpty(message = "Preenchimento obrigatório")
 	private String numero;
 	private String complemento;
+
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String bairro;
-	
+
 	@NotEmpty(message = "Preenchimento obrigatório")
 	private String cep;
-	
+
 	@NotEmpty(message = "Preenchimento obrigatório")
 	private String telefone1;
 	private String telefone2;
 
-	private Integer cidadeId;
-	
-	
+	@NotEmpty(message = "Preenchimento obrigatório")
+	private String cidade;
 
-	public ClienteNewDTO() {
+	@NotEmpty(message = "Preenchimento obrigatório")
+	private String estado;
+	
+	private Set<Integer> perfis = new HashSet<>();
+	
+	private String plano;
+	private Integer diaVencimento;
+	private String formaPagamento;
+	private String obs;
+
+	public UsuarioNewDTO() {
 
 	}
 
@@ -138,20 +156,68 @@ public class ClienteNewDTO implements Serializable {
 		this.telefone2 = telefone2;
 	}
 
-	public Integer getCidadeId() {
-		return cidadeId;
-	}
-
-	public void setCidadeId(Integer cidadeId) {
-		this.cidadeId = cidadeId;
-	}
-
 	public String getSenha() {
 		return senha;
 	}
 
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+	
+	public Set<Perfil> getPerfis() {
+		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+	}
+
+	public void addPerfil(Perfil perfil) {
+		perfis.add(perfil.getCod());
+	}
+
+	public String getPlano() {
+		return plano;
+	}
+
+	public void setPlano(String plano) {
+		this.plano = plano;
+	}
+
+	public Integer getDiaVencimento() {
+		return diaVencimento;
+	}
+
+	public void setDiaVencimento(Integer diaVencimento) {
+		this.diaVencimento = diaVencimento;
+	}
+
+	public String getFormaPagamento() {
+		return formaPagamento;
+	}
+
+	public void setFormaPagamento(String formaPagamento) {
+		this.formaPagamento = formaPagamento;
+	}
+
+	public String getObs() {
+		return obs;
+	}
+
+	public void setObs(String obs) {
+		this.obs = obs;
 	}
 
 }

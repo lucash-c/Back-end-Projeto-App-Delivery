@@ -20,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lucashcampos.projetodelivery.domain.Categoria;
 import com.lucashcampos.projetodelivery.dto.CategoriaDTO;
+import com.lucashcampos.projetodelivery.dto.CategoriaProdutoDTO;
 import com.lucashcampos.projetodelivery.services.CategoriaService;
 
 @RestController
@@ -33,11 +34,10 @@ public class CategoriaResource {
 		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	
-	@RequestMapping(value = "/loja={lojaId}",method = RequestMethod.GET)
-	public ResponseEntity<List<CategoriaDTO>> findAllByLoja(@PathVariable Integer lojaId) {
-		List<Categoria> list = service.findAllByLojaId(lojaId);
-		List<CategoriaDTO> listDTO = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+
+	@RequestMapping(value = "/loja={lojaId}", method = RequestMethod.GET)
+	public ResponseEntity<List<CategoriaProdutoDTO>> findAllByLoja(@PathVariable Integer lojaId) {
+		List<CategoriaProdutoDTO> listDTO = service.findAllByLojaId(lojaId);
 		return ResponseEntity.ok().body(listDTO);
 	}
 

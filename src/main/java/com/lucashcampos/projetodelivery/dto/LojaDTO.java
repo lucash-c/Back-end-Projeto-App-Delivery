@@ -1,224 +1,270 @@
 package com.lucashcampos.projetodelivery.dto;
 
-import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.Length;
-
+import com.lucashcampos.projetodelivery.domain.Endereco;
 import com.lucashcampos.projetodelivery.domain.Loja;
-import com.lucashcampos.projetodelivery.domain.enums.EspecialidadeLoja;
+import com.lucashcampos.projetodelivery.domain.Usuario;
 
-public class LojaDTO implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class LojaDTO {
+    private Integer id;
+    private String name;
+    private String whatsapp;
+    private EnderecoDTO endereco;
+    private ConfiguracoesDTO configuracoes;
+    private Boolean isOpen;
+    private Boolean isActive;
+    private List<String> especialidade;
+    private List<Usuario> usuarios;
 
-	private Integer id;
+    // Getters and Setters
 
-	@NotEmpty(message = "Razão Social é obrigatória!")
-	@Length(min = 3, max = 80, message = "A Razão Social deve ter entre 3 e 80 caracteres!")
-	private String razaoSocial;
+    public Integer getId() {
+        return id;
+    }
 
-	@NotEmpty(message = "CNPJ/CPF é obrigatório!")
-	@Size(min = 11, max = 14, message = "O CNPJ/CPF deve ter entre 11 e 14 caracteres!")
-	@Pattern(regexp = "^[0-9]*$", message = "O CNPJ/CPF deve conter apenas números!")
-	private String cnpjCpf;
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	@NotEmpty(message = "Nome do Responsável é obrigatório!")
-	private String nomeResponsavel;
+    public String getName() {
+        return name;
+    }
 
-	@NotEmpty(message = "Nome Fantasia é obrigatório!")
-	private String nomeFantasia;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@NotEmpty(message = "Logradouro é obrigatório!")
-	private String logradouro;
+    public String getWhatsapp() {
+        return whatsapp;
+    }
 
-	@NotEmpty(message = "Número é obrigatório!")
-	private String numero;
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
+    }
 
-	private String complemento;
+    public EnderecoDTO getEndereco() {
+        return endereco;
+    }
 
-	@NotEmpty(message = "CEP é obrigatório!")
-	@Size(min = 8, max = 8, message = "O CEP deve ter 8 caracteres!")
-	@Pattern(regexp = "^[0-9]*$", message = "O CEP deve conter apenas números!")
-	private String cep;
+    public void setEndereco(EnderecoDTO endereco) {
+        this.endereco = endereco;
+    }
 
-	@NotEmpty(message = "Telefone é obrigatório!")
-	@Pattern(regexp = "\\d{10,11}", message = "Telefone inválido. Deve conter 10 ou 11 dígitos numéricos.")
-	private String telefone;
+    public ConfiguracoesDTO getConfiguracoes() {
+        return configuracoes;
+    }
 
-	@Pattern(regexp = "\\d{10,11}", message = "Whatsapp inválido. Deve conter 10 ou 11 dígitos numéricos contando com o DDD.")
-	private String whatsapp;
-	private Double mediaSatisfacao;
-	private String logo;
-	private String site;
-	private String instagram;
-	private String facebook;
+    public void setConfiguracoes(ConfiguracoesDTO configuracoes) {
+        this.configuracoes = configuracoes;
+    }
 
-	@Size(min = 1, message = "Deve haver pelo menos uma especialidade adicionada!")
-	private List<EspecialidadeLoja> especialidades;
+    public Boolean getIsOpen() {
+        return isOpen;
+    }
 
-	public LojaDTO() {
+    public void setIsOpen(Boolean isOpen) {
+        this.isOpen = isOpen;
+    }
 
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public List<String> getEspecialidade() {
+        return especialidade;
+    }
+
+    public void setEspecialidade(List<String> especialidade) {
+        this.especialidade = especialidade;
+    }
+    
+    public List<Usuario> getUsuarios() {
+		return usuarios;
 	}
 
-	public LojaDTO(Loja obj) {
-		id = obj.getId();
-		razaoSocial = obj.getRazaoSocial();
-		cnpjCpf = obj.getCnpjCpf();
-		nomeResponsavel = obj.getNomeResponsavel();
-		nomeFantasia = obj.getNomeFantasia();
-		logradouro = obj.getEndereco().getLogradouro();
-		numero = obj.getEndereco().getNumero();
-		complemento = obj.getEndereco().getComplemento();
-		cep = obj.getEndereco().getCep();
-		telefone = obj.getTelefone();
-		whatsapp = obj.getWhatsapp();
-		mediaSatisfacao = obj.getMediaSatisfacao();
-		logo = obj.getLogo();
-		site = obj.getSite();
-		instagram = obj.getInstagram();
-		facebook = obj.getFacebook();
-		especialidades = obj.getEspecialidades();
-
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 
-	public Integer getId() {
-		return id;
-	}
+	public static class EnderecoDTO {
+        private String cep;
+        private String logradouro;
+        private String bairro;
+        private String cidade;
+        private String estado;
+        private String numero;
+        private String complemento;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+        // Getters and Setters
 
-	public String getRazaoSocial() {
-		return razaoSocial;
-	}
+        public String getCep() {
+            return cep;
+        }
 
-	public void setRazaoSocial(String razaoSocial) {
-		this.razaoSocial = razaoSocial;
-	}
+        public void setCep(String cep) {
+            this.cep = cep;
+        }
 
-	public String getCnpjCpf() {
-		return cnpjCpf;
-	}
+        public String getLogradouro() {
+            return logradouro;
+        }
 
-	public void setCnpjCpf(String cnpjCpf) {
-		this.cnpjCpf = cnpjCpf;
-	}
+        public void setLogradouro(String logradouro) {
+            this.logradouro = logradouro;
+        }
 
-	public String getNomeResponsavel() {
-		return nomeResponsavel;
-	}
+        public String getBairro() {
+            return bairro;
+        }
 
-	public void setNomeResponsavel(String nomeResponsavel) {
-		this.nomeResponsavel = nomeResponsavel;
-	}
+        public void setBairro(String bairro) {
+            this.bairro = bairro;
+        }
 
-	public String getNomeFantasia() {
-		return nomeFantasia;
-	}
+        public String getCidade() {
+            return cidade;
+        }
 
-	public void setNomeFantasia(String nomeFantasia) {
-		this.nomeFantasia = nomeFantasia;
-	}
+        public void setCidade(String cidade) {
+            this.cidade = cidade;
+        }
 
-	public String getLogradouro() {
-		return logradouro;
-	}
+        public String getEstado() {
+            return estado;
+        }
 
-	public void setLogradouro(String logradouro) {
-		this.logradouro = logradouro;
-	}
+        public void setEstado(String estado) {
+            this.estado = estado;
+        }
 
-	public String getNumero() {
-		return numero;
-	}
+        public String getNumero() {
+            return numero;
+        }
 
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
+        public void setNumero(String numero) {
+            this.numero = numero;
+        }
 
-	public String getComplemento() {
-		return complemento;
-	}
+        public String getComplemento() {
+            return complemento;
+        }
 
-	public void setComplemento(String complemento) {
-		this.complemento = complemento;
-	}
+        public void setComplemento(String complemento) {
+            this.complemento = complemento;
+        }
+    }
 
-	public String getCep() {
-		return cep;
-	}
+    public static class ConfiguracoesDTO {
+        private List<FreteDTO> frete;
+        private Integer prazoRetirada;
+        private Integer limiteDistanciaKm;
 
-	public void setCep(String cep) {
-		this.cep = cep;
-	}
+        // Getters and Setters
 
-	public String getTelefone() {
-		return telefone;
-	}
+        public List<FreteDTO> getFrete() {
+            return frete;
+        }
 
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
+        public void setFrete(List<FreteDTO> frete) {
+            this.frete = frete;
+        }
 
-	public String getWhatsapp() {
-		return whatsapp;
-	}
+        public Integer getPrazoRetirada() {
+            return prazoRetirada;
+        }
 
-	public void setWhatsapp(String whatsapp) {
-		this.whatsapp = whatsapp;
-	}
+        public void setPrazoRetirada(Integer prazoRetirada) {
+            this.prazoRetirada = prazoRetirada;
+        }
 
-	public Double getMediaSatisfacao() {
-		return mediaSatisfacao;
-	}
+        public Integer getLimiteDistanciaKm() {
+            return limiteDistanciaKm;
+        }
 
-	public void setMediaSatisfacao(Double mediaSatisfacao) {
-		this.mediaSatisfacao = mediaSatisfacao;
-	}
+        public void setLimiteDistanciaKm(Integer limiteDistanciaKm) {
+            this.limiteDistanciaKm = limiteDistanciaKm;
+        }
+    }
 
-	public String getLogo() {
-		return logo;
-	}
+    public static class FreteDTO {
+        private Integer km;
+        private Double valor;
+        private Integer prazo;
 
-	public void setLogo(String logo) {
-		this.logo = logo;
-	}
+        // Getters and Setters
 
-	public String getSite() {
-		return site;
-	}
+        public Integer getKm() {
+            return km;
+        }
 
-	public void setSite(String site) {
-		this.site = site;
-	}
+        public void setKm(Integer km) {
+            this.km = km;
+        }
 
-	public String getInstagram() {
-		return instagram;
-	}
+        public Double getValor() {
+            return valor;
+        }
 
-	public void setInstagram(String instagram) {
-		this.instagram = instagram;
-	}
+        public void setValor(Double valor) {
+            this.valor = valor;
+        }
 
-	public String getFacebook() {
-		return facebook;
-	}
+        public Integer getPrazo() {
+            return prazo;
+        }
 
-	public void setFacebook(String facebook) {
-		this.facebook = facebook;
-	}
+        public void setPrazo(Integer prazo) {
+            this.prazo = prazo;
+        }
+    }
 
-	public List<EspecialidadeLoja> getEspecialidades() {
-		return especialidades;
-	}
+    // Mapping method from Loja to LojaDTO
 
-	public void setEspecialidades(List<EspecialidadeLoja> especialidades) {
-		this.especialidades = especialidades;
-	}
+    public static LojaDTO fromLoja(Loja loja) {
+        LojaDTO dto = new LojaDTO();
+        dto.setId(loja.getId());
+        dto.setName(loja.getNomeFantasia());
+        dto.setWhatsapp(loja.getWhatsapp());
+        dto.setEndereco(fromEndereco(loja.getEndereco()));
+        dto.setConfiguracoes(fromConfiguracoes(loja));
+        dto.setIsOpen(loja.getIsOpen());
+        dto.setIsActive(loja.getIsActive());
+        dto.setEspecialidade(loja.getEspecialidades().stream().map(Enum::name).collect(Collectors.toList()));
+        return dto;
+    }
 
+    private static EnderecoDTO fromEndereco(Endereco endereco) {
+        if (endereco == null) {
+            return null;
+        }
+        EnderecoDTO dto = new EnderecoDTO();
+        dto.setCep(endereco.getCep());
+        dto.setLogradouro(endereco.getLogradouro());
+        dto.setBairro(endereco.getBairro());
+        dto.setCidade(endereco.getCidade());
+        dto.setEstado(endereco.getEstado());
+        dto.setNumero(endereco.getNumero());
+        dto.setComplemento(endereco.getComplemento());
+        return dto;
+    }
+
+    private static ConfiguracoesDTO fromConfiguracoes(Loja loja) {
+        ConfiguracoesDTO dto = new ConfiguracoesDTO();
+        dto.setFrete(loja.getFretes().stream().map(f -> {
+            FreteDTO freteDto = new FreteDTO();
+            freteDto.setKm(f.getKm());
+            freteDto.setValor(f.getValor());
+            freteDto.setPrazo(f.getPrazo());
+            return freteDto;
+        }).collect(Collectors.toList()));
+        dto.setPrazoRetirada(loja.getPrazoRetirada());
+        dto.setLimiteDistanciaKm(loja.getLimiteDistanciaKm());
+        return dto;
+    }
 }

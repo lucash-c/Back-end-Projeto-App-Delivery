@@ -21,13 +21,10 @@ public class PizzaSaborTamanho implements Serializable {
 	private Integer id;
 	private String sabor;
 	private String tamanho;
+	private Double preco;	
 	private String descricao;
-	private Integer pedacos;
-	private Integer pessoas; // quantidade de pessoas que serve
-	private Double preco;
+	private Boolean isVisible = true;
 	private Boolean isActive = true;
-	private Integer quantidadeSabor; // quantidade maxima de partes que a pizza podera ser dividida ou sabores que o
-	 								 // front permitira ao cliente escolher
 
 	@ManyToOne
 	@JoinColumn(name = "loja_id")
@@ -37,16 +34,15 @@ public class PizzaSaborTamanho implements Serializable {
 
 	}
 
-	public PizzaSaborTamanho(Integer id, String sabor, String descricao, String tamanho, Integer pedacos,
-			Integer pessoas, Double preco, Integer quantidadeSabor) {
+	public PizzaSaborTamanho(Integer id, String sabor, String descricao, String tamanho, Double preco
+			) {
+		super();
 		this.id = id;
 		this.sabor = sabor;
-		this.descricao = descricao;
 		this.tamanho = tamanho;
-		this.pedacos = pedacos;
-		this.pessoas = pessoas;
-		this.preco = preco;
-		this.quantidadeSabor = quantidadeSabor;
+		this.preco = preco;		
+		this.descricao = descricao;
+		
 	}
 
 	public Integer getId() {
@@ -65,52 +61,12 @@ public class PizzaSaborTamanho implements Serializable {
 		this.sabor = sabor;
 	}
 
-	public String getTamanho() {
-		return tamanho;
-	}
-
-	public void setTamanho(String tamanho) {
-		this.tamanho = tamanho;
-	}
-
-	public Integer getPedacos() {
-		return pedacos;
-	}
-
-	public void setPedacos(Integer pedacos) {
-		this.pedacos = pedacos;
-	}
-
-	public Integer getPessoas() {
-		return pessoas;
-	}
-
-	public void setPessoas(Integer pessoas) {
-		this.pessoas = pessoas;
-	}
-
-	public Double getPreco() {
-		return preco;
-	}
-
-	public void setPreco(Double preco) {
-		this.preco = preco;
-	}
-
 	public String getDescricao() {
 		return descricao;
 	}
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}
-
-	public Integer getQuantidadeSabor() {
-		return quantidadeSabor;
-	}
-
-	public void setQuantidadeSabor(Integer quantidadeSabor) {
-		this.quantidadeSabor = quantidadeSabor;
 	}
 
 	public Loja getLoja() {
@@ -127,6 +83,31 @@ public class PizzaSaborTamanho implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}	
+
+	public String getTamanho() {
+		return tamanho;
+	}
+
+	public void setTamanho(String tamanho) {
+		this.tamanho = tamanho;
+	}
+
+	public Double getPreco() {
+		return preco;
+	}
+
+	public void setPreco(Double preco) {
+		this.preco = preco;
+	}
+	
+
+	public Boolean getIsVisible() {
+		return isVisible;
+	}
+
+	public void setIsVisible(Boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 
 	@Override

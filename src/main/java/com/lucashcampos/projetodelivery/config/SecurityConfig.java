@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.lucashcampos.projetodelivery.repositories.UsuarioRepository;
 import com.lucashcampos.projetodelivery.security.JWTAuthenticationFilter;
 import com.lucashcampos.projetodelivery.security.JWTAuthorizationFilter;
 import com.lucashcampos.projetodelivery.security.JWTUtil;
@@ -28,53 +29,69 @@ import com.lucashcampos.projetodelivery.security.JWTUtil;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	@Autowired
-	private Environment env;
 
-	@Autowired
-	private JWTUtil jwtUtil;
+    @Autowired
+    private Environment env;
 
-	@Autowired
-	private UserDetailsService userDetailsService;
+    @Autowired
+    private JWTUtil jwtUtil;
 
-	private static final String[] PUBLIC_MATCHERS = { "/h2-console/**" };
+    @Autowired
+    private UserDetailsService userDetailsService;
 
-	private static final String[] PUBLIC_MATCHERS_GET = { "/produtos/**", "/categorias/**", "/estados/**" };
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-	private static final String[] PUBLIC_MATCHERS_POST = { "/clientes", "/auth/forgot/**" };
+    private static final String[] PUBLIC_MATCHERS = { "/h2-console/**" };
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+    private static final String[] PUBLIC_MATCHERS_GET = { "/produtos/**", "/categorias/**", "/estados/**" };
 
-		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
-			http.headers().frameOptions().disable();
-		}
+    private static final String[] PUBLIC_MATCHERS_POST = { "/Usuarios", "/auth/forgot/**" };
 
-		http.cors().and().csrf().disable();
-		http.authorizeRequests().antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
-				.antMatchers(PUBLIC_MATCHERS).permitAll().antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
-				.anyRequest().authenticated();
-		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
-		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-	}
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
 
-	@Override
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-	}
+        // Permitir acesso ao H2 no perfil de teste
+        if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
+            http.headers().frameOptions().disable();
+        }
 
-	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
-		configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
-		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
-	}
+        // Habilitar CORS e desabilitar CSRF
+        http.cors().and().csrf().disable();
 
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+        // Configuração de autorização das requisições
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
+                .antMatchers(PUBLIC_MATCHERS).permitAll()
+                .antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
+                .anyRequest().authenticated();
+
+        // Filtros de autenticação e autorização JWT
+        http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil, usuarioRepository));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
+
+        // Sessão sem estado (stateless)
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    }
+
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+    }
+
+    // Configuração do CORS
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+        configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "PATCH","OPTIONS"));
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Aplica as configurações para todas as rotas
+        return source;
+    }
+
+    // Criação do codificador de senhas
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

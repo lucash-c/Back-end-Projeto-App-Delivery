@@ -19,7 +19,7 @@ import com.lucashcampos.projetodelivery.domain.Adicional;
 import com.lucashcampos.projetodelivery.services.AdicionalService;
 
 @RestController
-@RequestMapping(value = "/adicionais-pizza")
+@RequestMapping(value = "/adicionais")
 public class AdicionalResource {
 	@Autowired
 	private AdicionalService service;
@@ -37,12 +37,12 @@ public class AdicionalResource {
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Adicional obj) {
-		obj = service.insert(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).build();
-	}
+	@RequestMapping(method = RequestMethod.POST, value = "/add-adicionais")
+	public ResponseEntity<Void> insert(@RequestBody List<Adicional> objs) {
+		 objs = service.insertAll(objs); 
+		    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+		    return ResponseEntity.created(uri).build();
+		}	
 	
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)

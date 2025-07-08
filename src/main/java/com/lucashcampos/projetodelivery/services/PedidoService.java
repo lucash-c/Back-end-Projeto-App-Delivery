@@ -10,7 +10,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lucashcampos.projetodelivery.domain.Cliente;
+import com.lucashcampos.projetodelivery.domain.Usuario;
 import com.lucashcampos.projetodelivery.domain.ItemPedido;
 import com.lucashcampos.projetodelivery.domain.Pedido;
 import com.lucashcampos.projetodelivery.domain.enums.EstadoPagamento;
@@ -25,7 +25,7 @@ import com.lucashcampos.projetodelivery.services.exceptions.ObjectNotFoundExcept
 public class PedidoService {
 
 	@Autowired
-	private ClienteService clienteService;
+	private UsuarioService usuarioService;
 
 	@Autowired
 	private PedidoRepository repo;
@@ -53,7 +53,7 @@ public class PedidoService {
 	public Pedido insert(Pedido obj) {
 		obj.setId(null);
 		obj.setInstante(new Date());
-		obj.setCliente(clienteService.find(obj.getCliente().getId()));
+		obj.setCliente(usuarioService.find(obj.getCliente().getId()));
 		obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj);
 		obj = repo.save(obj);
@@ -81,8 +81,8 @@ public class PedidoService {
 		}
 
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		Cliente cliente = clienteService.find(user.getId());
-		return repo.findByCliente(cliente, pageRequest);
+		Usuario usuario = usuarioService.find(user.getId());
+		return repo.findByCliente(usuario, pageRequest);
 	}
 	
 	public Page<Pedido> findPage(Integer lojaId, Integer page, Integer linesPerPage, String orderBy, String direction) {

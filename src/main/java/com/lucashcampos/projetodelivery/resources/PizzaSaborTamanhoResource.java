@@ -19,7 +19,7 @@ import com.lucashcampos.projetodelivery.domain.PizzaSaborTamanho;
 import com.lucashcampos.projetodelivery.services.PizzaSaborTamanhoService;
 
 @RestController
-@RequestMapping(value = "/cardapio-pizzas")
+@RequestMapping(value = "/sabores-pizza")
 public class PizzaSaborTamanhoResource {
 	@Autowired
 	private PizzaSaborTamanhoService service;
@@ -37,11 +37,11 @@ public class PizzaSaborTamanhoResource {
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody PizzaSaborTamanho obj) {
-		obj = service.insert(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).build();
+	@RequestMapping(method = RequestMethod.POST, value = "/add-sabores")
+	public ResponseEntity<Void> insert(@RequestBody List<PizzaSaborTamanho> objs) {
+	    objs = service.insertAll(objs); 
+	    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+	    return ResponseEntity.created(uri).build();
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")

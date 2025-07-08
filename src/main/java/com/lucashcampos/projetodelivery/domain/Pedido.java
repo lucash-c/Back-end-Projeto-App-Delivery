@@ -36,8 +36,8 @@ public class Pedido implements Serializable {
 	private Pagamento pagamento;
 
 	@ManyToOne(cascade = CascadeType.DETACH)
-	@JoinColumn(name = "cliente_id")
-	private Cliente cliente;
+	@JoinColumn(name = "usuario_id")
+	private Usuario usuario;
 
 	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "endereco_entrega_id")
@@ -54,19 +54,19 @@ public class Pedido implements Serializable {
 
 	}
 
-	public Pedido(Integer id, Date instante, Cliente cliente, Endereco enderecoDeEntrega) {
+	public Pedido(Integer id, Date instante, Usuario usuario, Endereco enderecoDeEntrega) {
 
 		this.id = id;
 		this.instante = instante;
-		this.cliente = cliente;
+		this.usuario = usuario;
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 
-	public Pedido(Integer id, Date instante, Cliente cliente, Endereco enderecoDeEntrega, Loja loja) {
+	public Pedido(Integer id, Date instante, Usuario usuario, Endereco enderecoDeEntrega, Loja loja) {
 
 		this.id = id;
 		this.instante = instante;
-		this.cliente = cliente;
+		this.usuario = usuario;
 		this.enderecoDeEntrega = enderecoDeEntrega;
 		this.loja = loja;
 	}
@@ -103,12 +103,12 @@ public class Pedido implements Serializable {
 		this.pagamento = pagamento;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
+	public Usuario getCliente() {
+		return usuario;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setCliente(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public Endereco getEnderecoDeEntrega() {

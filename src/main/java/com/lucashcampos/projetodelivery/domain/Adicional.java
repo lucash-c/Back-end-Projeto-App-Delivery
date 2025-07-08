@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.lucashcampos.projetodelivery.domain.enums.TipoAdicional;
 
 @Entity
@@ -24,7 +25,9 @@ public class Adicional implements Serializable {
 	private String nome;
 	private Double preco;
 	private Integer tipo;
-	private Boolean isActive = true;
+	private String tamanho;
+	private Boolean isVisible;
+	private Boolean isActive;
 
 	@ManyToOne
 	@JoinColumn(name = "loja_id")
@@ -70,9 +73,18 @@ public class Adicional implements Serializable {
 	public TipoAdicional getTipo() {
 		return TipoAdicional.toEnum(tipo);
 	}
-
+	
+	@JsonSetter("tipo")
 	public void setTipo(TipoAdicional tipo) {
 		this.tipo = tipo.getCod();
+	}	
+
+	public String getTamanho() {
+		return tamanho;
+	}
+
+	public void setTamanho(String tamanho) {
+		this.tamanho = tamanho;
 	}
 
 	public Loja getLoja() {
@@ -89,6 +101,14 @@ public class Adicional implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}	
+
+	public Boolean getIsVisible() {
+		return isVisible;
+	}
+
+	public void setIsVisible(Boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 
 	@Override

@@ -37,11 +37,11 @@ public class PizzaMassaResource {
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody PizzaMassa obj) {
-		obj = service.insert(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).build();
+	@RequestMapping(method = RequestMethod.POST, value = "/add-massas")
+	public ResponseEntity<Void> insert(@RequestBody List<PizzaMassa> objs) {
+	    objs = service.insertAll(objs); 
+	    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+	    return ResponseEntity.created(uri).build();
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")

@@ -7,7 +7,7 @@ import java.util.Set;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import com.lucashcampos.projetodelivery.domain.Cliente;
+import com.lucashcampos.projetodelivery.domain.Usuario;
 import com.lucashcampos.projetodelivery.domain.Endereco;
 import com.lucashcampos.projetodelivery.domain.ItemPedido;
 import com.lucashcampos.projetodelivery.domain.Loja;
@@ -20,7 +20,7 @@ public class PedidoDTO implements Serializable {
 	private Integer id;
 
 	@NotEmpty(message = "Informações do Cliente é obrigatório!")
-	private Cliente cliente;
+	private Usuario usuario;
 
 	@NotEmpty(message = "Informações de pagamento é obrigatório!")
 	private Pagamento pagamento;
@@ -40,7 +40,7 @@ public class PedidoDTO implements Serializable {
 
 	public PedidoDTO(Pedido obj) {
 		id = obj.getId();
-		cliente = obj.getCliente();
+		usuario = obj.getCliente();
 		enderecoDeEntrega = obj.getEnderecoDeEntrega();
 		itens = obj.getItens();
 		loja = obj.getLoja();
@@ -55,12 +55,12 @@ public class PedidoDTO implements Serializable {
 		this.id = id;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
+	public Usuario getCliente() {
+		return usuario;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setCliente(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public Pagamento getPagamento() {

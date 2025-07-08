@@ -9,7 +9,6 @@ import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lucashcampos.projetodelivery.domain.Categoria;
 import com.lucashcampos.projetodelivery.domain.Loja;
-import com.lucashcampos.projetodelivery.domain.enums.TipoProduto;
 
 public class CategoriaDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -18,11 +17,10 @@ public class CategoriaDTO implements Serializable {
 
 	@NotEmpty(message = "Preenchimento obrigatório!")
 	@Length(min = 3, max = 80, message = "O tamanho deve ser de no mínimo 3 e no maximo 80 caracteres! ")
-	private String nome;
-	private Integer tipo;
+	private String nome;	
+	private Boolean isVisible;
 	private Boolean isActive;
-	@JsonIgnore
-	private Loja loja;
+	private Integer lojaId;
 	
 	
 	public CategoriaDTO() {
@@ -31,9 +29,8 @@ public class CategoriaDTO implements Serializable {
 
 	public CategoriaDTO(Categoria obj) {
 		id = obj.getId();
-		nome = obj.getNome();
-		tipo = obj.getTipo().getCod();
-		loja= obj.getLoja();
+		nome = obj.getNome();		
+		lojaId= obj.getLoja().getId();
 		isActive = obj.getIsActive();
 	}
 
@@ -51,22 +48,14 @@ public class CategoriaDTO implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-	
-	public TipoProduto getTipo() {
-		return TipoProduto.toEnum(tipo);
-	}
-
-	public void setTipo(TipoProduto tipo) {
-		this.tipo = tipo.getCod();
 	}	
 
-	public Loja getLoja() {
-		return loja;
+	public Integer getLojaId() {
+		return lojaId;
 	}
 
-	public void setLoja(Loja loja) {
-		this.loja = loja;
+	public void setLojaId(Integer lojaId) {
+		this.lojaId = lojaId;
 	}
 
 	public Boolean getIsActive() {
@@ -76,6 +65,15 @@ public class CategoriaDTO implements Serializable {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
+
+	public Boolean getIsVisible() {
+		return isVisible;
+	}
+
+	public void setIsVisible(Boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+	
 	
 	
 

@@ -2,8 +2,10 @@ package com.lucashcampos.projetodelivery.services;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -13,22 +15,22 @@ import org.springframework.stereotype.Service;
 
 import com.lucashcampos.projetodelivery.domain.Adicional;
 import com.lucashcampos.projetodelivery.domain.Categoria;
-import com.lucashcampos.projetodelivery.domain.Cliente;
 import com.lucashcampos.projetodelivery.domain.Endereco;
+import com.lucashcampos.projetodelivery.domain.Frete;
 import com.lucashcampos.projetodelivery.domain.ItemPedido;
+import com.lucashcampos.projetodelivery.domain.Loja;
 import com.lucashcampos.projetodelivery.domain.Pagamento;
-import com.lucashcampos.projetodelivery.domain.PagamentoAVista;
 import com.lucashcampos.projetodelivery.domain.PagamentoComCartao;
 import com.lucashcampos.projetodelivery.domain.Pedido;
 import com.lucashcampos.projetodelivery.domain.Pizza;
 import com.lucashcampos.projetodelivery.domain.PizzaMassa;
 import com.lucashcampos.projetodelivery.domain.PizzaSaborTamanho;
 import com.lucashcampos.projetodelivery.domain.Produto;
-import com.lucashcampos.projetodelivery.domain.Loja;
 import com.lucashcampos.projetodelivery.domain.Sorvete;
 import com.lucashcampos.projetodelivery.domain.SorveteCobertura;
 import com.lucashcampos.projetodelivery.domain.SorveteSabor;
 import com.lucashcampos.projetodelivery.domain.SorveteTamanho;
+import com.lucashcampos.projetodelivery.domain.Usuario;
 import com.lucashcampos.projetodelivery.domain.enums.EspecialidadeLoja;
 import com.lucashcampos.projetodelivery.domain.enums.EstadoPagamento;
 import com.lucashcampos.projetodelivery.domain.enums.Perfil;
@@ -37,19 +39,20 @@ import com.lucashcampos.projetodelivery.domain.enums.TipoCliente;
 import com.lucashcampos.projetodelivery.domain.enums.TipoProduto;
 import com.lucashcampos.projetodelivery.repositories.AdicionalRepository;
 import com.lucashcampos.projetodelivery.repositories.CategoriaRepository;
-import com.lucashcampos.projetodelivery.repositories.ClienteRepository;
 import com.lucashcampos.projetodelivery.repositories.EnderecoRepository;
+import com.lucashcampos.projetodelivery.repositories.FreteRepository;
 import com.lucashcampos.projetodelivery.repositories.ItemPedidoRepository;
+import com.lucashcampos.projetodelivery.repositories.LojaRepository;
 import com.lucashcampos.projetodelivery.repositories.PagamentoRepository;
 import com.lucashcampos.projetodelivery.repositories.PedidoRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaMassaRepository;
 import com.lucashcampos.projetodelivery.repositories.PizzaSaborTamanhoRepository;
 import com.lucashcampos.projetodelivery.repositories.ProdutoRepository;
-import com.lucashcampos.projetodelivery.repositories.LojaRepository;
 import com.lucashcampos.projetodelivery.repositories.SorveteCoberturaRepository;
 import com.lucashcampos.projetodelivery.repositories.SorveteRepository;
 import com.lucashcampos.projetodelivery.repositories.SorveteSaborRepository;
 import com.lucashcampos.projetodelivery.repositories.SorveteTamanhoRepository;
+import com.lucashcampos.projetodelivery.repositories.UsuarioRepository;
 
 @Service
 public class DBService {
@@ -64,7 +67,7 @@ public class DBService {
 	private ProdutoRepository produtoRepository;
 
 	@Autowired
-	private ClienteRepository clienteRepository;
+	private UsuarioRepository usuarioRepository;
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
@@ -105,70 +108,97 @@ public class DBService {
 	@Autowired
 	private LojaService lojaService;
 
+	@Autowired
+	private FreteRepository freteRepository;
+
 	@Transactional
-	public void InstantiateTestDatabase() throws ParseException {
+	public void InstantiateTestDatabase() throws ParseException {		
+		
 
-		Cliente cli1 = new Cliente(null, "56198765545", "Maria Silva", "lucash_c@yahoo.com.br",
-				TipoCliente.PESSOAFISICA, pe.encode("1234"));
-		cli1.getTelefones().addAll(Arrays.asList("5465465645", "56116161"));
+		Usuario cli1 = new Usuario(null, "41516198875", "Lucas Campos", "lucash_c@yahoo.com.br",
+				TipoCliente.PESSOAFISICA, "Básico", 5, "Cartão de Crédito", "Cliente antigo", true, true,
+				pe.encode("1234"), "19991414411", "1936049510", Set.of(Perfil.CLIENTE, Perfil.ADMIN));
 
-		Cliente cli2 = new Cliente(null, "39140661059", "Rafaela Maelyse", "rafaelamaelyse@outlook.com",
-				TipoCliente.PESSOAFISICA, pe.encode("1234"));
-		cli2.getTelefones().addAll(Arrays.asList("55555454", "1111555555"));
-		cli2.addPerfil(Perfil.ADMIN);
+		Usuario cli2 = new Usuario(null, "987.654.321-00", "Maria Augusta", "maria.souza@example.com",
+				TipoCliente.PESSOAFISICA, "Premium", 10, "Boleto", "Cliente VIP", true, true, pe.encode("senha456"),
+				"19993446522","",
+				Set.of(Perfil.CLIENTE));
 
-		Endereco e1 = new Endereco(null, "Rua das Flores", "300", "Apto 303", "38220834");
-		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "5465465");
-		Endereco e3 = new Endereco(null, "Avenida Floriano", "2106", null, "8858585");
+		Endereco e1 = new Endereco(null, "Rua das Flores", "300", "Apto 303", "Centro", "São Paulo", "SP", "38220-834");
+
+		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Bela Vista", "Rio de Janeiro", "RJ",
+				"54654-655");
+
+		Endereco e3 = new Endereco(null, "Avenida Floriano", "2106", null, "Centro", "Curitiba", "PR", "88585-855");
 
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
-		cli2.getEnderecos().addAll(Arrays.asList(e3));
+		cli2.getEnderecos().add(e3);				
 
 		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
-		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
-
+		usuarioRepository.saveAll(Arrays.asList(cli1, cli2));
 		// Restaurante 1
-		Loja r1 = new Loja(null, "Restaurante A", "12345678000190", // CNPJ fictício
-				"João da Silva", "Comida Boa", new Endereco(null, "Rua A", "123", "Apt 101", "12345-678"),
-				"(11) 5555-5555", "(11) 99999-9999", 4.5, "logo1.jpg", "www.restaurantea.com", "restaurantea_instagram",
-				"restaurantea_facebook", List.of(EspecialidadeLoja.PIZZARIA.getCod()));
+		Loja r1 = new Loja("Delícias do Chef", "12345678000191", "Carlos Eduardo", "Sabor & Arte",
+				List.of(EspecialidadeLoja.PIZZARIA.getCod(), EspecialidadeLoja.BRASILEIRA.getCod()),
+				new Endereco(null, "Rua das Flores", "10", "Loja 1", "01001-000", "Centro", "São Paulo", "SP"),
+				"(11) 1234-5678", "(11) 98765-4321", 4.8, "logo1.jpg", "www.saborearte.com.br", "saborearte_instagram",
+				"saborearte_facebook", 30, 10, new ArrayList<>(), new ArrayList<>(List.of(cli1)));
 
 		// Restaurante 2
-		Loja r2 = new Loja(null, "Restaurante B", "98765432100055", // CNPJ fictício
-				"Maria Souza", "Sabor Gourmet", new Endereco(null, "Av. B", "456", "Sala 201", "54321-987"),
-				"(22) 3333-3333", "(22) 88888-8888", 4.2, "logo2.jpg", "www.saborgourmet.com", "saborgourmet_instagram",
-				"saborgourmet_facebook", List.of(EspecialidadeLoja.JAPONESA.getCod()));
+		Loja r2 = new Loja("Casa do Sushi", "98765432100056", "Fernanda Oliveira", "Sushi Master",
+				List.of(EspecialidadeLoja.JAPONESA.getCod()),
+				new Endereco(null, "Av. Paulista", "1500", "Sala 10", "01310-100", "Bela Vista", "São Paulo", "SP"),
+				"(11) 3333-4444", "(11) 99876-5432", 4.6, "logo2.jpg", "www.sushimaster.com.br",
+				"sushimaster_instagram", "sushimaster_facebook", 25, 15, new ArrayList<>(),
+				new ArrayList<>(List.of(cli2)));
 
 		// Restaurante 3
-		Loja r3 = new Loja(3, "Restaurante C", "11223344556677", // CNPJ fictício
-				"Pedro Oliveira", "Delícias Caseiras", new Endereco(null, "Rua C", "789", "Casa", "78901-234"),
-				"(33) 4444-4444", "(33) 77777-7777", 4.0, "logo3.jpg", "www.delicias.com", "delicias_instagram",
-				"delicias_facebook", List.of(EspecialidadeLoja.ESPETARIA.getCod()));
+		Loja r3 = new Loja("Cozinha Mineira", "11223344556678", "Roberto Lima", "Sabores de Minas",
+				List.of(EspecialidadeLoja.BRASILEIRA.getCod()),
+				new Endereco(null, "Rua das Palmeiras", "100", "Casa", "30140-001", "Savassi", "Belo Horizonte", "MG"),
+				"(31) 4444-5555", "(31) 98765-4321", 4.7, "logo3.jpg", "www.saboresdeminas.com.br",
+				"saboresdeminas_instagram", "saboresdeminas_facebook", 35, 12, new ArrayList<>(),
+				new ArrayList<>(List.of(cli2)));
 
 		// Restaurante 4
-		Loja r4 = new Loja(4, "Restaurante D", "99887766554433", // CNPJ fictício
-				"Ana Rodrigues", "Sabor Brasileiro", new Endereco(null, "Av. D", "1011", "Sala 301", "98765-432"),
-				"(44) 5555-5555", "(44) 66666-6666", 4.8, "logo4.jpg", "www.saborbrasileiro.com",
-				"saborbrasileiro_instagram", "saborbrasileiro_facebook",
-				List.of(EspecialidadeLoja.ESPETARIA.getCod()));
+		Loja r4 = new Loja("Churrasco Gaúcho", "99887766554434", "Mariana Sousa", "Gaúcho Grill",
+				List.of(EspecialidadeLoja.BRASILEIRA.getCod()),
+				new Endereco(null, "Av. Brasil", "2500", "Sala 5", "90230-060", "Centro", "Porto Alegre", "RS"),
+				"(51) 5555-6666", "(51) 98765-1234", 4.9, "logo4.jpg", "www.gauchogrill.com.br",
+				"gauchogrill_instagram", "gauchogrill_facebook", 40, 20, new ArrayList<>(),
+				new ArrayList<>(List.of(cli1)));
 
 		// Restaurante 5
-		Loja r5 = new Loja(5, "Restaurante E", "11223344556677", // CNPJ fictício (mesmo CNPJ do
-																				// restaurante 3 para fins de exemplo)
-				"Fernanda Carvalho", "Pizza Express", new Endereco(null, "Rua E", "555", "Apt 501", "55555-555"),
-				"(55) 7777-7777", "(55) 99999-9999", 4.4, "logo5.jpg", "www.pizzaexpress.com", "pizzaexpress_instagram",
-				"pizzaexpress_facebook", List.of(EspecialidadeLoja.PIZZARIA.getCod()));
+		Loja r5 = new Loja("Pastelaria do João", "12312312300012", "João Alves", "Pastel do João",
+				List.of(EspecialidadeLoja.BRASILEIRA.getCod()),
+				new Endereco(null, "Rua Central", "500", "Box 8", "80010-000", "Centro", "Curitiba", "PR"),
+				"(41) 7777-8888", "(41) 98765-9876", 4.5, "logo5.jpg", "www.pasteldojoao.com.br",
+				"pasteldojoao_instagram", "pasteldojoao_facebook", 20, 8, new ArrayList<>(),
+				new ArrayList<>(List.of(cli2)));
+
+		cli1.getLojas().addAll(Arrays.asList(r1, r4));
+		cli2.getLojas().addAll(Arrays.asList(r2, r3, r5));
 
 		lojaRepository.saveAll(Arrays.asList(r1, r2, r3, r4, r5));
-	
+		usuarioRepository.saveAll(Arrays.asList(cli1, cli2));
 
-		Categoria cat1 = new Categoria(null, "Lanches", r1, TipoProduto.COMUM);
-		Categoria cat2 = new Categoria(null, "Bebidas", r1, TipoProduto.COMUM);
-		Categoria cat3 = new Categoria(null, "Pizzas", r2, TipoProduto.PIZZA);
-		Categoria cat4 = new Categoria(null, "Doces", r2, TipoProduto.COMUM);
-		Categoria cat5 = new Categoria(null, "Pastéis", r3, TipoProduto.COMUM);
-		Categoria cat6 = new Categoria(null, "Mercado", r4, TipoProduto.COMUM);
-		Categoria cat7 = new Categoria(null, "Farmacia", r5, TipoProduto.COMUM);
+		Frete f1 = new Frete(null, 2, 2.0, 30, r1);
+		Frete f2 = new Frete(null, 3, 3.0, 40, r1);
+		Frete f3 = new Frete(null, 2, 2.5, 40, r2);
+		Frete f4 = new Frete(null, 4, 4.0, 60, r2);
+		Frete f5 = new Frete(null, 2, 2.0, 30, r3);
+
+		freteRepository.saveAll(Arrays.asList(f1, f2, f3, f4, f5));
+		Frete f6 = new Frete(15, 20, 10.0, 120, r3);
+		r3.getFretes().add(f6);
+		lojaService.update(r3);
+
+		Categoria cat1 = new Categoria(null, "Lanches", r1, true);
+		Categoria cat2 = new Categoria(null, "Bebidas", r1, true);
+		Categoria cat3 = new Categoria(null, "Pizzas", r2, true);
+		Categoria cat4 = new Categoria(null, "Doces", r1, true);
+		Categoria cat5 = new Categoria(null, "Pastéis", r3, true);
+		Categoria cat6 = new Categoria(null, "Mercado", r4, true);
+		Categoria cat7 = new Categoria(null, "Farmacia", r5, true);
 
 		Produto p1 = new Produto(null, "Coca-cola 2l", 15.00, r1);
 		Produto p2 = new Produto(null, "Suco de laranja", 8.00, r1);
@@ -183,13 +213,13 @@ public class DBService {
 
 		// pizza
 		PizzaSaborTamanho PortuguesaGrande = new PizzaSaborTamanho(null, "Portuguesa",
-				"Molho, Mussarela, Tomate, presunto, ovo, cebola e orégano", "Grande", 8, 4, 35.00, 2);
+				"Molho, Mussarela, Tomate, presunto, ovo, cebola e orégano", "Grande", 35.00);
 		PizzaSaborTamanho MussarelaGrande = new PizzaSaborTamanho(null, "Mussarela",
-				"Molho, Mussarela, Tomate e orégano", "Grande", 8, 4, 30.00, 2);
+				"Molho, Mussarela, Tomate e orégano", "Grande", 30.00);
 		PizzaSaborTamanho MussarelaMedia = new PizzaSaborTamanho(null, "Mussarela",
-				"Molho, Mussarela, Tomate e orégano", "Media", 6, 3, 26.00, 2);
+				"Molho, Mussarela, Tomate e orégano", "Media", 26.00);
 		PizzaSaborTamanho MussarelaBroto = new PizzaSaborTamanho(null, "Mussarela",
-				"Molho, Mussarela, Tomate e orégano", "Broto", 2, 1, 22.00, 2);
+				"Molho, Mussarela, Tomate e orégano", "Broto", 22.00);
 
 		pizzaSaborTamanhoRepository
 				.saveAll(Arrays.asList(MussarelaGrande, MussarelaMedia, MussarelaBroto, PortuguesaGrande));
@@ -197,12 +227,12 @@ public class DBService {
 		PizzaMassa bordaSimples = new PizzaMassa(null, "Borda simples", 2.00);
 		pizzaMassaRepository.saveAll(Arrays.asList(bordaSimples));
 
-		Adicional ad1 = new Adicional(null, "Calabresa", 6.00, TipoAdicional.PIZZAS.getCod());
+		Adicional ad1 = new Adicional(null, "Calabresa", 6.00, TipoAdicional.PIZZA.getCod());
 		adicionalRepository.saveAll(Arrays.asList(ad1));
 
-		Pizza p4 = new Pizza(Arrays.asList(MussarelaGrande), bordaSimples, Arrays.asList(ad1), "tirar tomate");
+		Pizza p4 = new Pizza(Arrays.asList(MussarelaGrande), bordaSimples, Arrays.asList(ad1), "tirar tomate", 2);
 		Pizza p12 = new Pizza(Arrays.asList(MussarelaGrande, PortuguesaGrande), bordaSimples, Arrays.asList(ad1),
-				"tirar cebola");
+				"tirar cebola", 2);
 
 		SorveteCobertura coberturaCaramelo = new SorveteCobertura(null, "Caramelo", 0.0);
 		sorveteCoberturaRepository.save(coberturaCaramelo);
@@ -214,7 +244,7 @@ public class DBService {
 				"Copinho de 1 bola com 1 sabor a sua escolha.", 1);
 		sorveteTamanhoRepository.save(tamanhoSorvete);
 
-		Adicional adCastanha = new Adicional(null, "Castanha", 1.00, TipoAdicional.SORVETES.getCod());
+		Adicional adCastanha = new Adicional(null, "Castanha", 1.00, TipoAdicional.SORVETE.getCod());
 		adicionalRepository.saveAll(Arrays.asList(adCastanha));
 
 		Sorvete sorvete = new Sorvete(tamanhoSorvete, Arrays.asList(chocolate), Arrays.asList(adCastanha),
@@ -259,74 +289,44 @@ public class DBService {
 		Produto p48 = new Produto(null, "Produto 48", 10.00, r1);
 		Produto p49 = new Produto(null, "Produto 49", 10.00, r1);
 		Produto p50 = new Produto(null, "Produto 50", 10.00, r1);
+		
+		p50.setCodBarras("55247022");
 
 		cat1.getProdutos()
 				.addAll(Arrays.asList(p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, p23, p24, p25, p26, p27, p28,
 						p29, p30, p31, p32, p34, p35, p36, p37, p38, p39, p40, p41, p42, p43, p44, p45, p46, p47, p48,
 						p49, p50));
 
-		p13.getCategorias().add(cat1);
-		p14.getCategorias().add(cat1);
-		p15.getCategorias().add(cat1);
-		p16.getCategorias().add(cat1);
-		p17.getCategorias().add(cat1);
-		p18.getCategorias().add(cat1);
-		p19.getCategorias().add(cat1);
-		p20.getCategorias().add(cat1);
-		p21.getCategorias().add(cat1);
-		p22.getCategorias().add(cat1);
-		p23.getCategorias().add(cat1);
-		p24.getCategorias().add(cat1);
-		p25.getCategorias().add(cat1);
-		p26.getCategorias().add(cat1);
-		p27.getCategorias().add(cat1);
-		p28.getCategorias().add(cat1);
-		p29.getCategorias().add(cat1);
-		p30.getCategorias().add(cat1);
-		p31.getCategorias().add(cat1);
-		p32.getCategorias().add(cat1);
-		p33.getCategorias().add(cat1);
-		p34.getCategorias().add(cat1);
-		p35.getCategorias().add(cat1);
-		p36.getCategorias().add(cat1);
-		p37.getCategorias().add(cat1);
-		p38.getCategorias().add(cat1);
-		p39.getCategorias().add(cat1);
-		p40.getCategorias().add(cat1);
-		p41.getCategorias().add(cat1);
-		p42.getCategorias().add(cat1);
-		p43.getCategorias().add(cat1);
-		p44.getCategorias().add(cat1);
-		p45.getCategorias().add(cat1);
-		p46.getCategorias().add(cat1);
-		p47.getCategorias().add(cat1);
-		p48.getCategorias().add(cat1);
-		p49.getCategorias().add(cat1);
-		p50.getCategorias().add(cat1);
+		p13.setCategoria(cat1);
+		p3.setCategoria(cat1);
+		p5.setCategoria(cat1);
 
-		cat1.getProdutos().addAll(Arrays.asList(p3, p5));
+		p1.setCategoria(cat2);
+		p2.setCategoria(cat2);
+		p4.setCategoria(cat3);
+		p6.setCategoria(cat2);
+		p7.setCategoria(cat5);
+		p8.setCategoria(cat2);
+		p9.setCategoria(cat4);
+		p10.setCategoria(cat5);
+		p12.setCategoria(cat3);
+
+		for (Produto p : Arrays.asList(p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, p23, p24, p25, p26, p27, p28, p29, 
+		                               p30, p31, p32, p33, p34, p35, p36, p37, p38, p39, p40, p41, p42, p43, p44, p45, p46, 
+		                               p47, p48, p49, p50)) {
+		    p.setCategoria(cat1);
+		}
+
+		cat1.getProdutos().addAll(Arrays.asList(p3, p5, p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, p23, p24, p25, 
+		                                        p26, p27, p28, p29, p30, p31, p32, p33, p34, p35, p36, p37, p38, p39, 
+		                                        p40, p41, p42, p43, p44, p45, p46, p47, p48, p49, p50));
 		cat2.getProdutos().addAll(Arrays.asList(p1, p2, p6, p8));
 		cat3.getProdutos().addAll(Arrays.asList(p4, p12));
-		cat4.getProdutos().addAll(Arrays.asList(p8, p9));
-		cat5.getProdutos().addAll(Arrays.asList(p7, p10));
-		//cat7.getProdutos().addAll(Arrays.asList(p11));
-
-		p1.getCategorias().addAll(Arrays.asList(cat2));
-		p2.getCategorias().addAll(Arrays.asList(cat2));
-		p3.getCategorias().addAll(Arrays.asList(cat1));
-		p4.getCategorias().addAll(Arrays.asList(cat3));
-		p5.getCategorias().addAll(Arrays.asList(cat1));
-		p6.getCategorias().addAll(Arrays.asList(cat2));
-		p7.getCategorias().addAll(Arrays.asList(cat5));
-		p8.getCategorias().addAll(Arrays.asList(cat2, cat4));
-		p9.getCategorias().addAll(Arrays.asList(cat4));
-		p10.getCategorias().addAll(Arrays.asList(cat5));
-		//p11.getCategorias().addAll(Arrays.asList(cat7));
-		p12.getCategorias().addAll(Arrays.asList(cat3));
-
-		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
+		cat4.getProdutos().addAll(Arrays.asList(p9));
+		cat5.getProdutos().addAll(Arrays.asList(p7, p10));		
 
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12));
+		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 
 		produtoRepository.saveAll(
 				Arrays.asList(p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, p23, p24, p25, p26, p27, p28, p29, p30,
@@ -340,7 +340,7 @@ public class DBService {
 		Pagamento pgto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
 		ped1.setPagamento(pgto1);
 
-		Pagamento pgto2 = new PagamentoAVista(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2022 00:00"));
+		Pagamento pgto2 = new PagamentoComCartao(null, EstadoPagamento.PENDENTE, ped2, 6);
 		ped2.setPagamento(pgto2);
 
 		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
@@ -361,16 +361,8 @@ public class DBService {
 		p3.getItens().addAll(Arrays.asList(ip2));
 		p4.getItens().addAll(Arrays.asList(ip1));
 
-		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3, ip4));
-
-		Loja rTeste = lojaService.find(1);
-		System.out.println(
-				"////////////////////////////////////////////////////////////////////////////////////////////////////");
-		System.out.println(rTeste.toString());
-		List<Produto> produtos = produtoRepository.findByLojaId(r1.getId());
-		for (Produto prod : produtos) {
-			System.out.println(prod.getNome());
-		}
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3, ip4));	
+		
 
 	}
 }

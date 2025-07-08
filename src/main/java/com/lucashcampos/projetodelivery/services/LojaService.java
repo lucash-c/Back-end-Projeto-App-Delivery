@@ -11,8 +11,9 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.lucashcampos.projetodelivery.domain.Endereco;
+import com.lucashcampos.projetodelivery.domain.Frete;
 import com.lucashcampos.projetodelivery.domain.Loja;
-import com.lucashcampos.projetodelivery.dto.LojaDTO;
+import com.lucashcampos.projetodelivery.dto.NewLojaDTO;
 import com.lucashcampos.projetodelivery.repositories.LojaRepository;
 import com.lucashcampos.projetodelivery.services.exceptions.ObjectNotFoundException;
 
@@ -20,13 +21,17 @@ import com.lucashcampos.projetodelivery.services.exceptions.ObjectNotFoundExcept
 public class LojaService {
 
 	@Autowired
-	private LojaRepository repo;
+	private LojaRepository repo;	
 
 	public Loja find(Integer id) {
 		Optional<Loja> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id " + id + ", Tipo: " + Loja.class.getName()));
 	}
+	
+	public List<Loja> findByUserId(Integer userId) {
+        return repo.findByUsuarioId(userId);
+    }
 
 	public List<Loja> findAll() {
 		return repo.findAll();
@@ -93,20 +98,44 @@ public class LojaService {
 
 		if (obj.getFacebook() != null)
 			newObj.setFacebook(obj.getFacebook());
+		
+		if (obj.getFretes() != null)
+			newObj.setFretes(obj.getFretes());
+		
 	}
 
-	public Loja fromDTO(LojaDTO objDTO) {
+	public Loja fromDTO(NewLojaDTO objDTO) {
+	    Endereco endereco = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getComplemento(), objDTO.getCep());
+	    
+	    // Cria uma lista com os IDs das especialidades da loja
+	    List<Integer> idsEspecialidades = objDTO.getEspecialidades().stream()
+	            .map(especialidade -> especialidade.getCod())
+	            .collect(Collectors.toList());
 
-		Endereco endereco = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getComplemento(),
-				objDTO.getCep());
-		
-		//cria uma lista com os IDs das especialidades da loja
-		List<Integer> idsEspecialidades = objDTO.getEspecialidades().stream()
-				.map(especialidade -> especialidade.getCod()).collect(Collectors.toList());
+	    // Cria uma lista de fretes
+	    List<Frete> fretes = objDTO.getFretes().stream()
+	            .map(freteDTO -> new Frete(freteDTO.getKm(),freteDTO.getValor(),freteDTO.getPrazo()))
+	            .collect(Collectors.toList());
 
-		return new Loja(null, objDTO.getRazaoSocial(), objDTO.getCnpjCpf(), objDTO.getNomeResponsavel(),
-				objDTO.getNomeFantasia(), endereco, objDTO.getTelefone(), objDTO.getWhatsapp(), objDTO.getMediaSatisfacao(), objDTO.getLogo(),
-				objDTO.getSite(), objDTO.getInstagram(), objDTO.getFacebook(), idsEspecialidades);
+	    return new Loja(
+	            objDTO.getRazaoSocial(),
+	            objDTO.getCnpjCpf(),
+	            objDTO.getNomeResponsavel(),
+	            objDTO.getNomeFantasia(),
+	            idsEspecialidades,
+	            endereco,
+	            objDTO.getTelefone(),
+	            objDTO.getWhatsapp(),
+	            objDTO.getMediaSatisfacao(),
+	            objDTO.getLogo(),
+	            objDTO.getSite(),
+	            objDTO.getInstagram(),
+	            objDTO.getFacebook(),
+	            objDTO.getPrazoRetirada(),
+	            objDTO.getLimiteDistanciaKm(),
+	            fretes,
+	            objDTO.getUsuarios()
+	    );
 	}
 
 }

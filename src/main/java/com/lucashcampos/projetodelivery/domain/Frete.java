@@ -11,31 +11,44 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "COBERTURAS_PARA_SORVETE")
-public class SorveteCobertura implements Serializable {
+@Table(name = "FRETES")
+public class Frete implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String nome;
-	private Double valorAdicional;
-	private Boolean isVisible = true;
+	private Integer km;
+	private Double valor;
+	private Integer prazo;
 	private Boolean isActive = true;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "loja_id")
 	private Loja loja;
 
-	public SorveteCobertura() {
+	public Frete() {
 
 	}
 
-	public SorveteCobertura(Integer id, String nome, Double valorAdicional) {
+	public Frete(Integer id, Integer km, Double valor, Integer prazo, Loja loja) {
 		this.id = id;
-		this.nome = nome;
-		this.valorAdicional = valorAdicional;
+		this.km = km;
+		this.valor = valor;
+		this.prazo = prazo;
+		this.loja = loja;
+
+	}
+	
+	public Frete(Integer km, Double valor, Integer prazo) {
+		this.km = km;
+		this.valor = valor;
+		this.prazo = prazo;		
+
 	}
 
 	public Integer getId() {
@@ -46,28 +59,28 @@ public class SorveteCobertura implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public Integer getKm() {
+		return km;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setKm(Integer km) {
+		this.km = km;
 	}
 
-	public Double getValorAdicional() {
-		return valorAdicional;
+	public Double getValor() {
+		return valor;
 	}
 
-	public void setValorAdicional(Double valorAdicional) {
-		this.valorAdicional = valorAdicional;
+	public void setValor(Double valor) {
+		this.valor = valor;
 	}
 
-	public Loja getLoja() {
-		return loja;
+	public Integer getPrazo() {
+		return prazo;
 	}
 
-	public void setLoja(Loja loja) {
-		this.loja = loja;
+	public void setPrazo(Integer prazo) {
+		this.prazo = prazo;
 	}
 
 	public Boolean getIsActive() {
@@ -76,14 +89,14 @@ public class SorveteCobertura implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
-	}	
-
-	public Boolean getIsVisible() {
-		return isVisible;
 	}
 
-	public void setIsVisible(Boolean isVisible) {
-		this.isVisible = isVisible;
+	public Loja getLoja() {
+		return loja;
+	}
+
+	public void setLoja(Loja loja) {
+		this.loja = loja;
 	}
 
 	@Override
@@ -99,7 +112,7 @@ public class SorveteCobertura implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SorveteCobertura other = (SorveteCobertura) obj;
+		Frete other = (Frete) obj;
 		return Objects.equals(id, other.id);
 	}
 

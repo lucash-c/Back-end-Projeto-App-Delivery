@@ -22,6 +22,7 @@ public class SorveteSabor implements Serializable {
 	private String nome;
 	private String descricao;
 	private Double valorAdicional;
+	private Boolean isVisible = true;
 	private Boolean isActive = true;
 
 	@ManyToOne
@@ -84,6 +85,14 @@ public class SorveteSabor implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}	
+
+	public Boolean getIsVisible() {
+		return isVisible;
+	}
+
+	public void setIsVisible(Boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 
 	@Override

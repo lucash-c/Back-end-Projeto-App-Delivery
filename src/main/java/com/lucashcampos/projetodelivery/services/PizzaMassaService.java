@@ -31,9 +31,8 @@ public class PizzaMassaService {
 		return repo.findAll();
 	}
 
-	public PizzaMassa insert(PizzaMassa obj) {
-		obj.setId(null);
-		return repo.save(obj);
+	public List<PizzaMassa> insertAll(List<PizzaMassa> objs) {
+	    return repo.saveAll(objs); 
 	}
 
 	public PizzaMassa update(PizzaMassa obj) {

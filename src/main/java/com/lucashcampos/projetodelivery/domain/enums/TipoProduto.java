@@ -2,7 +2,7 @@ package com.lucashcampos.projetodelivery.domain.enums;
 
 public enum TipoProduto {
 
-	PIZZA(0, "Pizza"), SORVETE(1, "Sorvete"), COMUM(2, "Comum");
+	PIZZA(0, "Pizza"), SORVETE(1, "Sorvete"), COMUM(2, "Comum"), BEBIDA(3, "Bebida"), LANCHE(4, "Lanche");
 
 	private int cod;
 	private String descricao;

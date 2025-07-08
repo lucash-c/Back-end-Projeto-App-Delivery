@@ -31,9 +31,8 @@ public class PizzaSaborTamanhoService {
 		return repo.findAll();
 	}
 
-	public PizzaSaborTamanho insert(PizzaSaborTamanho obj) {
-		obj.setId(null);
-		return repo.save(obj);
+	public List<PizzaSaborTamanho> insertAll(List<PizzaSaborTamanho> objs) {
+	    return repo.saveAll(objs);
 	}
 
 	public PizzaSaborTamanho update(PizzaSaborTamanho obj) {
@@ -59,9 +58,7 @@ public class PizzaSaborTamanhoService {
 	}
 
 	private void updateData(PizzaSaborTamanho newObj, PizzaSaborTamanho obj) {
-		newObj.setDescricao(obj.getDescricao());
-		newObj.setPedacos(obj.getPedacos());
-		newObj.setPessoas(obj.getPessoas());
+		newObj.setDescricao(obj.getDescricao());		
 		newObj.setSabor(obj.getSabor());
 		newObj.setPreco(obj.getPreco());
 		newObj.setTamanho(obj.getTamanho());

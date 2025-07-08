@@ -10,38 +10,34 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.lucashcampos.projetodelivery.domain.Adicional;
-import com.lucashcampos.projetodelivery.repositories.AdicionalRepository;
+import com.lucashcampos.projetodelivery.domain.Frete;
+import com.lucashcampos.projetodelivery.repositories.FreteRepository;
 import com.lucashcampos.projetodelivery.services.exceptions.DataIntegrityException;
 import com.lucashcampos.projetodelivery.services.exceptions.ObjectNotFoundException;
 
 @Service
-public class AdicionalService {
+public class FreteService {
 
 	@Autowired
-	private AdicionalRepository repo;
+	private FreteRepository repo;
 
-	public Adicional find(Integer id) {
-		Optional<Adicional> obj = repo.findById(id);
+	public Frete find(Integer id) {
+		Optional<Frete> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id " + id + ", Tipo: " + Adicional.class.getName()));
+				"Objeto não encontrado! Id " + id + ", Tipo: " + Frete.class.getName()));
 	}
 
-	public List<Adicional> findAll() {
+	public List<Frete> findAll() {
 		return repo.findAll();
 	}
 
-	public Adicional insert(Adicional obj) {
+	public Frete insert(Frete obj) {
 		obj.setId(null);
 		return repo.save(obj);
 	}
-	
-	public List<Adicional> insertAll(List<Adicional> objs) {
-	    return repo.saveAll(objs); 
-	}
 
-	public Adicional update(Adicional obj) {
-		Adicional newObj = find(obj.getId());
+	public Frete update(Frete obj) {
+		Frete newObj = find(obj.getId());
 		updateData(newObj, obj);
 		return repo.save(newObj);
 	}
@@ -56,14 +52,15 @@ public class AdicionalService {
 
 	}
 
-	public Page<Adicional> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+	public Page<Frete> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
 	}
 
-	private void updateData(Adicional newObj, Adicional obj) {
-		newObj.setNome(obj.getNome());
-		newObj.setPreco(obj.getPreco());
+	private void updateData(Frete newObj, Frete obj) {
+		newObj.setKm(obj.getKm());
+		newObj.setValor(obj.getValor());
+		newObj.setPrazo(obj.getPrazo());
 	}
 
 }

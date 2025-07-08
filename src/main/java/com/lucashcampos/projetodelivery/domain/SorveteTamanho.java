@@ -23,6 +23,7 @@ public class SorveteTamanho implements Serializable {
 	private Double preco;
 	private String descricao;
 	Integer quantidadeSabores;
+	private Boolean isVisible = true;
 	private Boolean isActive = true;
 
 	@ManyToOne
@@ -95,6 +96,14 @@ public class SorveteTamanho implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}	
+
+	public Boolean getIsVisible() {
+		return isVisible;
+	}
+
+	public void setIsVisible(Boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 
 	@Override

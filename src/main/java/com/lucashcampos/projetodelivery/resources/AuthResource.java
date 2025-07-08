@@ -40,4 +40,11 @@ public class AuthResource {
 		service.sendNewPassword(objDto.getEmail());
 		return ResponseEntity.noContent().build();
 	}
+	
+	@RequestMapping(value = "/isValidToken", method = RequestMethod.POST)
+	public ResponseEntity<Boolean> isValidToken(@RequestBody String token) {
+		boolean isValid = jwtUtil.tokenIsValid(token);
+        return ResponseEntity.ok(isValid);
+    }
+	
 }
