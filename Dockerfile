@@ -1,24 +1,31 @@
 # Fase de Build
 FROM ubuntu:latest AS build
 
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
+# Atualiza os pacotes e instala o Java 17 + Maven
+RUN apt-get update && \
+    apt-get install -y openjdk-17-jdk maven
+
+# Define o diretório de trabalho no container
+WORKDIR /app
+
+# Copia todos os arquivos do projeto para o container
 COPY . .
 
-RUN apt-get install maven -y
+# Compila o projeto e gera o .jar
 RUN mvn clean install
 
-# Fase de Execução
+# Fase de execução
 FROM openjdk:17-jdk-slim
 
-# Criar o diretório /app no contêiner
-RUN mkdir -p /app
+# Define o diretório de trabalho no container
+WORKDIR /app
 
-# Exponha a porta em que a sua aplicação Spring Boot será executada (ajuste conforme necessário)
+# Expõe a porta da aplicação
 EXPOSE 8080
 
-# Copie o arquivo JAR da sua aplicação para o contêiner
-COPY --from=build target/projetodelivery-0.0.1-SNAPSHOT.jar app.jar
+# Copia o .jar compilado da imagem de build
+COPY --from=build /app/target/projetodelivery-0.0.1-SNAPSHOT.jar app.jar
 
-# Defina o comando para iniciar a aplicação
+# Comando de inicialização da aplicação
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
